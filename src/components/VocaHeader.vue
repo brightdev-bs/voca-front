@@ -1,6 +1,6 @@
 <template>
   <v-app-bar :elevation="10">
-    <v-app-bar-title>voca</v-app-bar-title>
+    <v-btn href="/">voca</v-btn>
     <template v-slot:append>
       <v-btn-group>
         <v-btn>LOGIN</v-btn>

@@ -2,8 +2,7 @@
   <v-app>
     <v-main>
       <voca-header></voca-header>
-<!--      <voca-list></voca-list>-->
-      <voca-table></voca-table>
+      <router-view></router-view>
       <voca-footer></voca-footer>
     </v-main>
   </v-app>
@@ -12,21 +11,12 @@
 <script>
 import VocaHeader from "@/components/VocaHeader";
 import VocaFooter from "@/components/VocaFooter";
-import VocaTable from "@/components/VocaTable";
-// import VocaList from "@/components/VocaList";
-
 export default {
   name: 'App',
-
   components: {
     VocaHeader,
-    // VocaList,
-    VocaFooter,
-    VocaTable,
-  },
+    VocaFooter
+  }
 
-  data: () => ({
-    //
-  }),
 }
 </script>

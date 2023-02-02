@@ -1,5 +1,6 @@
 # Voca-Front
-### 네이밍 컨벤션
+## 네이밍 컨벤션
+### vue 네이밍 컨벤션
 1. 컴포넌트 이름은 합성어를 사용한다. -> HTML 요소의 이름이 한 단어이기 때문에 합성어를 사용하는 것이 향후 충돌을 방지한다.
 ~~~javascript
 Vue.component('voca-header', {})
@@ -76,4 +77,17 @@ props: {
   background-color: red;
 }
 </style>
+~~~
+
+### URL 네이밍 컨벤션
+1. 명사를 사용한다. 
+~~~javascript
+www.naver.com/get-users ==> 나쁜 예시
+www.naver.com/users     ==> 좋은 예시
+~~~
+2. 소문자를 사용한다.
+3. 복수형을 사용한다.
+4. 구분자는 하이픈('-')을 사용한다.
+~~~javascript
+www.naver.com/good-users
 ~~~
