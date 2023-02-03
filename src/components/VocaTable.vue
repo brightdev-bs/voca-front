@@ -1,5 +1,4 @@
 <template>
-
   <v-table>
     <thead>
     <tr>
@@ -31,35 +30,12 @@
 
 <script>
 export default {
+  props: {
+    words: Array,
+  },
   data () {
     return {
-      words: [
-        {
-          id: 1,
-          english: 'Frozen Yogurt',
-          korean: "요거트",
-          check: false
-        },
-        {
-          id: 2,
-          english: 'Frozen Yogurt',
-          korean: "요거트",
-          check: false
-        },
-        {
-          id: 3,
-          english: 'Frozen Yogurt',
-          korean: "요거트",
-          check: false
-        },
-        {
-          id: 4,
-          english: 'Frozen Yogurt',
-          korean: "요거트",
-          check: false
-        },
 
-      ],
     }
   },
 }

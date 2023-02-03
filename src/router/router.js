@@ -7,12 +7,12 @@ const router = createRouter({
         {
             path: '/',
             name: 'Main',
-            component: () => import('../App')
+            component: () => import('../views/HomeView')
         },
         {
-            path: '/test',
-            name: 'Main',
-            component: () => import('../App')
+            path: '/words/new',
+            name: 'WriteWord',
+            component: () => import('../views/AddWordView')
         }
     ]
 });
