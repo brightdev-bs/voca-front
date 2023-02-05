@@ -8,7 +8,13 @@ import { loadFonts } from './plugins/webfontloader'
 
 loadFonts()
 
-createApp(App)
-  .use(router)
-  .use(vuetify)
-  .mount('#app')
+let app = createApp(App)
+    .use(router)
+    .use(vuetify)
+
+let globalProperties = app.config.globalProperties;
+globalProperties.server = "http://localhost:8088";
+globalProperties.domain = "http://localhost:8089";
+
+app.mount('#app')
+

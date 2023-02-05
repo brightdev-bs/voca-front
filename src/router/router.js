@@ -13,6 +13,16 @@ const router = createRouter({
             path: '/words/new',
             name: 'WriteWord',
             component: () => import('../views/AddWordView')
+        },
+        {
+            path: '/sign-up',
+            name: 'SignUp',
+            component: () => import('../views/SignupView')
+        },
+        {
+            path: '/email',
+            name: 'confirmEmail',
+            component: () => import('../views/ConfirmView.vue')
         }
     ]
 });
