@@ -3,8 +3,8 @@
     <v-btn href="/">voca</v-btn>
     <template v-slot:append>
       <v-btn-group>
-        <v-btn>LOGIN</v-btn>
-        <v-btn>SIGN-UP</v-btn>
+        <v-btn href="/login">LOGIN</v-btn>
+        <v-btn href="/sign-up">SIGN-UP</v-btn>
       </v-btn-group>
     </template>
   </v-app-bar>
