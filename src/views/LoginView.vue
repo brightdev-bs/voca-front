@@ -75,10 +75,10 @@ export default {
             }
           })
           .then(res => {
+            console.log(res);
             if(res.status == 200) {
-              // localStorage.setItem('id', res.data.id)
-              // localStorage.setItem('token', res.data.token)
-              // location.href = this.domain;
+              console.log(res.data.data.username)
+              localStorage.setItem('id', res.data.data.username)
             }
           })
           .catch(err => {
