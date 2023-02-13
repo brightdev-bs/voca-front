@@ -18,7 +18,6 @@
         @blur="v$.password.$touch"
     ></v-text-field>
 
-
     <v-btn
         class="me-4 float-end"
         @click="login"
@@ -77,8 +76,9 @@ export default {
           .then(res => {
             console.log(res);
             if(res.status == 200) {
-              console.log(res.data.data.username)
+              localStorage.setItem('token', res.data.data.token)
               localStorage.setItem('id', res.data.data.username)
+              window.location.href = this.domain;
             }
           })
           .catch(err => {

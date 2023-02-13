@@ -19,12 +19,14 @@ export default {
   data() {
     return {
       username: '',
+      token: '',
     }
   },
 
   methods: {
     isActive() {
-      this.username = localStorage.getItem("id")
+      this.username = localStorage.getItem("id");
+      this.token = localStorage.getItem("token");
       if(this.username) {
         return false;
       } else {
