@@ -8,46 +8,44 @@
 
 <script>
 import VocaTable from "@/components/VocaTable";
+import axios from "axios";
 
 export default {
+  mounted() {
+    this.initWords();
+  },
   components: {
     VocaTable,
   },
   data() {
     return {
       date: "today",
-      words: [
-        {
-          id: 1,
-          english: 'Frozen Yogurt',
-          korean: "요거트",
-          check: false
-        },
-        {
-          id: 2,
-          english: 'Frozen Yogurt',
-          korean: "요거트",
-          check: false
-        },
-        {
-          id: 3,
-          english: 'Frozen Yogurt',
-          korean: "요거트",
-          check: false
-        },
-        {
-          id: 4,
-          english: 'Frozen Yogurt',
-          korean: "요거트",
-          check: false
-        },
-
-      ],
+      words: [],
     }
   },
   methods: {
-    addWord() {
+    initWords() {
 
+      const date = new Date().toISOString();
+
+      axios
+        .get(this.server + '/api/v1/words', {
+          params: {
+            date: date,
+          },
+          headers: {
+            "Content-Type": 'application/json',
+            Authorization: localStorage.getItem("token"),
+          },
+
+        })
+        .then(res => {
+          console.log(res);
+          this.words = res.data.data.words;
+        })
+        .catch(err => {
+          console.log(err);
+        })
     }
   }
 }

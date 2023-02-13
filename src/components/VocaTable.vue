@@ -3,10 +3,10 @@
     <thead>
     <tr>
       <th class="text-left" width="45%">
-        Name
+        Word
       </th>
       <th class="text-left" width="45%">
-        Calories
+        Definition
       </th>
       <th class="text-left" width="10%">
         check
@@ -18,10 +18,10 @@
         v-for="word in words"
         :key="word.id"
     >
-      <td>{{ word.english }}</td>
-      <td>{{ word.korean }}</td>
+      <td>{{ word.word }}</td>
+      <td>{{ word.definition }}</td>
       <td>
-        <v-checkbox v-model="word.check"></v-checkbox>
+        <v-checkbox v-model="word.checked" @click="check(word.id)"></v-checkbox>
       </td>
     </tr>
     </tbody>
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   props: {
     words: Array,
@@ -38,6 +40,25 @@ export default {
 
     }
   },
+  methods: {
+    check(id) {
+
+      console.log(id);
+      axios
+          .patch(this.server + '/api/v1/words/' + id, {
+            headers: {
+              "Content-Type": 'application/json',
+              Authorization: localStorage.getItem("token"),
+            }
+          })
+          .then(res => {
+            console.log(res.data.statusCode)
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    }
+  }
 }
 </script>
 
