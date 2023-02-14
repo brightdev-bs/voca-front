@@ -6,11 +6,16 @@ import router from './router/router.js';
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 
+import VCalendar from 'v-calendar'
+import VueBasicAlert from 'vue-basic-alert'
+
 loadFonts()
 
 let app = createApp(App)
     .use(router)
     .use(vuetify)
+    .use(VCalendar, {})
+    .use(VueBasicAlert)
 
 let globalProperties = app.config.globalProperties;
 globalProperties.server = "http://localhost:8088";

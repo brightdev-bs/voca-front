@@ -28,6 +28,11 @@ const router = createRouter({
             path: '/email',
             name: 'confirmEmail',
             component: () => import('../views/ConfirmView.vue')
+        },
+        {
+            path: '/my-page',
+            name: 'MyPage',
+            component: () => import('../views/MyPageView.vue')
         }
     ]
 });

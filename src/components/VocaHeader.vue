@@ -7,7 +7,7 @@
         <v-btn href="/sign-up">SIGN-UP</v-btn>
       </v-btn-group>
       <v-btn-group v-else>
-        <v-btn>{{ username }}</v-btn>
+        <v-btn href="/my-page">{{ username }}</v-btn>
       </v-btn-group>
     </template>
   </v-app-bar>
@@ -19,7 +19,6 @@ export default {
   data() {
     return {
       username: '',
-      token: '',
     }
   },
 
