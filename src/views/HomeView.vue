@@ -34,28 +34,26 @@ export default {
     }
   },
   methods: {
-    update(day) {
+    update() {
 
       let date;
+      let day = this.$route.query.date;
 
       if(day == 'today') {
         this.date = '오늘 공부할 단어';
         date = moment();
-      }
-
-      if(day == 'yesterday') {
+      } else if(day == 'yesterday') {
         this.date = '어제 공부한 단어';
         date = moment().subtract(1, 'days');
-      }
-
-      if(day == 'week') {
+      } else if(day == 'week') {
         this.date = '일주일 전 공부한 단어';
         date = moment().subtract(7, 'days');
-      }
-
-      if(day == 'month') {
+      } else if(day == 'month') {
         this.date = '한달 전 공부한 단어';
         date = moment().subtract(1, 'months');
+      } else {
+        date = moment(day, 'YYYY/MM/DD')
+        this.date = date.format('YYYY/MM/DD')
       }
 
       axios

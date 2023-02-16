@@ -15,12 +15,19 @@
 export default {
   data() {
     return {
-      value: 'today',
+      value: this.getTitle()
     }
   },
   methods: {
     getWords(day) {
-      this.$emit('update', day);
+      location.href = this.domain + "/?date=" + day;
+    },
+    getTitle() {
+      let date = this.$route.query.date;
+      if(!date || date == 'today') return 'today';
+      else if(date == 'yesterday') return 'yesterday';
+      else if(date == 'week') return 'aWeek';
+      else if(date == 'month') return 'aMonth';
     }
   }
 }

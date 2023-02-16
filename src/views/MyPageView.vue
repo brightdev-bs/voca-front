@@ -17,33 +17,48 @@
     <div>
       <h3>이전 공부 내역</h3>
       <v-date-picker
+          v-model="selected"
           is-expanded
+          @click="openPopup()"
           :attributes='attributes'
       />
     </div>
+
+    <v-dialog
+        v-model="clicked"
+        width="500">
+      <v-card>
+        <v-card-text>{{ selected }}에 공부한 단어를 복습하시겠습니까?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="green-darken-1"
+              variant="text"
+              @click="choose(false)"
+          >
+            Disagree
+          </v-btn>
+          <v-btn
+              color="green-darken-1"
+              variant="text"
+              @click="choose(true)"
+          >
+            Agree
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </div>
 </template>
 
 <script>
 import 'v-calendar/dist/style.css';
 import axios from "axios";
+import moment from "moment";
 
 export default {
 
-  data() {
-    return {
-      profile: {
-        username: '',
-        email: '',
-      },
-      attributes: [
-        {
-          dot: true,
-          dates: [],
-        }
-      ],
-    }
-  },
   mounted() {
 
     let token = localStorage.getItem("token");
@@ -76,6 +91,37 @@ export default {
           console.log(err);
         })
   },
+
+  data() {
+    return {
+      profile: {
+        username: '',
+        email: '',
+      },
+      attributes: [
+        {
+          dot: true,
+          dates: [],
+        }
+      ],
+      selected: null,
+      clicked: false,
+    }
+  },
+  methods: {
+    openPopup() {
+      this.selected = moment(this.selected).format('YYYY/MM/DD');
+      console.log(moment(this.selected, 'YYYY.MM.DD').format());
+      this.clicked = true;
+    },
+    choose(flag) {
+      if(flag) {
+        location.href = this.domain + '?date=' + this.selected;
+      } else {
+        this.clicked = false;
+      }
+    }
+  }
 }
 </script>
 
