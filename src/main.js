@@ -18,8 +18,8 @@ let app = createApp(App)
     .use(VueBasicAlert)
 
 let globalProperties = app.config.globalProperties;
-globalProperties.server = "http://localhost:8088";
-globalProperties.domain = "http://localhost:8089";
+globalProperties.server = "18.180.26.177:8088";
+globalProperties.domain = "18.180.26.177:8089";
 
 app.mount('#app')
 
