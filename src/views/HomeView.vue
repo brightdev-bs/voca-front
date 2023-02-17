@@ -1,7 +1,7 @@
 <template>
   <div class="ma-5">
     {{ this.date }}
-    <v-btn href="/words/new" class="float-right mx-auto">추가하기</v-btn>
+    <v-btn href="/words/new" class="float-right mx-auto" v-if="isToday">추가하기</v-btn>
   </div>
   <voca-table :words="this.words"></voca-table>
 
@@ -20,6 +20,7 @@ import moment from "moment";
 import VocaFooter from "@/components/VocaFooter.vue";
 
 export default {
+
   mounted() {
     this.update('today');
   },
@@ -29,6 +30,7 @@ export default {
   },
   data() {
     return {
+      isToday: this.checkDate(),
       date: "today",
       words: [],
     }
@@ -39,7 +41,7 @@ export default {
       let date;
       let day = this.$route.query.date;
 
-      if(day == 'today') {
+      if(day == 'today' || !day) {
         this.date = '오늘 공부할 단어';
         date = moment();
       } else if(day == 'yesterday') {
@@ -75,6 +77,12 @@ export default {
           console.log(err);
         })
     },
+    checkDate() {
+      let date = this.$route.query.date;
+      console.log(date);
+      if(date == 'today' || !date) return true;
+      else return false;
+    }
   }
 }
 </script>
