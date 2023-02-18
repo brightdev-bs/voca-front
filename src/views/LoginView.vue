@@ -24,6 +24,11 @@
     >
       Login
     </v-btn>
+
+    <v-alert type="error" v-if="this.error.flag">
+      {{ this.error.message }}
+    </v-alert>
+
   </form>
 </template>
 
@@ -34,6 +39,7 @@ import {useVuelidate} from "@vuelidate/core";
 import axios from "axios";
 
 export default {
+
   setup () {
     const initialState = {
       email: '',
@@ -52,6 +58,14 @@ export default {
     const v$ = useVuelidate(rules, state)
 
     return { state, v$ }
+  },
+  data() {
+    return {
+      error: {
+        flag: false,
+        message: '',
+      }
+    }
   },
   methods: {
 
@@ -83,6 +97,14 @@ export default {
           })
           .catch(err => {
             console.log(err);
+            const errorMsg = err.response.data.data;
+            this.error.flag = true;
+
+            if(errorMsg == '인증되지 않은 사용자입니다.') {
+              this.error.message = "인증되지 않은 사용자입니다. 이메일을 확인해주세요."
+            } else{
+              this.error.message = errorMsg
+            }
           })
       }
     }

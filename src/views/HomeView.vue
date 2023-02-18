@@ -6,11 +6,7 @@
   <voca-table :words="this.words"></voca-table>
 
   <!--      v-bind:프롭스 속성 이름="상위 컴포넌트 데이터 이름"-->
-  <voca-footer
-      v-bind:propsdata="date"
-      @update="update">
-
-  </voca-footer>
+  <voca-footer @update="update"/>
 </template>
 
 <script>
@@ -74,7 +70,10 @@ export default {
           this.words = res.data.data.words;
         })
         .catch(err => {
-          console.log(err);
+          const errorMsg = err.response.data.data
+          if(errorMsg == '토큰이 없습니다.') {
+            location.href = this.domain + '/login';
+          }
         })
     },
     checkDate() {
