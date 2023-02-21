@@ -78,7 +78,6 @@ export default {
     },
     checkDate() {
       let date = this.$route.query.date;
-      console.log(date);
       if(date == 'today' || !date) return true;
       else return false;
     }

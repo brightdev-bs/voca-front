@@ -82,7 +82,7 @@ export default {
         console.log(data);
 
         axios
-          .post(this.server + '/login', JSON.stringify(data), {
+          .post(this.server + '/api/v1/login', JSON.stringify(data), {
             headers: {
               "Content-Type": 'application/json',
             }

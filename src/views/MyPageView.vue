@@ -68,7 +68,7 @@ export default {
     }
 
     axios
-        .get(this.server + '/my-page', {
+        .get(this.server + '/api/v1/my-page', {
           headers: {
             "Content-Type": 'application/json',
             Authorization: localStorage.getItem("token"),
