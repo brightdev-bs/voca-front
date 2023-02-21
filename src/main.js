@@ -19,7 +19,7 @@ let app = createApp(App)
 
 let globalProperties = app.config.globalProperties;
 globalProperties.server = "http://18.180.26.177/server";
-globalProperties.domain = "http://18.180.26.177:8089";
+globalProperties.domain = "http://18.180.26.177";
 
 // globalProperties.server = "http://localhost:8088";
 // globalProperties.domain = "http://localhost:8089";
