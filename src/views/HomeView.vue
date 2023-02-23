@@ -1,9 +1,13 @@
 <template>
   <div class="ma-5">
     {{ this.date }}
-    <v-btn href="/words/new" class="float-right mx-auto" v-if="isToday">추가하기</v-btn>
+    <v-btn class="float-right mx-3" @click="hideDefinition">{{ hideButton }}</v-btn>
+    <v-btn href="/words/new" class="float-right" v-if="isToday">추가하기</v-btn>
   </div>
-  <voca-table :words="this.words"></voca-table>
+  <voca-table
+      :words="this.words"
+      @changeHideStatus="changeHideStatus"
+  ></voca-table>
 
   <!--      v-bind:프롭스 속성 이름="상위 컴포넌트 데이터 이름"-->
   <voca-footer @update="update"/>
@@ -26,6 +30,7 @@ export default {
   },
   data() {
     return {
+      hideButton: '뜻 숨기기',
       isToday: this.checkDate(),
       date: "today",
       words: [],
@@ -67,6 +72,7 @@ export default {
         })
         .then(res => {
           console.log(res);
+          res.data.data.words.forEach(w => w.isHidden = false);
           this.words = res.data.data.words;
         })
         .catch(err => {
@@ -80,6 +86,22 @@ export default {
       let date = this.$route.query.date;
       if(date == 'today' || !date) return true;
       else return false;
+    },
+    hideDefinition() {
+      if(this.hideButton == '뜻 숨기기') {
+        this.hideButton = '뜻 보이기';
+        this.words.forEach(w => w.isHidden = true)
+      } else {
+        this.hideButton = '뜻 숨기기';
+        this.words.forEach(w => w.isHidden = false)
+      }
+    },
+    changeHideStatus(id) {
+      let word = this.words.at(id);
+      console.log(word);
+      console.log(word.id)
+      console.log(word.isHidden);
+      word.isHidden = !word.isHidden;
     }
   }
 }

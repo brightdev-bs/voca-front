@@ -2,7 +2,7 @@
   <v-table>
     <thead>
     <tr>
-      <th class="text-left" width="45%">
+      <th class="text-left words" width="45%">
         Word
       </th>
       <th class="text-left" width="45%">
@@ -15,11 +15,11 @@
     </thead>
     <tbody>
     <tr
-        v-for="word in words"
+        v-for="(word, index) in words"
         :key="word.id"
     >
       <td>{{ word.word }}</td>
-      <td>{{ word.definition }}</td>
+      <td :class="{ hide: word.isHidden }" @click="changeHideStatus(index)">{{ word.definition }}</td>
       <td>
         <v-checkbox v-model="word.checked" @click="check(word.id)"></v-checkbox>
       </td>
@@ -34,6 +34,7 @@ import axios from "axios";
 export default {
   props: {
     words: Array,
+    isHidingDefinition: Boolean,
   },
   data () {
     return {
@@ -57,11 +58,16 @@ export default {
           .catch(err => {
             console.log(err);
           })
+    },
+    changeHideStatus(id) {
+      this.$emit('changeHideStatus', id);
     }
   }
 }
 </script>
 
 <style scoped>
-
+.hide {
+  background-color: black;
+}
 </style>
