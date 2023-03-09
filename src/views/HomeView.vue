@@ -77,7 +77,9 @@ export default {
         })
         .catch(err => {
           const errorMsg = err.response.data.data
-          if(errorMsg == '토큰이 없습니다.') {
+          if(errorMsg == '만료된 토큰입니다.' || errorMsg == '토큰이 없습니다.') {
+            localStorage.removeItem("id");
+            localStorage.removeItem("token");
             location.href = this.domain + '/login';
           }
         })

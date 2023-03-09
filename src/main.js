@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/router.js';
 
+import vSelect from "vue-select";
 
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
@@ -17,12 +18,14 @@ let app = createApp(App)
     .use(VCalendar, {})
     .use(VueBasicAlert)
 
-let globalProperties = app.config.globalProperties;
-globalProperties.server = "http://18.180.26.177/server";
-globalProperties.domain = "http://18.180.26.177";
+app.component("v-select", vSelect)
 
-// globalProperties.server = "http://localhost:8088";
-// globalProperties.domain = "http://localhost:8089";
+let globalProperties = app.config.globalProperties;
+// globalProperties.server = "http://18.180.26.177/server";
+// globalProperties.domain = "http://18.180.26.177";
+
+globalProperties.server = "http://localhost:8088";
+globalProperties.domain = "http://localhost:8089";
 
 app.mount('#app')
 

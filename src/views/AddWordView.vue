@@ -20,6 +20,72 @@
         label="부가 설명"
         variant="solo">
     </v-text-field>
+
+    <v-select
+        v-model="select"
+        :items="this.form.category"
+        item-title="name"
+        item-value="value"
+        variant="solo"
+        label="단어장"
+        @update:modelValue="change"
+    ></v-select>
+
+    <v-dialog
+      v-model="vocaView"
+      persistent
+      width="480"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">단어장 추가하기</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-text-field
+                v-model="this.voca.name"
+                label="단어장 이름"
+                required>
+              </v-text-field>
+            </v-row>
+            <v-row>
+              <v-text-field
+                  v-model="this.voca.description"
+                  label="단어장 설명"
+                  required>
+              </v-text-field>
+            </v-row>
+            <v-row>
+              <v-checkbox
+                  v-model="this.voca.isPublic"
+                  :label=" '공개' ">
+              </v-checkbox>
+            </v-row>
+          </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="blue-darken-1"
+              variant="text"
+              @click="this.vocaView = false"
+          >
+            취소
+          </v-btn>
+          <v-btn
+              color="blue-darken-1"
+              variant="text"
+              @click="addVocabulary"
+          >
+            저장
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
     <v-btn class="float-right" @click="addWord">추가하기</v-btn>
   </section>
 
@@ -30,12 +96,26 @@
 import axios from "axios";
 
 export default {
+  mounted() {
+    this.initVocaList();
+  },
   data() {
     return {
+      vocaView: false,
+      select: '',
+      categories: [],
       form: {
         word: '',
         definition: '',
         note: '',
+        category: [
+            { name: '추가하기', value: "add"}
+        ],
+      },
+      voca: {
+        name: '',
+        description: '',
+        isPublic : true,
       }
     }
   },
@@ -45,7 +125,7 @@ export default {
   methods: {
     addWord() {
 
-      console.log(localStorage.getItem("token"));
+      this.form.vocabularyName = this.select;
 
       axios
           .post(this.server + '/api/v1/words', JSON.stringify(this.form), {
@@ -65,9 +145,74 @@ export default {
             console.log(err);
           })
     },
+    change(event) {
+      console.log(event);
+      if(event == 'add') {
+       this.vocaView = true;
+       this.select = '';
+      }
+    },
+    addVocabulary() {
+      const name = this.voca.name.trim();
+      const desc = this.voca.description.trim();
+      const isPublic = this.voca.isPublic;
+      const form = {
+        "name": name,
+        "description": desc,
+        "isPublic": isPublic,
+      }
+
+      for(const value of this.form.category) {
+        if(value.name == name) {
+          alert("이미 같은 이름의 단어장이 존재합니다.");
+          return;
+        }
+      }
+
+      axios
+          .post(this.server + '/api/v1/voca', JSON.stringify(form), {
+            headers: {
+              "Content-Type": 'application/json',
+              Authorization: localStorage.getItem("token"),
+            }
+          })
+          .then(res => {
+            console.log(res.data.statusCode)
+            if(res.data.statusCode == '201 CREATED') {
+
+              this.form.category.unshift({name: name, value: name});
+              this.voca.name = '';
+              this.voca.description = '';
+              this.vocaView = false;
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    },
+    initVocaList() {
+
+      axios
+          .get(this.server + '/api/v1/voca', {
+            headers: {
+              "Content-Type": 'application/json',
+              Authorization: localStorage.getItem("token"),
+            }
+          })
+          .then(res => {
+            console.log(res.data.statusCode)
+            if(res.data.statusCode == '200 OK') {
+              console.log(res.data);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    }
   }
 
 }
+
 </script>
 
 <style scoped>

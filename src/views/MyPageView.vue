@@ -19,13 +19,15 @@
       <v-date-picker
           v-model="selected"
           is-expanded
-          @click="openPopup()"
+          @dayclick="onDayClick"
           :attributes='attributes'
+          :max-date="new Date()"
       />
     </div>
 
     <v-dialog
         v-model="clicked"
+        persistent
         width="500">
       <v-card>
         <v-card-text>{{ selected }}에 공부한 단어를 복습하시겠습니까?</v-card-text>
@@ -109,7 +111,7 @@ export default {
     }
   },
   methods: {
-    openPopup() {
+    onDayClick() {
       this.selected = moment(this.selected).format('YYYY/MM/DD');
       console.log(moment(this.selected, 'YYYY.MM.DD').format());
       this.clicked = true;
@@ -120,7 +122,8 @@ export default {
       } else {
         this.clicked = false;
       }
-    }
+      this.selected = null;
+    },
   }
 }
 </script>
