@@ -42,47 +42,80 @@ export default {
       let date;
       let day = this.$route.query.date;
 
-      if(day == 'today' || !day) {
-        this.date = '오늘 공부할 단어';
-        date = moment();
-      } else if(day == 'yesterday') {
-        this.date = '어제 공부한 단어';
-        date = moment().subtract(1, 'days');
-      } else if(day == 'week') {
-        this.date = '일주일 전 공부한 단어';
-        date = moment().subtract(7, 'days');
-      } else if(day == 'month') {
-        this.date = '한달 전 공부한 단어';
-        date = moment().subtract(1, 'months');
-      } else {
-        date = moment(day, 'YYYY/MM/DD')
-        this.date = date.format('YYYY/MM/DD')
+      if(day) {
+        if(day == 'today' || !day) {
+          this.date = '오늘 공부할 단어';
+          date = moment();
+        } else if(day == 'yesterday') {
+          this.date = '어제 공부한 단어';
+          date = moment().subtract(1, 'days');
+        } else if(day == 'week') {
+          this.date = '일주일 전 공부한 단어';
+          date = moment().subtract(7, 'days');
+        } else if(day == 'month') {
+          this.date = '한달 전 공부한 단어';
+          date = moment().subtract(1, 'months');
+        } else {
+          date = moment(day, 'YYYY/MM/DD')
+          this.date = date.format('YYYY/MM/DD')
+        }
+
+        axios
+            .get(this.server + '/api/v1/words', {
+              params: {
+                date: date.format("YYYY-MM-DD HH:mm:ss"),
+              },
+              headers: {
+                "Content-Type": 'application/json',
+                Authorization: localStorage.getItem("token"),
+              },
+
+            })
+            .then(res => {
+              console.log(res);
+              res.data.data.words.forEach(w => w.isHidden = false);
+              this.words = res.data.data.words;
+            })
+            .catch(err => {
+              const errorMsg = err.response.data.data
+              if(errorMsg == '만료된 토큰입니다.' || errorMsg == '토큰이 없습니다.') {
+                localStorage.removeItem("id");
+                localStorage.removeItem("token");
+                location.href = this.domain + '/login';
+              }
+            })
       }
 
-      axios
-        .get(this.server + '/api/v1/words', {
-          params: {
-            date: date.format("YYYY-MM-DD HH:mm:ss"),
-          },
-          headers: {
-            "Content-Type": 'application/json',
-            Authorization: localStorage.getItem("token"),
-          },
+      let voca = this.$route.query.voca;
+      if(voca) {
+        date = voca;
+        axios
+            .get(this.server + '/api/v1/voca/words', {
+              params: {
+                voca: voca,
+              },
+              headers: {
+                "Content-Type": 'application/json',
+                Authorization: localStorage.getItem("token"),
+              },
 
-        })
-        .then(res => {
-          console.log(res);
-          res.data.data.words.forEach(w => w.isHidden = false);
-          this.words = res.data.data.words;
-        })
-        .catch(err => {
-          const errorMsg = err.response.data.data
-          if(errorMsg == '만료된 토큰입니다.' || errorMsg == '토큰이 없습니다.') {
-            localStorage.removeItem("id");
-            localStorage.removeItem("token");
-            location.href = this.domain + '/login';
-          }
-        })
+            })
+            .then(res => {
+              console.log(res);
+              res.data.data.words.forEach(w => w.isHidden = false);
+              this.words = res.data.data.words;
+            })
+            .catch(err => {
+              const errorMsg = err.response.data.data
+              if(errorMsg == '만료된 토큰입니다.' || errorMsg == '토큰이 없습니다.') {
+                localStorage.removeItem("id");
+                localStorage.removeItem("token");
+                location.href = this.domain + '/login';
+              }
+            })
+
+      }
+
     },
     checkDate() {
       let date = this.$route.query.date;
