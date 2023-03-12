@@ -16,6 +16,9 @@
         required
         @input="v$.password.$touch"
         @blur="v$.password.$touch"
+        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="show ? 'text' : 'password'"
+        @click:append="show = !show"
     ></v-text-field>
 
     <v-btn
@@ -70,7 +73,8 @@ export default {
       error: {
         flag: false,
         message: '',
-      }
+      },
+      show: false,
     }
   },
   methods: {

@@ -24,18 +24,39 @@
         :error-messages="v$.password.$errors.map(e => e.$message)"
         label="패스워드"
         required
+        :type="show ? 'text' : 'password'"
         @input="v$.password.$touch"
         @blur="v$.password.$touch"
+        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+        @click:append="show = !show"
     ></v-text-field>
 
 
-    <v-btn
-        class="me-4 float-end"
-        @click="signup"
-    >
-      submit
-    </v-btn>
+    <v-row justify="end">
+      <v-btn @click="signup">
+        submit
+      </v-btn>
+    </v-row>
+
+    <v-row class="ma-2 pt-5">
+      <v-alert v-if="this.error"
+               type="error"
+               title="Error"
+      >
+        {{ this.errorMessage }}
+      </v-alert>
+    </v-row>
+
+    <v-row justify="center">
+      <v-progress-circular
+          v-if="loading"
+          color="primary"
+          indeterminate>
+
+      </v-progress-circular>
+    </v-row >
   </form>
+
 </template>
 
 <script>
@@ -46,6 +67,14 @@ import axios from "axios";
 
 
 export default {
+  data() {
+    return {
+      show: false,
+      error: false,
+      errorMessage: '',
+      loading: false,
+    }
+  },
   setup () {
     const initialState = {
       username: '',
@@ -75,6 +104,8 @@ export default {
       const isFormCorrect = await this.v$.$validate()
       if(isFormCorrect) {
 
+        this.loading = true;
+
         let data = {
           username: this.state.username,
           email: this.state.email,
@@ -89,13 +120,25 @@ export default {
             })
             .then(res => {
               if(res.status == 200) {
-                <v-alert type="info">메일을 확인해주세요.</v-alert>
+                this.loading = false;
+                alert("메일을 확인해주세요.");
                 location.href = this.domain;
               }
             })
             .catch(err => {
               console.log(err);
+              const errorMsg = err.response.data.data;
+              if(errorMsg == '이미 가입한 사용자입니다.') {
+                this.errorMessage = '이미 가입한 사용자입니다.'
+              }
+
+              if(errorMsg == '이미 사용중인 이름입니다.') {
+                this.errorMessage = '이미 사용중인 이름입니다.'
+              }
+              this.error = true;
+              this.loading = false;
             })
+
         }
     }
   }
