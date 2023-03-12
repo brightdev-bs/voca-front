@@ -25,7 +25,7 @@
         v-model="select"
         :items="this.form.category"
         item-title="name"
-        item-value="value"
+        item-value="key"
         variant="solo"
         label="단어장"
         @update:modelValue="change"
@@ -109,7 +109,7 @@ export default {
         definition: '',
         note: '',
         category: [
-            { name: '추가하기', value: "add"}
+            { name: '추가하기', key: "add"}
         ],
       },
       voca: {
@@ -125,7 +125,7 @@ export default {
   methods: {
     addWord() {
 
-      this.form.vocabularyName = this.select;
+      this.form.vocaId = this.select;
 
       axios
           .post(this.server + '/api/v1/words', JSON.stringify(this.form), {
@@ -178,9 +178,11 @@ export default {
           })
           .then(res => {
             console.log(res.data.statusCode)
+            console.log(res.data);
             if(res.data.statusCode == '201 CREATED') {
+              console.log(res.data.data.id)
 
-              this.form.category.unshift({name: name, value: name});
+              this.form.category.unshift({name: name, key: res.data.data.id});
               this.voca.name = '';
               this.voca.description = '';
               this.vocaView = false;
@@ -202,7 +204,10 @@ export default {
           .then(res => {
             console.log(res.data.statusCode)
             if(res.data.statusCode == '200 OK') {
-              console.log(res.data);
+              let response = res.data.data;
+              for (const ele of response) {
+                this.form.category.unshift({name: ele.name, key: ele.id});
+              }
             }
           })
           .catch(err => {
