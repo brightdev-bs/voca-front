@@ -41,8 +41,10 @@ export default {
 
       let date;
       let day = this.$route.query.date;
+      let voca = this.$route.query.voca;
 
-      if(day) {
+      if(day || !voca) {
+        date = moment();
         if(day == 'today' || !day) {
           this.date = '오늘 공부할 단어';
           date = moment();
@@ -59,6 +61,7 @@ export default {
           date = moment(day, 'YYYY/MM/DD')
           this.date = date.format('YYYY/MM/DD')
         }
+
 
         axios
             .get(this.server + '/api/v1/words', {
@@ -86,7 +89,6 @@ export default {
             })
       }
 
-      let voca = this.$route.query.voca;
       if(voca) {
         date = voca;
         axios
@@ -115,7 +117,6 @@ export default {
             })
 
       }
-
     },
     checkDate() {
       let date = this.$route.query.date;
