@@ -33,8 +33,15 @@ const router = createRouter({
             path: '/my-page',
             name: 'MyPage',
             component: () => import('../views/MyPageView.vue')
-        }
+        },
+        {
+            path: '/word-game',
+            name: 'WordGame',
+            component: () => import('../views/WordGameView.vue'),
+            props: true,
+        },
     ]
 });
+
 
 export default router;

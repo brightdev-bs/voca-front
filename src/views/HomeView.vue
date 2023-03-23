@@ -1,8 +1,13 @@
 <template>
   <div class="ma-5">
-    {{ this.date }}
-    <v-btn class="float-right mx-3" @click="hideDefinition">{{ hideButton }}</v-btn>
-    <v-btn href="/words/new" class="float-right" v-if="isToday">추가하기</v-btn>
+    <v-row>
+      {{ this.date }}
+    </v-row>
+    <v-row justify="end">
+      <v-btn size="small" class="float-right me-1" @click="hideDefinition">{{ hideButton }}</v-btn>
+      <v-btn size="small" href="/words/new" class="float-right me-1" v-if="isToday">추가하기</v-btn>
+      <v-btn size="small" @click="setWordGame" class="float-right">단어 게임</v-btn>
+    </v-row>
   </div>
   <voca-table
       :words="this.words"
@@ -18,6 +23,8 @@ import VocaTable from "@/components/VocaTable";
 import axios from "axios";
 import moment from "moment";
 import VocaFooter from "@/components/VocaFooter.vue";
+import {useWordGameStore} from "@/stores/useWordGameStore";
+import router from "@/router/router";
 
 export default {
 
@@ -76,7 +83,12 @@ export default {
             })
             .then(res => {
               console.log(res);
-              res.data.data.words.forEach(w => w.isHidden = false);
+              let id = 0;
+              res.data.data.words.forEach(w => {
+                w.num = id++;
+                w.isHidden = false
+                w.isWrong = false
+              });
               this.words = res.data.data.words;
             })
             .catch(err => {
@@ -104,7 +116,10 @@ export default {
             })
             .then(res => {
               console.log(res);
-              res.data.data.words.forEach(w => w.isHidden = false);
+              res.data.data.words.forEach(w => {
+                w.isHidden = false
+                w.isWrong= false
+              });
               this.words = res.data.data.words;
             })
             .catch(err => {
@@ -134,10 +149,12 @@ export default {
     },
     changeHideStatus(id) {
       let word = this.words.at(id);
-      console.log(word);
-      console.log(word.id)
-      console.log(word.isHidden);
       word.isHidden = !word.isHidden;
+    },
+    setWordGame() {
+      const store = useWordGameStore();
+      store.setWords(this.words);
+      router.push('/word-game');
     }
   }
 }
