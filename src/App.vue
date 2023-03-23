@@ -1,8 +1,10 @@
 <template>
   <v-app>
     <v-main>
-      <voca-header></voca-header>
-      <router-view></router-view>
+      <v-container>
+        <voca-header></voca-header>
+        <router-view></router-view>
+      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -14,7 +16,5 @@ export default {
   components: {
     VocaHeader,
   },
-
-
 }
 </script>
