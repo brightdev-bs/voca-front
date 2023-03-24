@@ -1,5 +1,6 @@
 <template>
   <form class="ma-5">
+    <h2 class="ma-2">Sign-up</h2>
     <v-text-field
         v-model="state.username"
         :error-messages="v$.username.$errors.map(e => e.$message)"
@@ -22,7 +23,7 @@
     <v-text-field
         v-model="state.password"
         :error-messages="v$.password.$errors.map(e => e.$message)"
-        label="패스워드"
+        label="password"
         required
         :type="show ? 'text' : 'password'"
         @input="v$.password.$touch"

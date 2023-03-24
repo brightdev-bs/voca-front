@@ -1,5 +1,6 @@
 <template>
   <form class="ma-5">
+    <h2 class="ma-2">Login</h2>
     <v-text-field
         v-model="state.email"
         :error-messages="v$.email.$errors.map(e => e.$message)"
@@ -12,7 +13,7 @@
     <v-text-field
         v-model="state.password"
         :error-messages="v$.password.$errors.map(e => e.$message)"
-        label="패스워드"
+        label="password"
         required
         @input="v$.password.$touch"
         @blur="v$.password.$touch"
@@ -31,12 +32,6 @@
     <v-alert type="error" v-if="this.error.flag">
       {{ this.error.message }}
     </v-alert>
-
-    <v-btn
-        v-if="this.error.flag"
-        @click="sendEmail">
-      다시 보내기
-    </v-btn>
 
   </form>
 </template>
@@ -118,33 +113,6 @@ export default {
           })
       }
     },
-
-    sendEmail() {
-      const isFormCorrect = this.v$.$validate()
-      if(isFormCorrect) {
-
-        let data = {
-          email: this.state.email,
-          password: this.state.password,
-        }
-
-        axios
-            .post(this.server + '/api/v1/email', JSON.stringify(data), {
-              headers: {
-                "Content-Type": 'application/json',
-              }
-            })
-            .then(res => {
-              if(res.status == 200) {
-                <v-alert type="info">메일을 확인해주세요.</v-alert>
-                location.href = this.domain;
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            })
-      }
-    }
   }
 }
 </script>
