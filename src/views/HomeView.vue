@@ -71,7 +71,7 @@ export default {
 
 
         axios
-            .get(this.server + '/api/v1/words', {
+            .get('/api/v1/words', {
               params: {
                 date: date.format("YYYY-MM-DD HH:mm:ss"),
               },
@@ -104,7 +104,7 @@ export default {
       if(voca) {
         date = voca;
         axios
-            .get(this.server + '/api/v1/voca/words', {
+            .get('/api/v1/voca/words', {
               params: {
                 voca: voca,
               },
@@ -127,7 +127,7 @@ export default {
               if(errorMsg == '만료된 토큰입니다.' || errorMsg == '토큰이 없습니다.') {
                 localStorage.removeItem("id");
                 localStorage.removeItem("token");
-                location.href = this.domain + '/login';
+                location.href = '/login';
               }
             })
 
