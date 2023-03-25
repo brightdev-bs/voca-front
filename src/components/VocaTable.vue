@@ -46,7 +46,7 @@ export default {
 
       console.log(id);
       axios
-          .patch(this.server + '/api/v1/words/' + id, {
+          .patch('/api/v1/words/' + id, {
             headers: {
               "Content-Type": 'application/json',
               Authorization: localStorage.getItem("token"),

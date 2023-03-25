@@ -128,7 +128,7 @@ export default {
       this.form.vocaId = this.select;
 
       axios
-          .post(this.server + '/api/v1/words', JSON.stringify(this.form), {
+          .post('/api/v1/words', JSON.stringify(this.form), {
             headers: {
               "Content-Type": 'application/json',
               Authorization: localStorage.getItem("token"),
@@ -170,7 +170,7 @@ export default {
       }
 
       axios
-          .post(this.server + '/api/v1/voca', JSON.stringify(form), {
+          .post('/api/v1/voca', JSON.stringify(form), {
             headers: {
               "Content-Type": 'application/json',
               Authorization: localStorage.getItem("token"),
@@ -195,7 +195,7 @@ export default {
     initVocaList() {
 
       axios
-          .get(this.server + '/api/v1/voca', {
+          .get('/api/v1/voca', {
             headers: {
               "Content-Type": 'application/json',
               Authorization: localStorage.getItem("token"),
