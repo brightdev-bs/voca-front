@@ -12,7 +12,7 @@ import axios from "axios";
 export default {
   created() {
     let token = this.$route.query.token;
-    axios.get(this.server + "/api/v1/email?token=" + token)
+    axios.get(this.domain + "/api/v1/email?token=" + token)
         .then(() => {
           this.response.message = '인증되었습니다.';
         })
