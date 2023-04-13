@@ -27,10 +27,10 @@ app.component("v-select", vSelect)
 
 let globalProperties = app.config.globalProperties;
 // globalProperties.server = "http://18.180.26.177/server";
-globalProperties.domain = "https://voca-world.com";
+// globalProperties.domain = "https://voca-world.com"; 서버 올릴 때만 오픈
 
-// globalProperties.server = "http://localhost:8088";
-// globalProperties.domain = "http://localhost:8089";
+globalProperties.server = "http://localhost/api";
+globalProperties.domain = "http://localhost";
 
 app.mount('#app')
 
