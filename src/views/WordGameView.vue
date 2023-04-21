@@ -79,9 +79,30 @@ export default {
       let wrongWords = new Array();
       let incorrect = [];
       for(const word of this.words) {
-        if(word.definition == word.text) {
-          count++;
-        } else {
+        let correctFlag = false;
+        // 정규식을 이용해 () [], 띄어쓰기 무시한다.
+        // https://regexr.com/
+        if(word.definition && word.text) {
+          const def = word.definition.replace(/\s|^\[.*\]|\(.*\)/g, '');
+          const txt = word.text.replace(/\s|^\[.*\]|\(.*\)/g, '');
+
+          if(def == txt) {
+            correctFlag = true;
+            count++;
+            continue;
+          }
+
+          const defArr = new Set(def.split(","));
+          const txtArr = txt.split(",");
+          for(const text of txtArr) {
+            if(defArr.has(text)) {
+              correctFlag = true;
+              count++;
+            }
+          }
+        }
+
+        if(correctFlag == false) {
           wrongWords.push(word.word);
           incorrect.push(word.num);
         }
