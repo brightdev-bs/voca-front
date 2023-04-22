@@ -29,8 +29,8 @@ let globalProperties = app.config.globalProperties;
 // globalProperties.server = "http://18.180.26.177/server";
 // globalProperties.domain = "https://voca-world.com"; 서버 올릴 때만 오픈
 
-globalProperties.server = "http://localhost/api";
-globalProperties.domain = "http://localhost";
+globalProperties.domain = process.env.VUE_APP_ADDRESS
+globalProperties.server = process.env.VUE_APP_ADDRESS_API;
 
 app.mount('#app')
 

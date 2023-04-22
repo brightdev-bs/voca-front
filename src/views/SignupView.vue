@@ -114,7 +114,7 @@ export default {
         }
 
         axios
-            .post(this.domain + '/api/v1/sign-up', JSON.stringify(data), {
+            .post(this.server + '/v1/sign-up', JSON.stringify(data), {
               headers: {
                 "Content-Type": 'application/json',
               }
