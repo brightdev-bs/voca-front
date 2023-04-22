@@ -1,5 +1,9 @@
 FROM node:latest as build-stage
 WORKDIR /app
+
+# uri 주소
+ARG VUE_APP_ADDRESS
+ARG VUE_APP_ADDRESS_API
 # package.json이름을 가진 파일을 모두 workdir폴더로 복사한다.
 COPY package*.json ./
 RUN npm install

@@ -71,7 +71,7 @@ export default {
 
 
         axios
-            .get(this.domain + '/api/v1/words', {
+            .get(this.server + '/v1/words', {
               params: {
                 date: date.format("YYYY-MM-DD HH:mm:ss"),
               },
@@ -104,7 +104,7 @@ export default {
       if(voca) {
         date = voca;
         axios
-            .get(this.domain + '/api/v1/voca/words', {
+            .get(this.server + '/v1/voca/words', {
               params: {
                 voca: voca,
               },

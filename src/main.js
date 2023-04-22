@@ -27,8 +27,8 @@ app.component("v-select", vSelect)
 
 let globalProperties = app.config.globalProperties;
 
-globalProperties.server = "http://localhost/api";
-globalProperties.domain = "http://localhost";
+globalProperties.domain = process.env.VUE_APP_ADDRESS
+globalProperties.server = process.env.VUE_APP_ADDRESS_API;
 
 app.mount('#app')
 
