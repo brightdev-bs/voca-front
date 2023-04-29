@@ -8,12 +8,15 @@
       </v-btn-group>
       <v-btn-group v-else>
         <v-btn href="/my-page">{{ username }}</v-btn>
+        <v-btn @click="logout">logout</v-btn>
       </v-btn-group>
     </template>
   </v-app-bar>
 </template>
 
 <script>
+import router from "@/router/router";
+
 export default {
 
   data() {
@@ -31,6 +34,11 @@ export default {
       } else {
         return true;
       }
+    },
+    logout() {
+      localStorage.removeItem('id')
+      localStorage.removeItem('token')
+      router.go();
     }
   }
 
