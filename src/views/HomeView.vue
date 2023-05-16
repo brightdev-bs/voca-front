@@ -25,6 +25,8 @@ import moment from "moment";
 import VocaFooter from "@/components/VocaFooter.vue";
 import {useWordGameStore} from "@/stores/useWordGameStore";
 import router from "@/router/router";
+import {Error} from '@/global/constants'
+
 
 export default {
 
@@ -93,7 +95,8 @@ export default {
             })
             .catch(err => {
               const errorMsg = err.response.data.data
-              if(errorMsg == '만료된 토큰입니다.' || errorMsg == '토큰이 없습니다.') {
+              console.log(errorMsg);
+              if(errorMsg == Error.INVALID_TOKEN || errorMsg == Error.NOT_FOUND_TOKEN) {
                 localStorage.removeItem("id");
                 localStorage.removeItem("token");
                 location.href = this.domain + '/login';
@@ -124,13 +127,13 @@ export default {
             })
             .catch(err => {
               const errorMsg = err.response.data.data
-              if(errorMsg == '만료된 토큰입니다.' || errorMsg == '토큰이 없습니다.') {
+              console.log(errorMsg);
+              if(errorMsg == Error.INVALID_TOKEN || errorMsg == Error.NOT_FOUND_TOKEN) {
                 localStorage.removeItem("id");
                 localStorage.removeItem("token");
                 location.href = this.domain + '/login';
               }
             })
-
       }
     },
     checkDate() {

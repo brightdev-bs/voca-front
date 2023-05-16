@@ -126,11 +126,9 @@ export default {
       this.dialog = true;
     },
     closeDialog() {
-      console.log("실행됨.");
       this.dialog = false;
     },
     moveToMain() {
-      console.log("실행됨.");
       router.push('/');
     }
   }

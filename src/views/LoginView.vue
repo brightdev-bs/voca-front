@@ -105,7 +105,7 @@ export default {
             const errorMsg = err.response.data.data;
             this.error.flag = true;
 
-            if(errorMsg == '인증되지 않은 사용자입니다.') {
+            if(errorMsg == Error.UNAUTHENTICATED_USER) {
               this.error.message = "인증되지 않은 사용자입니다. 이메일을 확인해주세요."
             } else{
               this.error.message = errorMsg

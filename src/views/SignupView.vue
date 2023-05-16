@@ -129,11 +129,11 @@ export default {
             .catch(err => {
               console.log(err);
               const errorMsg = err.response.data.data;
-              if(errorMsg == '이미 가입한 사용자입니다.') {
+              if(errorMsg == Error.EXISTS_USER) {
                 this.errorMessage = '이미 가입한 사용자입니다.'
               }
 
-              if(errorMsg == '이미 사용중인 이름입니다.') {
+              if(errorMsg == Error.EXISTS_NAME) {
                 this.errorMessage = '이미 사용중인 이름입니다.'
               }
               this.error = true;
