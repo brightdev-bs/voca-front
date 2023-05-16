@@ -52,6 +52,7 @@ export default {
       let day = this.$route.query.date;
       let voca = this.$route.query.voca;
 
+      // Base case
       if(day || !voca) {
         date = moment();
         if(day == 'today' || !day) {
@@ -71,7 +72,6 @@ export default {
           this.date = date.format('YYYY/MM/DD')
         }
 
-
         axios
             .get(this.server + '/v1/words', {
               params: {
@@ -84,7 +84,6 @@ export default {
 
             })
             .then(res => {
-              console.log(res);
               let id = 0;
               res.data.data.words.forEach(w => {
                 w.num = id++;
@@ -95,7 +94,6 @@ export default {
             })
             .catch(err => {
               const errorMsg = err.response.data.data
-              console.log(errorMsg);
               if(errorMsg == Error.INVALID_TOKEN || errorMsg == Error.NOT_FOUND_TOKEN) {
                 localStorage.removeItem("id");
                 localStorage.removeItem("token");
@@ -104,8 +102,9 @@ export default {
             })
       }
 
+      // 단어장 선택해서 공부하기 했을 때
       if(voca) {
-        date = voca;
+        this.date = '';
         axios
             .get(this.server + '/v1/voca/words', {
               params: {
@@ -118,7 +117,6 @@ export default {
 
             })
             .then(res => {
-              console.log(res);
               res.data.data.words.forEach(w => {
                 w.isHidden = false
                 w.isWrong= false
@@ -127,7 +125,6 @@ export default {
             })
             .catch(err => {
               const errorMsg = err.response.data.data
-              console.log(errorMsg);
               if(errorMsg == Error.INVALID_TOKEN || errorMsg == Error.NOT_FOUND_TOKEN) {
                 localStorage.removeItem("id");
                 localStorage.removeItem("token");
