@@ -99,6 +99,7 @@
 import 'v-calendar/dist/style.css';
 import axios from "axios";
 import moment from "moment";
+import {Error} from "@/global/constants";
 
 export default {
 
@@ -132,7 +133,12 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err);
+          const errorMsg = err.response.data.data
+          if(errorMsg === Error.EXPIRED_TOKEN || errorMsg === Error.NOT_FOUND_TOKEN || errorMsg === Error.INVALID_TOKEN) {
+            localStorage.removeItem("id");
+            localStorage.removeItem("token");
+            location.href = this.domain + '/login';
+          }
         })
   },
 

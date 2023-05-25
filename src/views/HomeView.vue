@@ -94,7 +94,7 @@ export default {
             })
             .catch(err => {
               const errorMsg = err.response.data.data
-              if(errorMsg == Error.INVALID_TOKEN || errorMsg == Error.NOT_FOUND_TOKEN) {
+              if(errorMsg === Error.EXPIRED_TOKEN || errorMsg === Error.NOT_FOUND_TOKEN || errorMsg === Error.INVALID_TOKEN) {
                 localStorage.removeItem("id");
                 localStorage.removeItem("token");
                 location.href = this.domain + '/login';
@@ -125,7 +125,7 @@ export default {
             })
             .catch(err => {
               const errorMsg = err.response.data.data
-              if(errorMsg == Error.INVALID_TOKEN || errorMsg == Error.NOT_FOUND_TOKEN) {
+              if(errorMsg == Error.EXPIRED_TOKEN || errorMsg == Error.NOT_FOUND_TOKEN) {
                 localStorage.removeItem("id");
                 localStorage.removeItem("token");
                 location.href = this.domain + '/login';
