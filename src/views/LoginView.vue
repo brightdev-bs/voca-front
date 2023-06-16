@@ -24,6 +24,12 @@
 
     <v-btn
         class="me-4 float-end"
+        href="/find/password"
+    >
+      find password
+    </v-btn>
+    <v-btn
+        class="me-4 float-end"
         @click="login"
     >
       Login
