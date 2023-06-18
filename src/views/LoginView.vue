@@ -24,7 +24,7 @@
 
     <v-btn
         class="me-4 float-end"
-        href="/find/password"
+        href="/password"
     >
       find password
     </v-btn>
@@ -35,9 +35,7 @@
       Login
     </v-btn>
 
-    <v-alert type="error" v-if="this.error.flag">
-      {{ this.error.message }}
-    </v-alert>
+    <ProgressCircular :loading="this.loading"/>
 
   </form>
 </template>
@@ -47,8 +45,10 @@ import {reactive} from "vue";
 import {email, minLength, required} from "@vuelidate/validators";
 import {useVuelidate} from "@vuelidate/core";
 import axios from "axios";
+import ProgressCircular from "@/components/ProgressCircular.vue";
 
 export default {
+  components: {ProgressCircular},
 
   setup () {
     const initialState = {
@@ -76,21 +76,21 @@ export default {
         message: '',
       },
       show: false,
+      loading: false,
     }
   },
   methods: {
 
     async login() {
       const isFormCorrect = await this.v$.$validate()
-      console.log(isFormCorrect);
       if(isFormCorrect) {
+
+        this.loading = true;
 
         let data = {
           email: this.state.email,
           password: this.state.password,
         }
-
-        console.log(data);
 
         axios
           .post(this.server + '/v1/login', JSON.stringify(data), {
@@ -99,7 +99,6 @@ export default {
             }
           })
           .then(res => {
-            console.log(res);
             if(res.status == 200) {
               localStorage.setItem('token', res.data.data.token)
               localStorage.setItem('id', res.data.data.username)
@@ -107,7 +106,7 @@ export default {
             }
           })
           .catch(err => {
-            console.log(err);
+            this.loading = false;
             const errorMsg = err.response.data.data;
             this.error.flag = true;
 

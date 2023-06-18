@@ -41,9 +41,15 @@ const router = createRouter({
             props: true,
         },
         {
-            path: '/find/password',
+            path: '/password',
             name: 'FindPassword',
             component: () => import('../views/FindPasswordView.vue'),
+            props: true,
+        },
+        {
+            path: '/password/options',
+            name: 'ChangePassword',
+            component: () => import('../views/ChangePasswordView.vue'),
             props: true,
         },
     ]
