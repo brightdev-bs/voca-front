@@ -40,6 +40,18 @@ const router = createRouter({
             component: () => import('../views/WordGameView.vue'),
             props: true,
         },
+        {
+            path: '/password',
+            name: 'FindPassword',
+            component: () => import('../views/FindPasswordView.vue'),
+            props: true,
+        },
+        {
+            path: '/password/options',
+            name: 'ChangePassword',
+            component: () => import('../views/ChangePasswordView.vue'),
+            props: true,
+        },
     ]
 });
 
