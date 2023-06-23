@@ -26,37 +26,56 @@
     submit
   </v-btn>
 
-  <ProgressCircular :loading="this.loading"/>
-  <ErrorAlert
-    :message="this.error.message"
-    :flag="this.error.flag"
-  />
+  <LoadingAlert :loading="loading"/>
 
 </template>
 
 <script>
 
 import {useVuelidate} from "@vuelidate/core";
-// import axios from "axios";
 import {minLength, required, sameAs} from "@vuelidate/validators";
-import axios from "axios";
-import ProgressCircular from "@/components/ProgressCircular.vue";
-import ErrorAlert from "@/components/ErrorAlert.vue";
+import {useAxios} from "@/composables/useAxios";
+import {reactive} from "vue";
+import LoadingAlert from "@/components/LoadingAlert.vue";
 
 export default {
-  components: {ErrorAlert, ProgressCircular},
+  components: {LoadingAlert},
+  setup() {
+    const v$ = useVuelidate();
+    const { loading, dateExecute } = useAxios(
+        '/v1/password',
+        {
+          method: 'post',
+        },
+        {
+          immediate: false,
+          onSuccess: () => {
+            alert("비밀번호가 성공적으로 바뀌었습니다.");
+            window.location.href = process.env.VUE_APP_ADDRESS + "/login";
+          },
+          onError: err => {
+            alert(err.response.data.data);
+          }
+        },
+    );
 
-  setup: () => ({ v$: useVuelidate() }),
+    const initialState = {
+      loading: loading,
+      execute: dateExecute,
+    };
+
+    const state = reactive({
+      ...initialState,
+    })
+
+
+    return { v$, state }
+  },
   data() {
     return {
       password: '',
       password2: '',
       show: false,
-      loading: false,
-      error: {
-        message: '',
-        flag: false,
-      }
     }
   },
   validations() {
@@ -74,36 +93,13 @@ export default {
 
       if(result === true && token) {
 
-        this.loading = true;
-
         const data = {
           password: this.password,
           password2: this.password2,
           token: token,
         }
 
-        axios
-            .post(this.server + '/v1/password', JSON.stringify(data), {
-              headers: {
-                "Content-Type": 'application/json',
-              }
-            })
-            .then(res => {
-              if(res.data.data === true) {
-                alert("비밀번호가 성공적으로 바뀌었습니다.");
-                window.location.href = this.domain + "/login";
-              } else {
-                this.loading = false;
-                this.error.flag = true;
-                this.error.message = "비밀번호 찾기를 다시 시도해주세요.";
-              }
-            })
-            .catch(err => {
-              this.loading = false;
-              const errorMsg = err.response.data.data;
-              this.error.flag = true;
-              this.error.message = errorMsg;
-            })
+        this.state.execute(data);
       }
     }
   }

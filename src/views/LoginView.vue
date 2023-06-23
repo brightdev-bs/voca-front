@@ -35,25 +35,43 @@
       Login
     </v-btn>
 
-    <ProgressCircular :loading="this.loading"/>
+    <LoadingAlert :loading="loading"/>
 
   </form>
 </template>
 
 <script>
-import {reactive} from "vue";
+import {reactive, toRefs} from "vue";
 import {email, minLength, required} from "@vuelidate/validators";
 import {useVuelidate} from "@vuelidate/core";
-import axios from "axios";
-import ProgressCircular from "@/components/ProgressCircular.vue";
+import {useAxios} from "@/composables/useAxios";
 
 export default {
-  components: {ProgressCircular},
 
   setup () {
+    const { loading, dateExecute } = useAxios(
+        'v1/login',
+        {
+          method: 'post',
+        },
+        {
+          immediate: false,
+          onSuccess: res => {
+            localStorage.setItem('token', res.data.data.token)
+            localStorage.setItem('id', res.data.data.username)
+            location.href = process.env.VUE_APP_ADDRESS;
+          },
+          onError: err => {
+            alert(err.response.data.data + " 이메일을 확인해주세요.");
+          }
+        },
+    );
+
     const initialState = {
       email: '',
       password: '',
+      loading: loading,
+      execute: dateExecute,
     }
 
     const state = reactive({
@@ -67,16 +85,14 @@ export default {
 
     const v$ = useVuelidate(rules, state)
 
-    return { state, v$ }
+    return {
+      ...toRefs(state),
+      state,
+      v$ }
   },
   data() {
     return {
-      error: {
-        flag: false,
-        message: '',
-      },
       show: false,
-      loading: false,
     }
   },
   methods: {
@@ -85,37 +101,12 @@ export default {
       const isFormCorrect = await this.v$.$validate()
       if(isFormCorrect) {
 
-        this.loading = true;
-
         let data = {
           email: this.state.email,
           password: this.state.password,
         }
 
-        axios
-          .post(this.server + '/v1/login', JSON.stringify(data), {
-            headers: {
-              "Content-Type": 'application/json',
-            }
-          })
-          .then(res => {
-            if(res.status == 200) {
-              localStorage.setItem('token', res.data.data.token)
-              localStorage.setItem('id', res.data.data.username)
-              window.location.href = this.domain;
-            }
-          })
-          .catch(err => {
-            this.loading = false;
-            const errorMsg = err.response.data.data;
-            this.error.flag = true;
-
-            if(errorMsg == Error.UNAUTHENTICATED_USER) {
-              this.error.message = "인증되지 않은 사용자입니다. 이메일을 확인해주세요."
-            } else{
-              this.error.message = errorMsg
-            }
-          })
+        this.state.execute(data);
       }
     },
   }

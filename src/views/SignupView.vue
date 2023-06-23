@@ -39,51 +39,53 @@
       </v-btn>
     </v-row>
 
-    <v-row class="ma-2 pt-5">
-      <v-alert v-if="this.error"
-               type="error"
-               title="Error"
-      >
-        {{ this.errorMessage }}
-      </v-alert>
-    </v-row>
-
-    <v-row justify="center">
-      <v-progress-circular
-          v-if="loading"
-          color="primary"
-          indeterminate>
-
-      </v-progress-circular>
-    </v-row >
+    <LoadingAlert :loading="loading"/>
   </form>
 
 </template>
 
 <script>
-import { reactive } from 'vue'
+import {reactive, toRefs} from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import {email, minLength, required} from '@vuelidate/validators'
-import axios from "axios";
-
+import LoadingAlert from "@/components/LoadingAlert.vue";
+import {useAxios} from "@/composables/useAxios";
 
 export default {
+
+  components: {LoadingAlert},
   data() {
     return {
       show: false,
-      error: false,
-      errorMessage: '',
-      loading: false,
     }
   },
   setup () {
+    const { loading, dateExecute } = useAxios(
+        'v1/sign-up',
+        {
+          method: 'post',
+        },
+        {
+          immediate: false,
+          onSuccess: () => {
+            alert("회원가입이 완료되었습니다. 이메일을 확인해주세요.");
+            location.href = process.env.VUE_APP_ADDRESS + "/login";
+          },
+          onError: err => {
+            alert(err.response.data.data);
+          }
+        },
+    );
+
     const initialState = {
       username: '',
       email: '',
       password: '',
       select: null,
       checkbox: null,
-    }
+      loading: loading,
+      execute: dateExecute,
+    };
 
     const state = reactive({
       ...initialState,
@@ -97,52 +99,28 @@ export default {
 
     const v$ = useVuelidate(rules, state)
 
-    return { state, v$ }
+    return {
+      ...toRefs(state),
+      state,
+      v$ }
   },
 
   methods: {
     async signup() {
       const isFormCorrect = await this.v$.$validate()
-      if(isFormCorrect) {
+      if (isFormCorrect) {
 
-        this.loading = true;
-
-        let data = {
+        let form = {
           username: this.state.username,
           email: this.state.email,
           password: this.state.password,
-        }
+        };
 
-        axios
-            .post(this.server + '/v1/sign-up', JSON.stringify(data), {
-              headers: {
-                "Content-Type": 'application/json',
-              }
-            })
-            .then(res => {
-              if(res.status == 200) {
-                this.loading = false;
-                alert("메일을 확인해주세요.");
-                location.href = this.domain;
-              }
-            })
-            .catch(err => {
-              console.log(err);
-              const errorMsg = err.response.data.data;
-              if(errorMsg == Error.EXISTS_USER) {
-                this.errorMessage = '이미 가입한 사용자입니다.'
-              }
-
-              if(errorMsg == Error.EXISTS_NAME) {
-                this.errorMessage = '이미 사용중인 이름입니다.'
-              }
-              this.error = true;
-              this.loading = false;
-            })
-
-        }
+        this.state.execute(form);
+      }
     }
   }
+
 }
 </script>
 

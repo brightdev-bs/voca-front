@@ -97,53 +97,49 @@
 
 <script>
 import 'v-calendar/dist/style.css';
-import axios from "axios";
 import moment from "moment";
 import {Error} from "@/global/constants";
+import {useAxios} from "@/composables/useAxios";
+import {reactive, toRefs} from "vue";
 
 export default {
 
-  mounted() {
-
-    let token = localStorage.getItem("token");
-    if(token == undefined || token == "undefined" || token == null || token == '') {
-      window.location.href = this.domain + '/login';
-    }
-
-    axios
-        .get(this.server + '/v1/my-page', {
+  setup () {
+    const { loading, dateExecute } = useAxios(
+        '/v1/my-page',
+        {
+          method: 'get',
           headers: {
-            "Content-Type": 'application/json',
-            Authorization: localStorage.getItem("token"),
-          }
-        })
-        .then(res => {
-          if(res.data.statusCode == '200 OK') {
-            this.profile.username = res.data.data.user.username;
-            this.profile.email = res.data.data.user.email;
+            Authorization: localStorage.getItem("token")
+          },
+        },
+        {
+          immediate: false,
+          onSuccess: res => {
+            state.profile.username = res.data.data.user.username;
+            state.profile.email = res.data.data.user.email;
             const records = res.data.data.dates;
-            for(let i = 0; i < records.length; i++) {
-              this.attributes[0].dates.push(new Date(records[i]).toLocaleDateString());
+            for (let i = 0; i < records.length; i++) {
+              state.attributes[0].dates.push(new Date(records[i]).toLocaleDateString());
             }
 
             const vocabularies = res.data.data.vocabularyList;
-            for(let voca of vocabularies) {
-              this.vocabulary.push(voca);
+            for (let voca of vocabularies) {
+              state.vocabulary.push(voca);
             }
-          }
-        })
-        .catch(err => {
-          const errorMsg = err.response.data.data
-          if(errorMsg === Error.EXPIRED_TOKEN || errorMsg === Error.NOT_FOUND_TOKEN || errorMsg === Error.INVALID_TOKEN) {
-            localStorage.removeItem("id");
-            localStorage.removeItem("token");
-            location.href = this.domain + '/login';
-          }
-        })
-  },
+          },
+          onError: err => {
+            const errorMsg = err.response.data.data
+            if (errorMsg === Error.EXPIRED_TOKEN || errorMsg === Error.NOT_FOUND_TOKEN || errorMsg === Error.INVALID_TOKEN) {
+              localStorage.removeItem("id");
+              localStorage.removeItem("token");
+              location.href = process.env.VUE_APP_ADDRESS + "/login";
+            }
+          },
+        },
+    );
 
-  data() {
-    return {
+    const initialState = {
       profile: {
         username: '',
         email: '',
@@ -159,8 +155,30 @@ export default {
       vocabulary: [],
       selectedVoca: null,
       vocaClicked: false,
+      loading: loading,
+      execute: dateExecute,
+    }
+
+    const state = reactive({
+      ...initialState,
+    })
+
+    return {
+      ...toRefs(state),
+      state,
     }
   },
+  mounted() {
+
+    let token = localStorage.getItem("token");
+
+    if(token == undefined || token == "undefined" || token == null || token == '') {
+      window.location.href = this.domain + '/login';
+    }
+
+    this.state.execute();
+  },
+
   methods: {
     onDayClick() {
       this.selectedDate = moment(this.selectedDate).format('YYYY/MM/DD');

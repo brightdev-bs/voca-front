@@ -15,30 +15,44 @@
     메일 인증
   </v-btn>
 
-  <ErrorAlert
-      :flag="this.error.flag"
-      :message="this.error.message"
-  />
-
-  <ProgressCircular :loading="this.loading"/>
-
+  <LoadingAlert :loading="loading"/>
 </template>
 
 <script>
 
-import {reactive} from "vue";
+import {reactive, ref, toRefs} from "vue";
 import {email, required} from "@vuelidate/validators";
 import {useVuelidate} from "@vuelidate/core";
-import axios from "axios";
-import ErrorAlert from "@/components/ErrorAlert.vue";
-import ProgressCircular from "@/components/ProgressCircular.vue";
+import {useAxios} from "@/composables/useAxios";
+import LoadingAlert from "@/components/LoadingAlert.vue";
 
 export default {
-  components: {ProgressCircular, ErrorAlert},
+  components: {LoadingAlert},
 
   setup () {
-    const initialState = {
+    const params = ref({
       email: '',
+    });
+    const { loading, dateExecute } = useAxios(
+        '/v1/password',
+        {
+          params
+        },
+        {
+          immediate: false,
+          onSuccess: () => {
+            alert("메일을 확인해주세요");
+            location.href = process.env.VUE_APP_ADDRESS + "/login";
+          },
+          onError: err => {
+            alert(err.response.data.data);
+          }
+        },
+    );
+
+    const initialState = {
+      loading: loading,
+      execute: dateExecute,
     }
 
     const state = reactive({
@@ -51,39 +65,14 @@ export default {
 
     const v$ = useVuelidate(rules, state)
 
-    return { state, v$ }
-  },
-  data() {
-    return {
-      error: {
-        flag: false,
-        message: '',
-      },
-      loading: false,
-    }
+    return { params, state, v$, ...toRefs(state), }
   },
   methods: {
     async sendEmail() {
       const isFormCorrect = await this.v$.$validate()
-      console.log(isFormCorrect);
       if(isFormCorrect) {
-        this.loading = true;
-        axios
-            .get(this.server + '/v1/password?email=' + this.state.email, {
-              headers: {
-                "Content-Type": 'application/json',
-              }
-            })
-            .then(() => {
-              alert("메일을 확인해주세요");
-              window.location.href = this.domain + "/login";
-            })
-            .catch(err => {
-              console.log(err);
-              const errorMsg = err.response.data.data;
-              this.error.flag = true;
-              this.error.message = errorMsg;
-            })
+        this.params.email = this.state.email;
+        this.state.execute();
       }
     }
   }

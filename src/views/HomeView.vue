@@ -20,16 +20,14 @@
 
 <script>
 import VocaTable from "@/components/VocaTable";
-import axios from "axios";
 import moment from "moment";
 import VocaFooter from "@/components/VocaFooter.vue";
 import {useWordGameStore} from "@/stores/useWordGameStore";
 import router from "@/router/router";
-import {Error} from '@/global/constants'
+import axios from "axios";
 
 
 export default {
-
   mounted() {
     this.update('today');
   },
@@ -51,20 +49,22 @@ export default {
       let date;
       let day = this.$route.query.date;
       let voca = this.$route.query.voca;
+      let url = '';
+      let params = {};
 
       // Base case
       if(day || !voca) {
         date = moment();
-        if(day == 'today' || !day) {
+        if (day == 'today' || !day) {
           this.date = '오늘 공부할 단어';
           date = moment();
-        } else if(day == 'yesterday') {
+        } else if (day == 'yesterday') {
           this.date = '어제 공부한 단어';
           date = moment().subtract(1, 'days');
-        } else if(day == 'week') {
+        } else if (day == 'week') {
           this.date = '일주일 전 공부한 단어';
           date = moment().subtract(7, 'days');
-        } else if(day == 'month') {
+        } else if (day == 'month') {
           this.date = '한달 전 공부한 단어';
           date = moment().subtract(1, 'months');
         } else {
@@ -72,66 +72,43 @@ export default {
           this.date = date.format('YYYY/MM/DD')
         }
 
-        axios
-            .get(this.server + '/v1/words', {
-              params: {
-                date: date.format("YYYY-MM-DD HH:mm:ss"),
-              },
-              headers: {
-                "Content-Type": 'application/json',
-                Authorization: localStorage.getItem("token"),
-              },
-
-            })
-            .then(res => {
-              let id = 0;
-              res.data.data.words.forEach(w => {
-                w.num = id++;
-                w.isHidden = false
-                w.isWrong = false
-              });
-              this.words = res.data.data.words;
-            })
-            .catch(err => {
-              const errorMsg = err.response.data.data
-              if(errorMsg === Error.EXPIRED_TOKEN || errorMsg === Error.NOT_FOUND_TOKEN || errorMsg === Error.INVALID_TOKEN) {
-                localStorage.removeItem("id");
-                localStorage.removeItem("token");
-                location.href = this.domain + '/login';
-              }
-            })
+        url = '/v1/words';
+        params.date = date.format("YYYY-MM-DD HH:mm:ss");
       }
 
       // 단어장 선택해서 공부하기 했을 때
       if(voca) {
         this.date = '';
-        axios
-            .get(this.server + '/v1/voca/words', {
-              params: {
-                voca: voca,
-              },
-              headers: {
-                "Content-Type": 'application/json',
-                Authorization: localStorage.getItem("token"),
-              },
-
-            })
-            .then(res => {
-              res.data.data.words.forEach(w => {
-                w.isHidden = false
-                w.isWrong= false
-              });
-              this.words = res.data.data.words;
-            })
-            .catch(err => {
-              const errorMsg = err.response.data.data
-              if(errorMsg == Error.EXPIRED_TOKEN || errorMsg == Error.NOT_FOUND_TOKEN) {
-                localStorage.removeItem("id");
-                localStorage.removeItem("token");
-                location.href = this.domain + '/login';
-              }
-            })
+        url = '/v1/voca/words'
+        params.voca = voca;
       }
+
+      axios
+          .get(this.server + url, {
+            params: params,
+            headers: {
+              "Content-Type": 'application/json',
+              Authorization: localStorage.getItem("token"),
+            },
+          })
+          .then(res => {
+            console.log(res);
+            res.data.data.words.forEach(w => {
+              w.isHidden = false
+              w.isWrong= false
+            });
+            this.words = res.data.data.words;
+          })
+          .catch(err => {
+            const errorMsg = err.response.data.data
+            console.log(err);
+            console.log(errorMsg)
+            // if(errorMsg == Error.EXPIRED_TOKEN || errorMsg == Error.NOT_FOUND_TOKEN) {
+            //   // localStorage.removeItem("id");
+            //   // localStorage.removeItem("token");
+            //   // location.href = this.domain + '/login';
+            // }
+          })
     },
     checkDate() {
       let date = this.$route.query.date;
