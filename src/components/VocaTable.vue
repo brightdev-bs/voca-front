@@ -68,6 +68,7 @@ export default {
 
 <style scoped>
 .hide {
-  background-color: black;
+  color: white;
+  background-color: white;
 }
 </style>
