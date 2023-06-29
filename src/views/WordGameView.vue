@@ -46,7 +46,7 @@
 
 <script>
 
-import {useWordGameStore} from "@/stores/useWordGameStore";
+import {useWordStore} from "@/stores/useWordStore";
 import VocaInfoDialog from "@/components/VocaInfoDialog.vue";
 import router from "@/router/router";
 
@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     init() {
-      const store = useWordGameStore();
+      const store = useWordStore();
       const words = store.getWords;
       this.words = words;
       console.log(this.words);

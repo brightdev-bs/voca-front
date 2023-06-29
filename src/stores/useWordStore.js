@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const useWordGameStore = defineStore("WordGame", {
+export const useWordStore = defineStore("WordGame", {
     state: () => {
 
         return {

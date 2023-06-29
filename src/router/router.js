@@ -52,6 +52,12 @@ const router = createRouter({
             component: () => import('../views/ChangePasswordView.vue'),
             props: true,
         },
+        {
+            path: '/study',
+            name: 'StudyWords',
+            component: () => import('../views/StudyWordsView.vue'),
+            props: true,
+        },
     ]
 });
 

@@ -5,8 +5,9 @@
     </v-row>
     <v-row justify="end">
       <v-btn size="small" class="float-right me-1" @click="hideDefinition">{{ hideButton }}</v-btn>
-      <v-btn size="small" href="/words/new" class="float-right me-1" v-if="isToday">추가하기</v-btn>
       <v-btn size="small" @click="setWordGame" class="float-right">단어 게임</v-btn>
+      <v-btn size="small" @click="studyWords" class="float-right">학습하기</v-btn>
+      <v-btn size="small" href="/words/new" class="float-right me-1" v-if="isToday">추가하기</v-btn>
     </v-row>
   </div>
   <voca-table
@@ -22,7 +23,7 @@
 import VocaTable from "@/components/VocaTable";
 import moment from "moment";
 import VocaFooter from "@/components/VocaFooter.vue";
-import {useWordGameStore} from "@/stores/useWordGameStore";
+import {useWordStore} from "@/stores/useWordStore";
 import router from "@/router/router";
 import axios from "axios";
 
@@ -129,9 +130,17 @@ export default {
       word.isHidden = !word.isHidden;
     },
     setWordGame() {
-      const store = useWordGameStore();
-      store.setWords(this.words);
+      this.store();
       router.push('/word-game');
+    },
+    studyWords() {
+      this.store();
+      router.push('/study')
+    },
+    store() {
+      const store = useWordStore();
+      store.setWords(this.words);
+      return store;
     }
   }
 }
