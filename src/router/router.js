@@ -7,7 +7,12 @@ const router = createRouter({
         {
             path: '/',
             name: 'Main',
-            component: () => import('../views/HomeView')
+            component: () => import('../views/HomeView.vue')
+        },
+        {
+            path: '/vocabulary',
+            name: 'Vocabulary',
+            component: () => import('../views/VocabularyView.vue')
         },
         {
             path: '/words/new',

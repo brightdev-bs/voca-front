@@ -1,12 +1,8 @@
 <template>
   <v-bottom-navigation grow v-model="value">
-    <v-btn value="today" @click="getWords('today')">Today</v-btn>
-
-    <v-btn value="yesterday" @click="getWords('yesterday')">Yesterday</v-btn>
-
-    <v-btn value="aWeek" @click="getWords('week')">1 Week ago</v-btn>
-
-    <v-btn value="aMonth" @click="getWords('month')">1 Month ago</v-btn>
+    <v-btn value="home" href="/">Home</v-btn>
+    <v-btn value="today" href="/vocabulary">Vocabulary</v-btn>
+    <v-btn value="my-page" href="/my-page">MyPage</v-btn>
   </v-bottom-navigation>
 </template>
 
@@ -19,15 +15,9 @@ export default {
     }
   },
   methods: {
-    getWords(day) {
-      location.href = this.domain + "/?date=" + day;
-    },
     getTitle() {
       let date = this.$route.query.date;
-      if(!date || date == 'today') return 'today';
-      else if(date == 'yesterday') return 'yesterday';
-      else if(date == 'week') return 'aWeek';
-      else if(date == 'month') return 'aMonth';
+      if(!date) return 'today';
     }
   }
 }

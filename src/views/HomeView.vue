@@ -1,146 +1,57 @@
 <template>
-  <div class="ma-5">
-    <v-row>
-      {{ this.date }}
-    </v-row>
-    <v-row justify="end">
-      <v-btn size="small" class="float-right me-1" @click="hideDefinition">{{ hideButton }}</v-btn>
-      <v-btn size="small" @click="setWordGame" class="float-right">단어 게임</v-btn>
-      <v-btn size="small" @click="studyWords" class="float-right">학습하기</v-btn>
-      <v-btn size="small" href="/words/new" class="float-right me-1" v-if="isToday">추가하기</v-btn>
-    </v-row>
-  </div>
-  <voca-table
-      :words="this.words"
-      @changeHideStatus="changeHideStatus"
-  ></voca-table>
 
-  <!--      v-bind:프롭스 속성 이름="상위 컴포넌트 데이터 이름"-->
-  <voca-footer @update="update"/>
+  <section>
+    <h3 class="mb-3">Search Community</h3>
+     <v-text-field
+         :append-icon="'mdi-comment-search-outline'"
+         label="Language Exchange Community"
+         variant="solo"
+         size="x-large"
+     />
+  </section>
+
+  <!-- 검색 결과  -->
+  <section>
+    <h3 class="mb-3">Language Community</h3>
+    <v-row class="float-sm-left">
+      <v-col>
+        <v-card
+            class="mx-auto"
+            width="350"
+            prepend-icon="mdi-home"
+        >
+          <template v-slot:title>
+            This is a title
+          </template>
+
+          <v-card-item>
+            <div>
+              <div class="text-caption">Greyhound divisely hello coldly fonwderfully. </div>
+            </div>
+          </v-card-item>
+          <v-divider></v-divider>
+          <v-card-actions class="float-end me-2">
+            <p class="me-4">
+              <v-icon icon="mdi-account-multiple"></v-icon>
+              21 / 50
+            </p>
+            <v-btn size="small" variant="tonal" @click="toCommunity()">
+              Look Into
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </section>
+
 </template>
 
 <script>
-import VocaTable from "@/components/VocaTable";
-import moment from "moment";
-import VocaFooter from "@/components/VocaFooter.vue";
-import {useWordStore} from "@/stores/useWordStore";
-import router from "@/router/router";
-import axios from "axios";
-
 
 export default {
-  mounted() {
-    this.update('today');
-  },
-  components: {
-    VocaTable,
-    VocaFooter,
-  },
-  data() {
-    return {
-      hideButton: '뜻 숨기기',
-      isToday: this.checkDate(),
-      date: "today",
-      words: [],
-    }
-  },
   methods: {
-    update() {
-
-      let date;
-      let day = this.$route.query.date;
-      let voca = this.$route.query.voca;
-      let url = '';
-      let params = {};
-
-      // Base case
-      if(day || !voca) {
-        date = moment();
-        if (day == 'today' || !day) {
-          this.date = '오늘 공부할 단어';
-          date = moment();
-        } else if (day == 'yesterday') {
-          this.date = '어제 공부한 단어';
-          date = moment().subtract(1, 'days');
-        } else if (day == 'week') {
-          this.date = '일주일 전 공부한 단어';
-          date = moment().subtract(7, 'days');
-        } else if (day == 'month') {
-          this.date = '한달 전 공부한 단어';
-          date = moment().subtract(1, 'months');
-        } else {
-          date = moment(day, 'YYYY/MM/DD')
-          this.date = date.format('YYYY/MM/DD')
-        }
-
-        url = '/v1/words';
-        params.date = date.format("YYYY-MM-DD HH:mm:ss");
-      }
-
-      // 단어장 선택해서 공부하기 했을 때
-      if(voca) {
-        this.date = '';
-        url = '/v1/voca/words'
-        params.voca = voca;
-      }
-
-      axios
-          .get(this.server + url, {
-            params: params,
-            headers: {
-              "Content-Type": 'application/json',
-              Authorization: localStorage.getItem("token"),
-            },
-          })
-          .then(res => {
-            console.log(res);
-            res.data.data.words.forEach(w => {
-              w.isHidden = false
-              w.isWrong= false
-            });
-            this.words = res.data.data.words;
-          })
-          .catch(err => {
-            const errorMsg = err.response.data.data
-            console.log(err);
-            console.log(errorMsg)
-            // if(errorMsg == Error.EXPIRED_TOKEN || errorMsg == Error.NOT_FOUND_TOKEN) {
-            //   // localStorage.removeItem("id");
-            //   // localStorage.removeItem("token");
-            //   // location.href = this.domain + '/login';
-            // }
-          })
-    },
-    checkDate() {
-      let date = this.$route.query.date;
-      if(date == 'today' || !date) return true;
-      else return false;
-    },
-    hideDefinition() {
-      if(this.hideButton == '뜻 숨기기') {
-        this.hideButton = '뜻 보이기';
-        this.words.forEach(w => w.isHidden = true)
-      } else {
-        this.hideButton = '뜻 숨기기';
-        this.words.forEach(w => w.isHidden = false)
-      }
-    },
-    changeHideStatus(id) {
-      let word = this.words.at(id);
-      word.isHidden = !word.isHidden;
-    },
-    setWordGame() {
-      this.store();
-      router.push('/word-game');
-    },
-    studyWords() {
-      this.store();
-      router.push('/study')
-    },
-    store() {
-      const store = useWordStore();
-      store.setWords(this.words);
-      return store;
+    toCommunity(id) {
+      console.log("community id = ", id);
     }
   }
 }
