@@ -48,15 +48,19 @@ import {useVuelidate} from "@vuelidate/core";
 export default {
   setup () {
     const { loading, dateExecute } = useAxios(
-        'v1/community',
+        'v1/community/form',
         {
           method: 'post',
+          headers: {
+            "Content-Type": 'application/json',
+            Authorization: localStorage.getItem("token"),
+          },
         },
         {
           immediate: false,
           onSuccess: () => {
             alert("생성되었습니다.")
-            location.href = "/home";
+            location.href = "/";
           },
           onError: err => {
             alert(err.response.data.data);
@@ -98,7 +102,6 @@ export default {
       const isFormCorrect = await this.v$.$validate()
       if(isFormCorrect) {
         const data = this.state.form
-        console.log(data);
         this.state.execute(data);
       }
     }
