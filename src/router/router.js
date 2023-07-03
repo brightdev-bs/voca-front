@@ -63,6 +63,12 @@ const router = createRouter({
             component: () => import('../views/StudyWordsView.vue'),
             props: true,
         },
+        {
+            path: '/community',
+            name: 'CommunityDetail',
+            component: () => import('../views/CommunityDetailView.vue'),
+            props: true,
+        },
     ]
 });
 
