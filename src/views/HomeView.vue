@@ -12,7 +12,10 @@
 
   <!-- 검색 결과  -->
   <section>
-    <h3 class="mb-3">Language Community</h3>
+    <div class="d-flex">
+      <h3 class="mb-3">Language Community</h3>
+      <v-btn class="me-5 ml-auto" href="/community/form">create</v-btn>
+    </div>
     <v-row class="float-sm-left">
       <v-col>
         <v-card

@@ -69,6 +69,12 @@ const router = createRouter({
             component: () => import('../views/CommunityDetailView.vue'),
             props: true,
         },
+        {
+            path: '/community/form',
+            name: 'CommunityForm',
+            component: () => import('../views/CreateCommunityView.vue'),
+            props: true,
+        },
     ]
 });
 
