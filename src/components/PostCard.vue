@@ -27,7 +27,7 @@
 
               <v-btn class="pa-0" @click="comment(post)">
                 <v-icon class="me-1" icon="mdi-comment-text-outline"></v-icon>
-                <span class="subheading me-2"> {{ post.comment.length }}</span>
+                <span class="subheading me-2"> {{ post.comments.length }}</span>
               </v-btn>
             </div>
           </template>
@@ -45,9 +45,6 @@ export default {
     post: {},
   },
   methods: {
-    likePressed() {
-
-    },
     comment(post) {
       console.log(post);
       post.commentShow = !post.commentShow

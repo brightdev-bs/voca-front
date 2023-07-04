@@ -63,11 +63,28 @@
           </div>
         </v-col>
 
-        <PostCard
+        <v-card
             v-for="comment in post.comments"
             :key="comment.id"
-            color="white"
-            class="mb-3"/>
+            class="mx-auto"
+            color="#white"
+            theme="black"
+            max-width="400"
+        >
+
+          <v-card-text class="text-h7 py-2">
+            {{ post.content }}
+          </v-card-text>
+
+          <v-card-actions>
+            <v-list-item class="w-100">
+
+              <v-list-item-subtitle>{{ post.writer }}</v-list-item-subtitle>
+
+            </v-list-item>
+          </v-card-actions>
+        </v-card>
+
       </v-col>
     </v-row>
   </div>
@@ -170,8 +187,9 @@ export default {
     },
     submitComment(postId) {
       let form = {
-        postContent: this.commentContent,
+        commentContent: this.commentContent,
       }
+      console.log(form);
       let { submitExecute } = useAxios(
           'v1/posts/' + postId + '/comments',
           {
@@ -192,7 +210,7 @@ export default {
           },
       );
 
-      submitExecute(JSON.stringify(form));
+      submitExecute(form);
 
     },
   }
