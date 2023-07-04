@@ -66,20 +66,20 @@
         <v-card
             v-for="comment in post.comments"
             :key="comment.id"
-            class="mx-auto"
+            class="mx-auto mb-2"
             color="#white"
             theme="black"
             max-width="400"
         >
 
           <v-card-text class="text-h7 py-2">
-            {{ post.content }}
+            {{ comment.content }}
           </v-card-text>
 
           <v-card-actions>
             <v-list-item class="w-100">
 
-              <v-list-item-subtitle>{{ post.writer }}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ comment.writer }}</v-list-item-subtitle>
 
             </v-list-item>
           </v-card-actions>
@@ -201,8 +201,9 @@ export default {
           },
           {
             immediate: false,
-            onSuccess: res => {
-              console.log("댓글 axios = ", res);
+            onSuccess: () => {
+              alert(response.SUCCESS);
+              window.location.reload();
             },
             onError: err => {
               alert(err);
