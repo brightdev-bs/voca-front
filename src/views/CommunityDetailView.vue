@@ -9,6 +9,8 @@
     <v-btn class="float-end me-3" @click="write = !write">Write</v-btn>
   </div>
   <hr class="ma-4">
+
+  <!-- 동적으로 나타나는 글쓰기 UI -->
   <div v-if="write">
     <v-textarea
         v-model="postContent"
@@ -20,29 +22,50 @@
       <v-btn class="mb-5 ml-auto" @click="submitPost">submit</v-btn>
     </div>
   </div>
+
+  <!-- posts -->
   <div>
-    <v-row>
+    <v-row
+        v-for="post in state.posts"
+        :key="post.id"
+    >
+      <!-- posts -->
       <v-col cols="12" sm="6">
         <PostCard
-            @click="commentClicked"
+            :post="post"
             class="mb-3"/>
       </v-col>
-      <v-col cols="12" sm="6">
+
+
+      <!-- comment posts -->
+      <v-col
+          cols="12"
+          sm="6"
+      >
+
+        <!-- dynamic comment form -->
         <v-col
             class="pa-0"
-            @sendFlag="commentClicked"
-            v-if="comment">
+            v-if="post.commentShow">
           <v-textarea
-              bg-color="amber-lighten-4"
+              v-model="commentContent"
               color="orange orange-darken-4"
-              label="Label"
+              label="Comment"
               rows="4"
           />
           <div class="d-flex">
-            <v-btn class="mb-5 ml-auto">submit</v-btn>
+            <v-btn
+                class="mb-5 ml-auto"
+                @click="submitComment(post.id)"
+            >
+              submit
+            </v-btn>
           </div>
         </v-col>
+
         <PostCard
+            v-for="comment in post.comments"
+            :key="comment.id"
             color="white"
             class="mb-3"/>
       </v-col>
@@ -54,23 +77,124 @@
 <script>
 
 import PostCard from "@/components/PostCard.vue";
+import {useAxios} from "@/composables/useAxios";
+import {reactive} from "vue";
+import {useRoute} from "vue-router";
+import {Response as response} from "@/global/constants";
 
 export default {
   components: {PostCard},
+  setup () {
+    const route = useRoute();
+    const { loading, dateExecute } = useAxios(
+        'v1/community/' + route.params.id,
+        {
+          method: 'get',
+          headers: {
+            "Content-Type": 'application/json',
+            Authorization: localStorage.getItem("token"),
+          },
+        },
+        {
+          immediate: true,
+          onSuccess: res => {
+            console.log(res)
+            let datas = res.data.data;
+            for(let d of datas) {
+              d.commentShow = false;
+            }
+            state.posts = res.data.data;
+          },
+          onError: err => {
+            alert(err);
+          }
+        },
+    );
+
+    const initialState = {
+      posts: [],
+      loading: loading,
+      execute: dateExecute,
+    }
+
+    const state = reactive({
+      ...initialState,
+    })
+
+    return { state }
+  },
+
   data() {
     return {
       write: false,
       comment: false,
       postContent: '',
+      commentContent: '',
     }
   },
   methods: {
     submitPost() {
+      if(!this.postContent.trim()) {
+        alert("There is nothing to post")
+        return;
+      }
+
+      const communityId = this.$route.params.id;
+
+      let { submitExecute } = useAxios(
+          'v1/community/' + communityId + '/posts',
+          {
+            method: 'post',
+            headers: {
+              "Content-Type": 'application/json',
+              Authorization: localStorage.getItem("token"),
+            },
+          },
+          {
+            immediate: false,
+            onSuccess: () => {
+              alert(response.SUCCESS);
+              window.location.reload();
+            },
+            onError: err => {
+              alert(err);
+            }
+          },
+      );
+
+      const form = {
+        postContent: this.postContent,
+      }
+
+      submitExecute(form);
+    },
+    submitComment(postId) {
+      let form = {
+        postContent: this.commentContent,
+      }
+      let { submitExecute } = useAxios(
+          'v1/posts/' + postId + '/comments',
+          {
+            method: 'post',
+            headers: {
+              "Content-Type": 'application/json',
+              Authorization: localStorage.getItem("token"),
+            },
+          },
+          {
+            immediate: false,
+            onSuccess: res => {
+              console.log("댓글 axios = ", res);
+            },
+            onError: err => {
+              alert(err);
+            }
+          },
+      );
+
+      submitExecute(JSON.stringify(form));
 
     },
-    commentClicked() {
-      this.comment = !this.comment;
-    }
   }
 }
 </script>

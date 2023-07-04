@@ -51,5 +51,6 @@ export const useAxios = (url, config = {}, options = {}) => {
         data,
         loading,
         dateExecute: execute,
+        submitExecute: execute,
     };
 }
