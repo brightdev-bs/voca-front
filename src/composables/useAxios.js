@@ -1,6 +1,5 @@
 import axios from "axios";
 import {ref, unref} from "vue";
-import {Error} from "@/global/constants";
 
 axios.defaults.baseURL = process.env.VUE_APP_ADDRESS_API;
 
@@ -37,18 +36,19 @@ export const useAxios = (url, config = {}, options = {}) => {
             data.value = res.data;
             if(onSuccess) onSuccess(res);
         }).catch(err => {
-            if(err.response.data.data === Error.INVALID_TOKEN) {
-                localStorage.removeItem("id");
-                localStorage.removeItem("token");
-                confirm("session is expired. please re-login", "OK");
-                location.href = '/login'
-                return;
-            }
-            if (err.response.data.data === Error.NOT_FOUND_TOKEN) {
-                location.href = '/login'
-                confirm("Only member can request. Please login first", "OK");
-                return;
-            }
+            console.log(err);
+            // if(err.response.data.data === Error.INVALID_TOKEN) {
+            //     localStorage.removeItem("id");
+            //     localStorage.removeItem("token");
+            //     confirm("session is expired. please re-login", "OK");
+            //     location.href = '/login'
+            //     return;
+            // }
+            // if (err.response.data.data === Error.NOT_FOUND_TOKEN) {
+            //     location.href = '/login'
+            //     confirm("Only member can request. Please login first", "OK");
+            //     return;
+            // }
             if (onError) onError(err);
         }).finally(() => {
             loading.value = false;

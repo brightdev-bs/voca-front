@@ -44,6 +44,7 @@ import {useAxios} from "@/composables/useAxios";
 import {reactive, toRefs} from "vue";
 import {required} from "@vuelidate/validators";
 import {useVuelidate} from "@vuelidate/core";
+import { Response } from "@/global/constants"
 
 export default {
   setup () {
@@ -59,11 +60,11 @@ export default {
         {
           immediate: false,
           onSuccess: () => {
-            alert("생성되었습니다.")
+            alert(Response.SUCCESS);
             location.href = "/";
           },
           onError: err => {
-            alert(err.response.data.data);
+            alert(err.response.data);
           }
         },
     );

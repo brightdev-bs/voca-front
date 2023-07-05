@@ -97,14 +97,15 @@ import PostCard from "@/components/PostCard.vue";
 import {useAxios} from "@/composables/useAxios";
 import {reactive} from "vue";
 import {useRoute} from "vue-router";
-import {Response as response} from "@/global/constants";
+import {Response} from "@/global/constants";
 
 export default {
   components: {PostCard},
   setup () {
     const route = useRoute();
+
     const { loading, dateExecute } = useAxios(
-        'v1/community/' + route.params.id,
+        'v1/community/' + route.params.communityId + '/topics/' + route.params.topicId,
         {
           method: 'get',
           headers: {
@@ -156,7 +157,7 @@ export default {
         return;
       }
 
-      const communityId = this.$route.params.id;
+      const communityId = this.$route.params.communityId;
 
       let { submitExecute } = useAxios(
           'v1/community/' + communityId + '/posts',
@@ -170,17 +171,19 @@ export default {
           {
             immediate: false,
             onSuccess: () => {
-              alert(response.SUCCESS);
+              alert(Response.SUCCESS);
               window.location.reload();
             },
             onError: err => {
-              alert(err);
+              console.log(err);
+              alert(Response.FAIL);
             }
           },
       );
 
       const form = {
         postContent: this.postContent,
+        topicId: this.$route.params.topicId
       }
 
       submitExecute(form);
@@ -202,7 +205,7 @@ export default {
           {
             immediate: false,
             onSuccess: () => {
-              alert(response.SUCCESS);
+              alert(Response.SUCCESS);
               window.location.reload();
             },
             onError: err => {

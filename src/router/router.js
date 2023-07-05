@@ -66,13 +66,19 @@ const router = createRouter({
         {
             path: '/community/:id',
             name: 'CommunityDetail',
-            component: () => import('../views/CommunityDetailView.vue'),
+            component: () => import('../views/CommunityMainView.vue'),
             props: true,
         },
         {
             path: '/community/form',
             name: 'CommunityForm',
             component: () => import('../views/CreateCommunityView.vue'),
+            props: true,
+        },
+        {
+            path: '/community/:communityId/topics/:topicId',
+            name: 'TopicDetail',
+            component: () => import('../views/TopicDetailView.vue'),
             props: true,
         },
     ]

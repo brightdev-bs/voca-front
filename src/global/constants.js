@@ -16,6 +16,7 @@ export const Error = {
 
 export const Response = {
         SUCCESS: 'Successfully processed',
+        FAIL: 'Something happened. Try again'
 }
 
 export * from "@/global/constants.js";

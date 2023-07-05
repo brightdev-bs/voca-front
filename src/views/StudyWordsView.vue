@@ -34,7 +34,7 @@ export default {
     next() {
       if(this.words.length <= 0) return;
       if(this.words.length <= index) {
-        alert("모든 단어 학습이 끝이 났습니다.")
+        alert("The study section is finished !")
         index = 0;
       }
 

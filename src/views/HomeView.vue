@@ -1,14 +1,15 @@
 <template>
 
-  <section>
-    <h3 class="mb-3">Search Community</h3>
-     <v-text-field
-         :append-icon="'mdi-comment-search-outline'"
-         label="Language Exchange Community"
-         variant="solo"
-         size="x-large"
-     />
-  </section>
+<!--  Todo : 이후에 추가 예정 -->
+<!--  <section>-->
+<!--    <h3 class="mb-3">Search Community</h3>-->
+<!--     <v-text-field-->
+<!--         :append-icon="'mdi-comment-search-outline'"-->
+<!--         label="Language Exchange Community"-->
+<!--         variant="solo"-->
+<!--         size="x-large"-->
+<!--     />-->
+<!--  </section>-->
 
   <!-- 검색 결과  -->
   <section>
