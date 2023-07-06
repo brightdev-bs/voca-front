@@ -68,7 +68,7 @@ export default {
         {
           immediate: false,
           onSuccess: () => {
-            alert("회원가입이 완료되었습니다. 이메일을 확인해주세요.");
+            alert("SUCCESS ! Check your email ");
             location.href = process.env.VUE_APP_ADDRESS + "/login";
           },
           onError: err => {

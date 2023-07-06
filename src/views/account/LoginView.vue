@@ -45,8 +45,10 @@ import {reactive, toRefs} from "vue";
 import {email, minLength, required} from "@vuelidate/validators";
 import {useVuelidate} from "@vuelidate/core";
 import {useAxios} from "@/composables/useAxios";
+import LoadingAlert from "@/components/LoadingAlert.vue";
 
 export default {
+  components: {LoadingAlert},
 
   setup () {
     const { loading, dateExecute } = useAxios(

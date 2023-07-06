@@ -5,15 +5,15 @@
   >
 
     <v-card-text>
-      <h3 class="me-2">{{ name }}</h3>
-      <p> {{ introduction }} </p>
+      <h3 class="me-2">name : {{ info.name }}</h3>
+      <p> {{ info.introduction }} </p>
     </v-card-text>
 
     <v-card-actions class="float-end me-2">
-      <v-btn size="small" variant="tonal">
+      <v-btn size="small" variant="tonal" @click="reject(info.id)">
         reject
       </v-btn>
-      <v-btn size="small" variant="tonal">
+      <v-btn size="small" variant="tonal" @click="accept(info.id)">
         accept
       </v-btn>
     </v-card-actions>
@@ -25,8 +25,15 @@
 
 export default {
   props: {
-    name: String,
-    introduction: String,
+    info: {},
+  },
+  methods: {
+    reject(id) {
+      this.$emit('rejectUser', id);
+    },
+    accept(id) {
+      this.$emit('acceptUser', id);
+    }
   }
 }
 </script>
