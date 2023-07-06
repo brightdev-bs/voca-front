@@ -27,7 +27,7 @@ export default {
 
   methods: {
     isActive() {
-      this.username = localStorage.getItem("id");
+      this.username = localStorage.getItem("name");
       this.token = localStorage.getItem("token");
       if(this.username) {
         return false;
@@ -37,6 +37,7 @@ export default {
     },
     logout() {
       localStorage.removeItem('id')
+      localStorage.removeItem('name')
       localStorage.removeItem('token')
       router.go();
     }

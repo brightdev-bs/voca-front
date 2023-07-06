@@ -4,10 +4,10 @@
       {{ this.date }}
     </v-row>
     <v-row justify="end">
-      <v-btn size="small" class="float-right me-1" @click="hideDefinition">{{ hideButton }}</v-btn>
-      <v-btn size="small" @click="setWordGame" class="float-right">Word Game</v-btn>
-      <v-btn size="small" @click="studyWords" class="float-right">Study</v-btn>
-      <v-btn size="small" href="/words/new" class="float-right me-1" v-if="isToday">Add</v-btn>
+      <v-btn size="small" class="float-right me-1 mt-1" @click="hideDefinition">{{ hideButton }}</v-btn>
+      <v-btn size="small" @click="setWordGame" class="float-right me-1 mt-1">Word Game</v-btn>
+      <v-btn size="small" @click="studyWords" class="float-right me-1 mt-1">Study</v-btn>
+      <v-btn size="small" href="/words/new" class="float-right me-1 mt-1" v-if="isToday">Add</v-btn>
     </v-row>
   </div>
   <voca-table

@@ -15,7 +15,13 @@
   <section>
     <div class="d-flex">
       <h3 class="mb-3">Language Community</h3>
-      <v-btn class="me-5 ml-auto" href="/community/form">create</v-btn>
+      <v-btn
+          v-if="state.isLogined"
+          class="me-5 ml-auto"
+          href="/community/form"
+      >
+        create
+      </v-btn>
     </div>
     <v-row
         class="float-sm-left mt-1 mb-1 mr-0"
@@ -76,6 +82,9 @@ export default {
             console.log(res)
             console.log(res.data.data)
             state.communities = res.data.data;
+            if(localStorage.getItem('token')) {
+              state.isLogined = true;
+            }
           },
           onError: err => {
             alert(err);
@@ -91,6 +100,7 @@ export default {
         isPublic: true,
       },
       communities: [],
+      isLogined: false,
       loading: loading,
       execute: dateExecute,
     }

@@ -81,6 +81,12 @@ const router = createRouter({
             component: () => import('../views/TopicDetailView.vue'),
             props: true,
         },
+        {
+            path: '/community/:communityId/members',
+            name: 'ManageMember',
+            component: () => import('../views/ManageMemberView.vue'),
+            props: true,
+        }
     ]
 });
 

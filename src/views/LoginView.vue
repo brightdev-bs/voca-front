@@ -58,7 +58,8 @@ export default {
           immediate: false,
           onSuccess: res => {
             localStorage.setItem('token', res.data.data.token)
-            localStorage.setItem('id', res.data.data.username)
+            localStorage.setItem('name', res.data.data.username)
+            localStorage.setItem('id', res.data.data.id)
             location.href = process.env.VUE_APP_ADDRESS;
           },
           onError: err => {
