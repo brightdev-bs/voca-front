@@ -1,23 +1,40 @@
 <template>
   <h2 class="mb-1"> {{ state.community.name }} </h2>
   <p class="ms-5 mb-2">  {{ state.community.description }} </p>
-  <div class="d-flex">
+  <div class="d-flex" v-if="state.community.isMaster">
     <v-btn
-        href="/community/{id}/manage"
+        @click="manageMemberPage"
         class="ml-auto mb-2 me-2"
     >
       Manage Member
     </v-btn>
+    <div class="d-flex">
+      <v-btn
+          class="ml-auto mb-2 me-2"
+          @click="textAreaShow = !textAreaShow"
+      >
+        create topic
+      </v-btn>
+    </div>
   </div>
-  <hr class="mb-2">
-  <div class="d-flex">
+  <div class="d-flex" v-else-if="state.community.isMember">
+      <v-btn
+          class="ml-auto mb-2 me-2"
+          @click="textAreaShow = !textAreaShow"
+      >
+        create topic
+      </v-btn>
+  </div>
+  <div class="d-flex" v-else>
     <v-btn
-        class="ml-auto mb-2 me-2"
-        @click="textAreaShow = !textAreaShow"
+      class="ml-auto mb-2 me-2"
+      @click="joinCommunity"
     >
-      create topic
+      Join
     </v-btn>
   </div>
+  <hr class="mb-2">
+
 
   <div class="d-flex" v-if="textAreaShow">
     <v-textarea
@@ -72,6 +89,27 @@ export default {
           onSuccess: res => {
             console.log(res.data)
             state.community = res.data.data;
+
+            const loginedId = localStorage.getItem('id');
+
+            if(loginedId == state.community.createdBy) {
+              console.log("isMaster");
+              state.community.isMaster = true;
+            } else {
+              if(isMember()) {
+                state.community.isMember = true;
+                console.log("isMember")
+              }
+            }
+
+            function isMember() {
+              for (let id in state.community.joinedMembers) {
+                if (loginedId == id) {
+                  return true;
+                }
+              }
+              return false;
+            }
           },
           onError: err => {
             console.log(err);
@@ -135,9 +173,15 @@ export default {
       dateExecute(form);
 
     },
+    joinCommunity() {
+
+    },
     moveToTopic(id) {
       location.href = '/community/' + this.$route.params.id + '/topics/' + id;
     },
+    manageMemberPage() {
+      location.href = '/community/' + this.$route.params.id + '/members';
+    }
   }
 }
 </script>
