@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import VocaTable from "@/components/VocaTable";
+import VocaTable from "@/components/VocaTable.vue";
 import moment from "moment";
 import VocaFooter from "@/components/VocaFooter.vue";
 import {useWordStore} from "@/stores/useWordStore";
