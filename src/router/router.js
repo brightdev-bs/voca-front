@@ -86,6 +86,12 @@ const router = createRouter({
             name: 'ManageMember',
             component: () => import('../views/community/ManageMemberView.vue'),
             props: true,
+        },
+        {
+            path: '/community/:communityId/members/form',
+            name: 'JoinForm',
+            component: () => import('../views/community/CommunityJoinFormView.vue'),
+            props: true,
         }
     ]
 });

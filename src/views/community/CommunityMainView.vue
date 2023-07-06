@@ -174,7 +174,18 @@ export default {
 
     },
     joinCommunity() {
-
+      const token = localStorage.getItem('token');
+      console.log(token);
+      if(!token) {
+        const b = confirm("Please login first");
+        console.log(b);
+        if(b) {
+          location.href = '/login';
+          return;
+        }
+        else return;
+      }
+      location.href = '/community/' + this.$route.params.id + '/members/form'
     },
     moveToTopic(id) {
       location.href = '/community/' + this.$route.params.id + '/topics/' + id;
