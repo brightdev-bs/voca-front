@@ -27,6 +27,7 @@
   </div>
   <div class="d-flex" v-else>
     <v-btn
+        v-if="!state.community.isMember"
       class="ml-auto mb-2 me-2"
       @click="joinCommunity"
     >
@@ -91,6 +92,7 @@ export default {
             state.community = res.data.data;
 
             const loginedId = localStorage.getItem('id');
+            console.log(loginedId);
 
             if(loginedId == state.community.createdBy) {
               console.log("isMaster");
@@ -103,8 +105,8 @@ export default {
             }
 
             function isMember() {
-              for (let id in state.community.joinedMembers) {
-                if (loginedId == id) {
+              for (let idx in state.community.joinedMembers) {
+                if (loginedId == state.community.joinedMembers[idx]) {
                   return true;
                 }
               }
