@@ -1,7 +1,7 @@
 <template>
   <h2>Today's Topic</h2>
   <div class="d-flex justify-center mb-6 bg-indigo-lighten-4">
-    <h3> {{ state.posts[0].topic }} </h3>
+    <h3> {{ state.data.topic }} </h3>
   </div>
 
   <div>
@@ -26,7 +26,7 @@
   <!-- posts -->
   <div>
     <v-row
-        v-for="post in state.posts"
+        v-for="post in state.data.posts"
         :key="post.id"
     >
       <!-- posts -->
@@ -117,11 +117,11 @@ export default {
           immediate: true,
           onSuccess: res => {
             console.log(res)
-            let datas = res.data.data;
-            for(let d of datas) {
+            let posts = res.data.data.posts;
+            for(let d of posts) {
               d.commentShow = false;
             }
-            state.posts = res.data.data;
+            state.data = res.data.data;
           },
           onError: err => {
             alert(err);
@@ -130,7 +130,7 @@ export default {
     );
 
     const initialState = {
-      posts: [],
+      data: [],
       loading: loading,
       execute: dateExecute,
     }

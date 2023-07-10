@@ -38,6 +38,9 @@ export const useAxios = (url, config = {}, options = {}) => {
             if(onSuccess) onSuccess(res);
         }).catch(err => {
             console.log(err);
+            if(!err.response.data.data) {
+                alert("Something is wrong. Try again after few minutes");
+            }
             if(err.response.data.data === Error.EXPIRED_TOKEN) {
                 localStorage.removeItem("id");
                 localStorage.removeItem("token");
