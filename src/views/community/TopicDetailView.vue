@@ -1,7 +1,7 @@
 <template>
   <h2>Today's Topic</h2>
   <div class="d-flex justify-center mb-6 bg-indigo-lighten-4">
-    <h3> Introduce yourself </h3>
+    <h3> {{ state.posts[0].topic }} </h3>
   </div>
 
   <div>
