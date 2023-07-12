@@ -94,6 +94,10 @@ export default {
       else return false;
     },
     hideDefinition() {
+      if(this.isEmptyWord() === true) {
+        alert("Add a word first");
+        return;
+      }
       if(this.hideButton === 'hide') {
         this.hideButton = 'show';
         this.words.forEach(w => w.isHidden = true)
@@ -107,10 +111,18 @@ export default {
       word.isHidden = !word.isHidden;
     },
     setWordGame() {
+      if(this.isEmptyWord() === true) {
+        alert("Add a word first");
+        return;
+      }
       this.store();
       router.push('/word-game');
     },
     studyWords() {
+      if(this.isEmptyWord() === true) {
+        alert("Add a word first");
+        return;
+      }
       this.store();
       router.push('/study')
     },
@@ -118,6 +130,13 @@ export default {
       const store = useWordStore();
       store.setWords(this.words);
       return store;
+    },
+
+    isEmptyWord() {
+      if(this.words.length == 0) {
+        return true;
+      }
+      return false;
     }
   }
 }
