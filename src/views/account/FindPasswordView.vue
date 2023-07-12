@@ -1,5 +1,5 @@
 <template>
-  <h2 class="ma-5">비밀번호 찾기</h2>
+  <h2 class="ma-5">Find password</h2>
   <v-text-field
       v-model="state.email"
       :error-messages="v$.email.$errors.map(e => e.$message)"
@@ -12,7 +12,7 @@
       class="me-4 float-end"
       @click="sendEmail"
   >
-    메일 인증
+    send
   </v-btn>
 
   <LoadingAlert :loading="loading"/>
@@ -41,7 +41,7 @@ export default {
         {
           immediate: false,
           onSuccess: () => {
-            alert("메일을 확인해주세요");
+            alert("Check email");
             location.href = process.env.VUE_APP_ADDRESS + "/login";
           },
           onError: err => {

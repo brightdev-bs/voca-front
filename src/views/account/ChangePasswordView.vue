@@ -50,7 +50,7 @@ export default {
         {
           immediate: false,
           onSuccess: () => {
-            alert("비밀번호가 성공적으로 바뀌었습니다.");
+            alert("password is changed");
             window.location.href = process.env.VUE_APP_ADDRESS + "/login";
           },
           onError: err => {

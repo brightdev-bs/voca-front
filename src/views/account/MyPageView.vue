@@ -15,7 +15,7 @@
 
 
     <div>
-      <h3 class="ma-3">이전 공부 내역</h3>
+      <h3 class="ma-3">Study record</h3>
       <v-date-picker
           v-model="selectedDate"
           is-expanded
@@ -26,7 +26,7 @@
     </div>
 
     <div>
-      <h3 class="ma-3">내 단어장</h3>
+      <h3 class="ma-3">Vocabularies</h3>
       <v-card
           class="mx-auto"
       >
@@ -45,7 +45,7 @@
         persistent
         width="500">
       <v-card>
-        <v-card-text>{{ selectedVoca.value }}에 저장한 단어를 복습하시겠습니까?</v-card-text>
+        <v-card-text>Do you want to review {{ selectedVoca.value }} ?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -71,7 +71,7 @@
         persistent
         width="500">
       <v-card>
-        <v-card-text>{{ selectedDate }}에 공부한 단어를 복습하시겠습니까?</v-card-text>
+        <v-card-text>Do you want to review the words you studied on {{ selectedDate }} ?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
