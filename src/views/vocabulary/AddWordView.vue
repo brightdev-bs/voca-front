@@ -1,23 +1,23 @@
 <template>
 
   <section class="ma-5">
-    <h3 class="ma-3">영어 단어 추가하기</h3>
+    <h3 class="ma-3">Add new word</h3>
     <v-text-field
         v-model="this.form.word"
         class="mt-3"
-        label="영어 단어"
+        label="word"
         variant="solo">
     </v-text-field>
 
     <v-text-field
         v-model="this.form.definition"
-        label="뜻"
+        label="definition"
         variant="solo">
     </v-text-field>
 
     <v-text-field
         v-model="this.form.note"
-        label="부가 설명"
+        label="description"
         variant="solo">
     </v-text-field>
 
@@ -27,7 +27,7 @@
         item-title="name"
         item-value="key"
         variant="solo"
-        label="단어장"
+        label="vocabulary"
         @update:modelValue="change"
     ></v-select>
 
@@ -38,33 +38,36 @@
     >
       <v-card>
         <v-card-title>
-          <span class="text-h5">단어장 추가하기</span>
+          <span class="text-h5">Add new vocabulary</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-text-field
                 v-model="this.voca.name"
-                label="단어장 이름"
+                label="Name of vocabulary"
                 required>
               </v-text-field>
             </v-row>
             <v-row>
               <v-text-field
                   v-model="this.voca.description"
-                  label="단어장 설명"
+                  label="Description"
                   required>
               </v-text-field>
             </v-row>
             <v-row>
+              <!--  Todo : 추후에 공개  -->
               <v-checkbox
                   v-model="this.voca.isPublic"
+                  class="d-none"
                   :label=" '공개' ">
               </v-checkbox>
             </v-row>
           </v-container>
         </v-card-text>
 
+        <!--  단어장 추가  -->
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -72,28 +75,29 @@
               variant="text"
               @click="this.vocaView = false"
           >
-            취소
+            cancel
           </v-btn>
           <v-btn
               color="blue-darken-1"
               variant="text"
               @click="addVocabulary"
           >
-            저장
+            save
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
 
-    <v-btn class="float-right" @click="addWord">추가하기</v-btn>
+    <v-btn class="float-right" @click="addWord">add</v-btn>
   </section>
 
 </template>
 
 <script>
 
-import axios from "axios";
+import {useAxios} from "@/composables/useAxios";
+
 
 export default {
   mounted() {
@@ -109,7 +113,7 @@ export default {
         definition: '',
         note: '',
         category: [
-            { name: '추가하기', key: "add"}
+            { name: 'create new vocabulary', key: "add"}
         ],
       },
       voca: {
@@ -125,25 +129,29 @@ export default {
   methods: {
     addWord() {
 
-      this.form.vocaId = this.select;
-
-      axios
-          .post(this.server + '/v1/words', JSON.stringify(this.form), {
+      const { dateExecute } = useAxios(
+          'v1/words',
+          {
+            method: 'post',
             headers: {
               "Content-Type": 'application/json',
               Authorization: localStorage.getItem("token"),
+            },
+          },
+          {
+            immediate: false,
+            onSuccess: () => {
+              location.href = "/vocabulary"
+            },
+            onError: err => {
+              alert(err);
             }
-          })
-          .then(res => {
-            console.log(res.data.statusCode)
-            if(res.data.statusCode == '200 OK') {
-              location.href = this.domain;
-            }
+          },
+      );
 
-          })
-          .catch(err => {
-            console.log(err);
-          })
+      const form = this.form;
+
+      dateExecute(form);
     },
     change(event) {
       console.log(event);
@@ -156,63 +164,71 @@ export default {
       const name = this.voca.name.trim();
       const desc = this.voca.description.trim();
       const isPublic = this.voca.isPublic;
+      for(const value of this.form.category) {
+        if(value.name == name) {
+          alert("There is already same name of vocabulary");
+          return;
+        }
+      }
+
+      const { dateExecute } = useAxios(
+          'v1/voca',
+          {
+            method: 'post',
+            headers: {
+              "Content-Type": 'application/json',
+              Authorization: localStorage.getItem("token"),
+            },
+          },
+          {
+            immediate: false,
+            onSuccess: res => {
+              this.form.category.unshift({name: name, key: res.data.data.id});
+              this.voca.name = '';
+              this.voca.description = '';
+              this.vocaView = false;
+            },
+            onError: err => {
+              alert(err);
+            }
+          },
+      );
+
       const form = {
         "name": name,
         "description": desc,
         "isPublic": isPublic,
       }
 
-      for(const value of this.form.category) {
-        if(value.name == name) {
-          alert("이미 같은 이름의 단어장이 존재합니다.");
-          return;
-        }
-      }
-
-      axios
-          .post(this.server + '/v1/voca', JSON.stringify(form), {
-            headers: {
-              "Content-Type": 'application/json',
-              Authorization: localStorage.getItem("token"),
-            }
-          })
-          .then(res => {
-            console.log(res.data.statusCode)
-            console.log(res.data);
-            if(res.data.statusCode == '201 CREATED') {
-              console.log(res.data.data.id)
-
-              this.form.category.unshift({name: name, key: res.data.data.id});
-              this.voca.name = '';
-              this.voca.description = '';
-              this.vocaView = false;
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          })
+      dateExecute(form);
     },
     initVocaList() {
 
-      axios
-          .get(this.server + '/v1/voca', {
+
+      const { dateExecute } = useAxios(
+          'v1/voca',
+          {
+            method: 'get',
             headers: {
               "Content-Type": 'application/json',
               Authorization: localStorage.getItem("token"),
-            }
-          })
-          .then(res => {
-            console.log(res.data.statusCode)
-            if(res.data.statusCode == '200 OK') {
+            },
+          },
+          {
+            immediate: false,
+            onSuccess: res => {
               let response = res.data.data;
               for (const ele of response) {
                 this.form.category.unshift({name: ele.name, key: ele.id});
               }
+            },
+            onError: err => {
+              alert(err);
             }
-          })
-          .catch(err => {
-            console.log(err);
-          })
+          },
+      );
+
+      dateExecute();
     }
   }
 
