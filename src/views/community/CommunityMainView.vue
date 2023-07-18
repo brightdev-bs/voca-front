@@ -3,28 +3,20 @@
   <p class="ms-5 mb-2">  {{ state.community.description }} </p>
   <div class="d-flex" v-if="state.community.isMaster">
     <v-btn
-        @click="manageMemberPage"
-        class="ml-auto mb-2 me-2"
-    >
-      Manage Member
-    </v-btn>
+        class="ml-auto me-3 mb-2"
+        color="purple"
+        icon="mdi-account-cog-outline"
+    ></v-btn>
     <div class="d-flex">
       <v-btn
-          class="ml-auto mb-2 me-2"
-          @click="textAreaShow = !textAreaShow"
-      >
-        create topic
-      </v-btn>
+          class="ml-auto me-3 mb-2"
+          color="indigo"
+          icon="mdi-note-edit-outline"
+          @click="createTopic()"
+      ></v-btn>
     </div>
   </div>
-  <div class="d-flex" v-else-if="state.community.isMember">
-      <v-btn
-          class="ml-auto mb-2 me-2"
-          @click="textAreaShow = !textAreaShow"
-      >
-        create topic
-      </v-btn>
-  </div>
+
   <div class="d-flex" v-else>
     <v-btn
         v-if="!state.community.isMember"
@@ -33,51 +25,49 @@
     >
       Join
     </v-btn>
+
+    <v-btn
+        v-if="state.community.isMember"
+        class="ml-auto me-3 mb-2"
+        color="indigo"
+        icon="mdi-note-edit-outline"
+        @click="createTopic()"
+    ></v-btn>
+
   </div>
   <hr class="mb-2">
 
-
-  <div class="d-flex" v-if="textAreaShow">
-    <v-textarea
-        v-model="content"
-        bg-color="grey-lighten-2"
-        color="cyan"
-        label="Topic"
-    ></v-textarea>
-    <v-btn
-        @click="createTopic"
-        class="align-self-end mb-6 ms-1"
-    >
-      submit
-    </v-btn>
+  <div class="mb-5">
+    <p class="me-4" @click="showComment()">
+      <v-icon icon="mdi-account-outline"></v-icon>
+      Vanille
+    </p>
+    <ReadOnlyEditor/>
+    <v-card>
+      <v-card-actions class="float-end me-2">
+        <p class="me-4" @click="showComment()">
+          <v-icon icon="mdi-comment-outline"></v-icon>
+          255
+        </p>
+        <p class="me-4">
+          <v-icon icon="mdi-thumb-up-outline"></v-icon>
+          255
+        </p>
+      </v-card-actions>
+    </v-card>
   </div>
-
-  <v-row>
-    <v-col
-        v-for="topic in state.community.topics"
-        :key="topic.id"
-    >
-      <PostItem
-          @click="moveToTopic(topic.id)"
-          :title=topic.content
-          width="350"
-          :created-at=topic.createdAt
-          class="ma-0"
-      />
-    </v-col>
-  </v-row>
 </template>
 
 <script>
 
-import PostItem from "@/components/PostItem.vue";
 import {useAxios} from "@/composables/useAxios";
 import {reactive} from "vue";
 import {useRoute} from "vue-router";
+import ReadOnlyEditor from "@/components/community/ReadOnlyEditor.vue";
 import {Response} from "@/global/constants";
 
 export default {
-  components: {PostItem},
+  components: {ReadOnlyEditor},
   setup () {
     const route = useRoute();
     const { loading, dateExecute } = useAxios(
@@ -137,19 +127,27 @@ export default {
   },
   data() {
     return {
-      textAreaShow: false,
-      content: '',
+
     }
   },
   methods: {
     createTopic() {
-      if(!this.content.trim()) {
-        alert("Write Topic");
-        return;
+      location.href = '/community/' + this.$route.params.id + '/topics'
+    },
+    joinCommunity() {
+
+      const token = localStorage.getItem('token');
+      if(!token) {
+        const b = confirm("Please login first");
+        if(b) {
+          location.href = '/login';
+          return;
+        }
+        else return;
       }
 
-      const { dateExecute } = useAxios(
-          'v1/community/' + this.$route.params.id + '/topic',
+      let { submitExecute } = useAxios(
+          'v1/community/' + this.$route.params.communityId + '/members',
           {
             method: 'post',
             headers: {
@@ -160,40 +158,22 @@ export default {
           {
             immediate: false,
             onSuccess: () => {
-              alert(Response.SUCCESS);
-              location.reload();
+              alert(Response.SUCCESS)
+              location.href = '/community/' + this.$route.params.communityId;
             },
             onError: err => {
-              console.log(err);
+              alert(err.response.data.data);
             }
           },
       );
 
-      const form = {
-        content: this.content,
-      }
-      dateExecute(form);
-
-    },
-    joinCommunity() {
-      const token = localStorage.getItem('token');
-      console.log(token);
-      if(!token) {
-        const b = confirm("Please login first");
-        console.log(b);
-        if(b) {
-          location.href = '/login';
-          return;
-        }
-        else return;
-      }
-      location.href = '/community/' + this.$route.params.id + '/members/form'
-    },
-    moveToTopic(id) {
-      location.href = '/community/' + this.$route.params.id + '/topics/' + id;
+      submitExecute();
     },
     manageMemberPage() {
       location.href = '/community/' + this.$route.params.id + '/members';
+    },
+    showComment() {
+
     }
   }
 }

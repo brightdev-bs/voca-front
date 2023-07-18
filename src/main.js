@@ -13,11 +13,14 @@ import { loadFonts } from './plugins/webfontloader'
 import VCalendar from 'v-calendar'
 import VueBasicAlert from 'vue-basic-alert'
 
+import CKEditor from '@ckeditor/ckeditor5-vue'
+
 const pinia = createPinia();
 
 loadFonts()
 
 let app = createApp(App)
+    .use(CKEditor)
     .use(router)
     .use(vuetify)
     .use(aliases, mdi)

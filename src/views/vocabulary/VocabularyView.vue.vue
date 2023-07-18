@@ -53,10 +53,10 @@ export default {
       let voca = this.$route.query.voca;
       if(voca) {
         this.date = '';
-        url = '/v1/voca/words'
+        url = 'v1/voca/words'
         params.voca = voca;
       } else {
-        url = '/v1/words';
+        url = 'v1/words';
         let date = moment();
         params.date = date.format("YYYY-MM-DD HH:mm:ss");
       }

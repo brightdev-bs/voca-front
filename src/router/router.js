@@ -76,9 +76,9 @@ const router = createRouter({
             props: true,
         },
         {
-            path: '/community/:communityId/topics/:topicId',
-            name: 'TopicDetail',
-            component: () => import('../views/community/TopicDetailView.vue'),
+            path: '/community/:id/topics',
+            name: 'CommunityForm',
+            component: () => import('../views/community/CreateTopicView.vue'),
             props: true,
         },
         {
