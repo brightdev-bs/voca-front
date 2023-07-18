@@ -38,21 +38,21 @@ export const useAxios = (url, config = {}, options = {}) => {
             if(onSuccess) onSuccess(res);
         }).catch(err => {
             console.log(err);
+            if(!err.response) {
+                alert("Something is wrong. Try again after few minutes");
+            }
             if(!err.response.data.data) {
                 alert("Something is wrong. Try again after few minutes");
             }
             if(err.response.data.data === Error.EXPIRED_TOKEN) {
-                localStorage.removeItem("id");
-                localStorage.removeItem("token");
-                localStorage.removeItem('name');
+                removeLocalStorage();
                 confirm("session is expired. please re-login", "OK");
                 location.href = '/login'
                 return;
             }
+
             if(err.response.data.data === Error.INVALID_TOKEN) {
-                localStorage.removeItem("id");
-                localStorage.removeItem("token");
-                localStorage.removeItem('name');
+                removeLocalStorage();
                 confirm("session is expired. please re-login", "OK");
                 location.href = '/login'
                 return;
@@ -70,6 +70,12 @@ export const useAxios = (url, config = {}, options = {}) => {
 
     if (immediate) {
         execute();
+    }
+
+    function removeLocalStorage() {
+        localStorage.removeItem("id");
+        localStorage.removeItem("token");
+        localStorage.removeItem('name');
     }
 
     return {

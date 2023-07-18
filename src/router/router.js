@@ -76,21 +76,15 @@ const router = createRouter({
             props: true,
         },
         {
-            path: '/community/:id/topics',
-            name: 'CommunityForm',
-            component: () => import('../views/community/CreateTopicView.vue'),
-            props: true,
-        },
-        {
-            path: '/community/:communityId/members',
-            name: 'ManageMember',
-            component: () => import('../views/community/ManageMemberView.vue'),
-            props: true,
-        },
-        {
             path: '/community/:communityId/members/form',
             name: 'JoinForm',
             component: () => import('../views/community/CommunityJoinFormView.vue'),
+            props: true,
+        },
+        {
+            path: '/community/:communityId/posts',
+            name: 'PostForm',
+            component: () => import('../views/community/PostFormView.vue'),
             props: true,
         }
     ]

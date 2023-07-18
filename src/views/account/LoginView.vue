@@ -65,7 +65,7 @@ export default {
             location.href = process.env.VUE_APP_ADDRESS;
           },
           onError: err => {
-            alert(err.response.data.data + " check the email");
+            alert(err.response.data.data);
           }
         },
     );
