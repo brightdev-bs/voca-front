@@ -72,7 +72,6 @@ export default {
       const store = useWordStore();
       const words = store.getWords;
       this.words = words;
-      console.log(this.words);
     },
     submit() {
       let count = 0;

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <ckeditor :editor="editor" v-model="$props.editorData" :config="editorConfig" @click="tmp" :disabled="editorDisabled"></ckeditor>
+    <ckeditor :editor="editor" v-model="$props.editorData" :config="editorConfig" :disabled="editorDisabled"></ckeditor>
   </div>
 </template>
 
@@ -10,12 +10,12 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
   props: {
     editorData: String,
+    editorDisabled: Boolean,
   },
   name: 'app',
   data() {
     return {
       editor: ClassicEditor,
-      editorDisabled: true,
       editorConfig: {
         toolbar: {
           items: [],

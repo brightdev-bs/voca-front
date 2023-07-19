@@ -11,17 +11,20 @@
   </div>
   <hr class="mb-2">
 
-  <div v-for="(post) in state.posts"
+  <div v-for="(post, index) in state.posts"
        :key="post.id"
        class="mb-5">
     <p class="me-4" @click="showComment()">
       <v-icon icon="mdi-account-outline"></v-icon>
       {{ post.writer }}
     </p>
-    <ReadOnlyEditor :editor-data="post.content"/>
+    <ReadOnlyEditor
+        :editor-data="post.content"
+        :editor-disabled="true"
+    />
     <v-card>
       <v-card-actions class="float-end me-2">
-        <p class="me-4" @click="showComment()">
+        <p class="me-4" @click="showComment(index)">
           <v-icon icon="mdi-comment-outline"></v-icon>
           {{ post.comments.length }}
         </p>
@@ -35,7 +38,9 @@
 import {useAxios} from "@/composables/useAxios";
 import {reactive} from "vue";
 import {useRoute} from "vue-router";
-import ReadOnlyEditor from "@/components/community/ReadOnlyEditor.vue";
+import ReadOnlyEditor from "@/components/community/OptionEditor.vue";
+import {usePostStore} from "@/stores/usePostStore";
+import router from "@/router/router";
 
 export default {
   components: {ReadOnlyEditor},
@@ -61,7 +66,7 @@ export default {
             }
           },
           onError: err => {
-            console.log(err);
+            alert(err.response.data.data);
           }
         },
     );
@@ -97,8 +102,10 @@ export default {
       }
       location.href = '/community/' + this.$route.params.id + '/posts'
     },
-    showComment() {
-
+    showComment(id) {
+      const store = usePostStore();
+      store.setPost(this.state.posts[id]);
+      router.push('/community/' + this.$route.params.id + '/posts/' + this.state.posts[id].id)
     }
   }
 }

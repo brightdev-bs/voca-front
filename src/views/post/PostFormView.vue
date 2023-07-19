@@ -52,7 +52,7 @@ export default {
               location.href = '/community/' + this.$route.params.communityId;
             },
             onError: err => {
-              console.log(err);
+              console.log(err.response.data.data);
             }
           },
       );

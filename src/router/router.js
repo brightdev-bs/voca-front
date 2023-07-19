@@ -84,7 +84,13 @@ const router = createRouter({
         {
             path: '/community/:communityId/posts',
             name: 'PostForm',
-            component: () => import('../views/community/PostFormView.vue'),
+            component: () => import('../views/post/PostFormView.vue'),
+            props: true,
+        },
+        {
+            path: '/community/:communityId/posts/:postId',
+            name: 'PostDetail',
+            component: () => import('../views/post/PostDetailView.vue'),
             props: true,
         }
     ]

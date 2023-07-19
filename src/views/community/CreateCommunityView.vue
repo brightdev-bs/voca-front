@@ -64,7 +64,7 @@ export default {
             location.href = "/";
           },
           onError: err => {
-            alert(err.response.data);
+            alert(err.response.data.data);
           }
         },
     );
