@@ -16,21 +16,21 @@
       v-model="state.form.description"
   />
 
-  <v-select
-      label="total member"
-      v-model="state.form.total"
-      :error-messages="v$.form.total.$errors.map(e => e.$message)"
-      @input="v$.form.total.$touch"
-      @blur="v$.form.total.$touch"
-      :items="[5, 7, 8, 10, 20, 30, 40, 50]"
-      required
-      variant="solo"
-  ></v-select>
+<!--  <v-select-->
+<!--      label="total member"-->
+<!--      v-model="state.form.total"-->
+<!--      :error-messages="v$.form.total.$errors.map(e => e.$message)"-->
+<!--      @input="v$.form.total.$touch"-->
+<!--      @blur="v$.form.total.$touch"-->
+<!--      :items="[5, 7, 8, 10, 20, 30, 40, 50]"-->
+<!--      required-->
+<!--      variant="solo"-->
+<!--  ></v-select>-->
 
-  <v-checkbox
-      label="Public"
-      v-model="state.form.isPublic"
-  />
+<!--  <v-checkbox-->
+<!--      label="Public"-->
+<!--      v-model="state.form.isPublic"-->
+<!--  />-->
 
   <div class="d-flex">
     <v-btn class="me-2 ml-auto" @click="createCommunity">submit</v-btn>
@@ -73,7 +73,7 @@ export default {
       form: {
         name: '',
         description: '',
-        total: 5,
+        total: 1000,
         isPublic: true,
       },
       loading: loading,
@@ -87,7 +87,7 @@ export default {
     const rules = {
       form: {
         name: { required },
-        total: { required }
+        // total: { required }
       }
     }
 

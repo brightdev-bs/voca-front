@@ -79,8 +79,6 @@ export default {
         {
           immediate: true,
           onSuccess: res => {
-            console.log(res)
-            console.log(res.data.data)
             state.communities = res.data.data;
             if(localStorage.getItem('token')) {
               state.isLogined = true;
