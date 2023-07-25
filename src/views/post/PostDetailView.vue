@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import ReadOnlyEditor from "@/components/community/OptionEditor.vue";
+import ReadOnlyEditor from "@/components/editor/OptionEditor.vue";
 import {useRoute} from "vue-router";
 import {useAxios} from "@/composables/useAxios";
 import {reactive} from "vue";
