@@ -1,74 +1,53 @@
 <template>
 
-<!--  Todo : 이후에 추가 예정 -->
-<!--  <section>-->
-<!--    <h3 class="mb-3">Search Community</h3>-->
-<!--     <v-text-field-->
-<!--         :append-icon="'mdi-comment-search-outline'"-->
-<!--         label="Language Exchange Community"-->
-<!--         variant="solo"-->
-<!--         size="x-large"-->
-<!--     />-->
-<!--  </section>-->
-
-  <!-- 검색 결과  -->
   <section>
     <div class="d-flex">
       <h3 class="mb-3">Language Community</h3>
       <v-btn
-          v-if="state.isLogined"
-          class="me-5 ml-auto"
-          href="/community/form"
-      >
-        create
-      </v-btn>
+          class="ml-auto me-3 mb-2"
+          color="indigo"
+          icon="mdi-note-edit-outline"
+          @click="writePost()"
+      ></v-btn>
     </div>
-    <v-row
-        class="float-sm-left mt-1 mb-1 mr-0"
-        v-for="community in state.communities"
-        :key="community.id"
-    >
-      <v-col>
-        <v-card
-            class="mx-auto"
-            width="350"
-            prepend-icon="mdi-account-group-outline"
-        >
-          <template v-slot:title>
-            {{ community.name }}
-          </template>
 
-          <v-card-item>
-            <div>
-              <div class="text-caption"> {{ community.description }} </div>
-            </div>
-          </v-card-item>
-          <v-divider></v-divider>
-          <v-card-actions class="float-end me-2">
-            <p class="me-4">
-              <v-icon icon="mdi-account-multiple"></v-icon>
-              {{ community.totalNumber }}
-            </p>
-            <v-btn size="small" variant="tonal" @click="toCommunity(community.id)">
-              Look Into
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+    <div v-for="(post, index) in state.posts"
+         :key="post.id"
+         class="mb-5">
+      <ReadOnlyEditor
+          :editor-data="post.content"
+          :editor-disabled="true"
+      />
+      <v-card>
+        <v-card-actions class="float-end me-2">
+          <p class="me-4" @click="showComment()">
+            <v-icon icon="mdi-account-outline"></v-icon>
+            {{ post.writer }}
+          </p>
+          <p class="me-4" @click="showComment(index)">
+            <v-icon icon="mdi-comment-outline"></v-icon>
+            {{ post.comments.length }}
+          </p>
+        </v-card-actions>
+      </v-card>
+    </div>
+
   </section>
-
 </template>
 
 <script>
 
 import {useAxios} from "@/composables/useAxios";
 import {reactive} from "vue";
+import ReadOnlyEditor from "@/components/editor/OptionEditor.vue";
+import {usePostStore} from "@/stores/usePostStore";
+import router from "@/router/router";
 
 export default {
+  components: { ReadOnlyEditor },
   setup () {
     const { loading, dateExecute } = useAxios(
-        'v1/community',
+        'v1/community/1/posts',
         {
           method: 'get',
           headers: {
@@ -79,7 +58,8 @@ export default {
         {
           immediate: true,
           onSuccess: res => {
-            state.communities = res.data.data;
+            state.posts = res.data.data;
+            console.log(state.posts);
             if(localStorage.getItem('token')) {
               state.isLogined = true;
             }
@@ -91,13 +71,7 @@ export default {
     );
 
     const initialState = {
-      form: {
-        name: '',
-        description: '',
-        total: 5,
-        isPublic: true,
-      },
-      communities: [],
+      posts: [],
       isLogined: false,
       loading: loading,
       execute: dateExecute,
@@ -110,9 +84,21 @@ export default {
     return { state }
   },
   methods: {
-    toCommunity(id) {
-      location.href = "/community/" + id;
-    }
+    writePost() {
+      if(!localStorage.getItem("id")) {
+        alert('login first');
+        location.href = '/login';
+        return;
+      }
+      location.href = '/editor/1/posts'
+    },
+    showComment(id) {
+      const store = usePostStore();
+      store.setPost(this.state.posts[id]);
+      console.log(store);
+      router.push('/community/1/posts/' + this.state.posts[id].id)
+    },
+
   }
 }
 </script>

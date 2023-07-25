@@ -49,10 +49,10 @@ export default {
             immediate: false,
             onSuccess: () => {
               alert(Response.SUCCESS);
-              location.href = '/community/' + this.$route.params.communityId;
+              location.href = this.domain;
             },
             onError: err => {
-              console.log(err.response.data.data);
+              alert(err.response.data.data);
             }
           },
       );
