@@ -150,6 +150,7 @@ export default {
       );
 
       const form = this.form;
+      form.vocaId = this.select;
 
       dateExecute(form);
     },
@@ -205,7 +206,7 @@ export default {
     initVocaList() {
 
 
-      const { dateExecute } = useAxios(
+      const { submitExecute } = useAxios(
           'v1/voca',
           {
             method: 'get',
@@ -228,7 +229,7 @@ export default {
           },
       );
 
-      dateExecute();
+      submitExecute();
     }
   }
 
