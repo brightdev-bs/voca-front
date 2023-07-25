@@ -90,7 +90,7 @@ export default {
         location.href = '/login';
         return;
       }
-      location.href = '/editor/1/posts'
+      location.href = '/community/1/posts'
     },
     showComment(id) {
       const store = usePostStore();
