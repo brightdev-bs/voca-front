@@ -19,22 +19,20 @@ export default {
   },
   mounted() {
     if(window.location.pathname.startsWith("/vocabulary")){
-      console.log("voca")
-      this.isVoca = true;
-      this.isHome = false;
-      this.isMyPage = false
+      this.selectFooter(true, false, false)
     } else if(window.location.pathname.startsWith("/my-page")) {
-      console.log("mypage")
-      this.isVoca = false;
-      this.isHome = false;
-      this.isMyPage = true
+      this.selectFooter(false, false, true)
     } else {
-      console.log("home")
-      this.isVoca = false;
-      this.isHome = true;
-      this.isMyPage = false;
+      this.selectFooter(false, true, false)
     }
   },
+  method: {
+    selectFooter(voca, home, mypage) {
+      this.isVoca = voca;
+      this.isHome = home;
+      this.isMyPage = mypage
+    }
+  }
 }
 </script>
 

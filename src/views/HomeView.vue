@@ -95,7 +95,6 @@ export default {
     showComment(id) {
       const store = usePostStore();
       store.setPost(this.state.posts[id]);
-      console.log(store);
       router.push('/community/1/posts/' + this.state.posts[id].id)
     },
 

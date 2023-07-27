@@ -51,8 +51,8 @@ export default {
               alert(Response.SUCCESS);
               location.href = this.domain;
             },
-            onError: err => {
-              alert(err.response.data.data);
+            onError: () => {
+              alert(Response.FAIL)
             }
           },
       );

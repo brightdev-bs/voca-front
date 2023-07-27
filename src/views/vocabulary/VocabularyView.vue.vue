@@ -7,7 +7,7 @@
       <v-btn size="small" class="float-right me-1 mt-1" @click="hideDefinition">{{ hideButton }}</v-btn>
       <v-btn size="small" @click="setWordGame" class="float-right me-1 mt-1">Word Game</v-btn>
       <v-btn size="small" @click="studyWords" class="float-right me-1 mt-1">Study</v-btn>
-      <v-btn size="small" href="/words/new" class="float-right me-1 mt-1" v-if="isToday">Add</v-btn>
+      <v-btn size="small" href="/vocabulary/words/new" class="float-right me-1 mt-1" v-if="isToday">Add</v-btn>
     </v-row>
   </div>
   <voca-table
@@ -30,7 +30,7 @@ import {useAxios} from "@/composables/useAxios";
 
 export default {
   mounted() {
-    this.update('today');
+    this.update();
   },
   components: {
     VocaTable,
@@ -61,6 +61,8 @@ export default {
         params.date = date.format("YYYY-MM-DD HH:mm:ss");
       }
 
+      console.log(params.date);
+
       const { dateExecute } = useAxios(
           url,
           {
@@ -74,6 +76,7 @@ export default {
           {
             immediate: false,
             onSuccess: res => {
+              console.log(res);
               res.data.data.words.forEach(w => {
                 w.isHidden = false
                 w.isWrong= false
