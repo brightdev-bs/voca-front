@@ -58,10 +58,9 @@ export default {
       } else {
         url = 'v1/words';
         let date = moment();
-        params.date = date.format("YYYY-MM-DD HH:mm:ss");
+        params.date = date.utc().format("YYYY-MM-DD HH:mm:ss");
+        params.offset = new Date().getTimezoneOffset() / -60;
       }
-
-      console.log(params.date);
 
       const { dateExecute } = useAxios(
           url,
