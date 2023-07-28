@@ -59,7 +59,6 @@ export default {
           immediate: true,
           onSuccess: res => {
             state.posts = res.data.data;
-            console.log(state.posts);
             if(localStorage.getItem('token')) {
               state.isLogined = true;
             }

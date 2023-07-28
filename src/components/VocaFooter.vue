@@ -26,7 +26,7 @@ export default {
       this.selectFooter(false, true, false)
     }
   },
-  method: {
+  methods: {
     selectFooter(voca, home, mypage) {
       this.isVoca = voca;
       this.isHome = home;
