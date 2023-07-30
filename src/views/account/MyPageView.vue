@@ -186,9 +186,7 @@ export default {
     },
     choose(flag) {
       if(flag) {
-        const date = moment(this.selectedDate).format('yyyy-MM-DD HH:mm:ss');
-        const offset = new Date().getTimezoneOffset() / -60;
-        location.href = this.domain + '/vocabulary?date=' + date + '&offset=' + offset;
+        location.href = this.domain + '/vocabulary?date=' + this.selectedDate;
       } else {
         this.dateClicked = false;
       }

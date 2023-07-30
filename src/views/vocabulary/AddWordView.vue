@@ -88,8 +88,9 @@
       </v-card>
     </v-dialog>
 
-
     <v-btn class="float-right" @click="addWord">add</v-btn>
+
+    <LoadingAlert :loading="loading"/>
   </section>
 
 </template>
@@ -97,9 +98,14 @@
 <script>
 
 import {useAxios} from "@/composables/useAxios";
+import moment from "moment/moment";
+import LoadingAlert from "@/components/LoadingAlert.vue";
 
 
 export default {
+  components: {
+    LoadingAlert
+  },
   mounted() {
     this.initVocaList();
   },
@@ -120,11 +126,9 @@ export default {
         name: '',
         description: '',
         isPublic : true,
-      }
+      },
+      loading: false,
     }
-  },
-  components: {
-
   },
   methods: {
     addWord() {
@@ -141,9 +145,11 @@ export default {
           {
             immediate: false,
             onSuccess: () => {
+              this.loading = false;
               location.href = "/vocabulary"
             },
             onError: err => {
+              this.loading = false;
               alert(err);
             }
           },
@@ -151,7 +157,9 @@ export default {
 
       const form = this.form;
       form.vocaId = this.select;
+      form.date = moment().format("yyyy-MM-DD");
 
+      this.loading = true;
       dateExecute(form);
     },
     change(event) {

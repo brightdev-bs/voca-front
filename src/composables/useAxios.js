@@ -37,12 +37,13 @@ export const useAxios = (url, config = {}, options = {}) => {
             data.value = res.data;
             if(onSuccess) onSuccess(res);
         }).catch(err => {
-            console.log(err);
             if(!err.response) {
                 alert("Something is wrong. Try again after few minutes");
+                return;
             }
             if(!err.response.data.data) {
                 alert("Something is wrong. Try again after few minutes");
+                return;
             }
             if(err.response.data.data === Error.EXPIRED_TOKEN) {
                 removeLocalStorage();
@@ -62,6 +63,8 @@ export const useAxios = (url, config = {}, options = {}) => {
                 confirm("Only member can request. Please login first", "OK");
                 return;
             }
+
+            alert(err.response.data.data);
             if (onError) onError(err);
         }).finally(() => {
             loading.value = false;
