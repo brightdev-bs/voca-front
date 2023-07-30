@@ -51,16 +51,22 @@ export default {
       let params = {};
 
       let voca = this.$route.query.voca;
+      const date = this.$route.query.date;
       if(voca) {
         this.date = '';
         url = 'v1/voca/words'
         params.voca = voca;
+      } else if(date) {
+        url = 'v1/words';
+        params.date = date;
+        params.offset = this.$route.query.offset;
       } else {
         url = 'v1/words';
         let date = moment();
-        params.date = date.utc().format("YYYY-MM-DD HH:mm:ss");
+        params.date = date.format("YYYY-MM-DD HH:mm:ss");
         params.offset = new Date().getTimezoneOffset() / -60;
       }
+      console.log(url);
 
       const { dateExecute } = useAxios(
           url,

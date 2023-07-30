@@ -181,13 +181,14 @@ export default {
 
   methods: {
     onDayClick() {
-      this.selectedDate = moment(this.selectedDate).format('YYYY/MM/DD');
-      console.log(moment(this.selectedDate, 'YYYY.MM.DD').format());
+      this.selectedDate = moment(this.selectedDate).format('YYYY-MM-DD');
       this.dateClicked = true;
     },
     choose(flag) {
       if(flag) {
-        location.href = this.domain + '/vocabulary?date=' + this.selectedDate;
+        const date = moment(this.selectedDate).format('yyyy-MM-DD HH:mm:ss');
+        const offset = new Date().getTimezoneOffset() / -60;
+        location.href = this.domain + '/vocabulary?date=' + date + '&offset=' + offset;
       } else {
         this.dateClicked = false;
       }
