@@ -21,7 +21,7 @@
 
     <v-row class="me-1" justify="end">
       <v-btn @click="submit">
-        제출
+        submit
       </v-btn>
     </v-row>
   </div>
@@ -63,7 +63,7 @@ export default {
         wrongWords: [],
         incorrect: [],
       },
-      title: '단어 게임 결과',
+      title: 'Result',
       dialog: false,
     }
   },
@@ -79,7 +79,6 @@ export default {
       let incorrect = [];
       for(let i = 0; i < this.words.length; i++) {
         const word = this.words[i];
-        console.log("words[i] : ", word);
 
         let correctFlag = false;
 
@@ -114,10 +113,7 @@ export default {
         }
       }
 
-      // 로직이
       for(const id of incorrect) {
-        console.log(id);
-        console.log(this.words[id]);
         this.words[id].isWrong = true;
       }
 

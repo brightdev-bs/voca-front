@@ -8,8 +8,8 @@
         {{ title }}
       </template>
       <v-card-text>
-        점수 : {{ score }} <br>
-        틀린 단어 : {{ wrongWords }} <br>
+        score : {{ score }} <br>
+        wrong : {{ wrongWords }} <br>
       </v-card-text>
 
       <v-card-actions>
@@ -17,13 +17,13 @@
             variant="tonal"
             @click="moveToMain"
         >
-          메인 페이지 이동
+          To Main Pagewhy
         </v-btn>
         <v-btn
             variant="tonal"
             @click="close"
         >
-          닫기
+          close
         </v-btn>
       </v-card-actions>
     </v-card>
