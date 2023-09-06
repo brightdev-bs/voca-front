@@ -22,7 +22,7 @@
 <script>
 import VocaTable from "@/components/VocaTable.vue";
 import moment from "moment";
-import VocaFooter from "@/components/VocaFooter.vue";
+import VocaFooter from "@/layout/VocaFooter.vue";
 import {useWordStore} from "@/stores/useWordStore";
 import router from "@/router/router";
 import {useAxios} from "@/composables/useAxios";

@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import VocaHeader from "@/components/VocaHeader";
-import VocaFooter from "@/components/VocaFooter.vue";
+import VocaHeader from "@/layout/VocaHeader.vue";
+import VocaFooter from "@/layout/VocaFooter.vue";
 export default {
   name: 'App',
   components: {
