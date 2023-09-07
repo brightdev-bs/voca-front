@@ -15,6 +15,13 @@
       @changeHideStatus="changeHideStatus"
   ></voca-table>
 
+  <VuePaging
+      :total-page="this.totalPage"
+      :current-page="this.currentPage"
+      @next-page="nextPage"
+      @prev-page="prevPage"
+  />
+
   <!--      v-bind:프롭스 속성 이름="상위 컴포넌트 데이터 이름"-->
   <voca-footer @update="update"/>
 </template>
@@ -26,6 +33,7 @@ import VocaFooter from "@/layout/VocaFooter.vue";
 import {useWordStore} from "@/stores/useWordStore";
 import router from "@/router/router";
 import {useAxios} from "@/composables/useAxios";
+import VuePaging from "@/components/VuePaging.vue";
 
 
 export default {
@@ -33,6 +41,7 @@ export default {
     this.update();
   },
   components: {
+    VuePaging,
     VocaTable,
     VocaFooter,
   },
@@ -42,58 +51,42 @@ export default {
       isToday: this.checkDate(),
       title: 'Today I Learned',
       words: [],
+      currentPage: 1,
+      totalPage: 1,
     }
   },
   methods: {
     update() {
-
-      let url;
+      const url = this.getUrl();
+      const params = this.buildParams();
+      this.requestWords(url, params);
+    },
+    getUrl() {
+      let voca = this.$route.query.voca;
+      if(voca) return 'v1/voca/words';
+      else return "v1/words";
+    },
+    buildParams() {
       let params = {};
-
       let voca = this.$route.query.voca;
       const date = this.$route.query.date;
+      let page = this.$route.query.page;
+      if(!page) page = 1;
+      this.currentPage = page;
+      params.page = page - 1;
+
       if(voca) {
         this.date = '';
-        url = 'v1/voca/words'
         params.voca = voca;
       } else if(date) {
-        url = 'v1/words';
         params.date = date;
         params.offset = this.$route.query.offset;
       } else {
-        url = 'v1/words';
         let date = moment();
         params.date = date.format("YYYY-MM-DD");
       }
-      console.log(url);
 
-      const { dateExecute } = useAxios(
-          url,
-          {
-            method: 'get',
-            params: params,
-            headers: {
-              "Content-Type": 'application/json',
-              Authorization: localStorage.getItem("token"),
-            },
-          },
-          {
-            immediate: false,
-            onSuccess: res => {
-              console.log(res);
-              res.data.data.words.forEach(w => {
-                w.isHidden = false
-                w.isWrong= false
-              });
-              this.words = res.data.data.words;
-            },
-            onError: err => {
-              alert(err.data.data);
-            }
-          },
-      );
-
-      dateExecute();
+      return params;
     },
     checkDate() {
       let date = this.$route.query.date;
@@ -144,6 +137,42 @@ export default {
         return true;
       }
       return false;
+    },
+    nextPage(page) {
+      window.location.href = '/vocabulary?page=' + page;
+    },
+    prevPage(page) {
+      window.location.href = '/vocabulary?page=' + page;
+    },
+    requestWords(url, params) {
+      const { dateExecute } = useAxios(
+          url,
+          {
+            method: 'get',
+            params: params,
+            headers: {
+              "Content-Type": 'application/json',
+              Authorization: localStorage.getItem("token"),
+            },
+          },
+          {
+            immediate: false,
+            onSuccess: res => {
+              console.log(res);
+              res.data.data.words.forEach(w => {
+                w.isHidden = false
+                w.isWrong= false
+              });
+              this.words = res.data.data.words;
+              this.totalPage = res.data.data.totalPage;
+            },
+            onError: err => {
+              alert(err.data.data);
+            }
+          },
+      );
+
+      dateExecute();
     }
   }
 }

@@ -38,7 +38,6 @@ export const useAxios = (url, config = {}, options = {}) => {
             if(onSuccess) onSuccess(res);
         }).catch(err => {
             if(!err.response) {
-                alert("Something is wrong. Try again after few minutes");
                 return;
             }
             if(!err.response.data.data) {

@@ -1,7 +1,7 @@
 <template>
   <v-bottom-navigation grow v-model="value" active>
     <v-btn href="/" v-bind:active="isHome">Home</v-btn>
-    <v-btn href="/vocabulary" v-bind:active="isVoca">Vocabulary</v-btn>
+    <v-btn href="/vocabulary?page=1" v-bind:active="isVoca">Vocabulary</v-btn>
     <v-btn href="/my-page" v-bind:active="isMyPage">MyPage</v-btn>
   </v-bottom-navigation>
 </template>
@@ -18,7 +18,7 @@ export default {
     }
   },
   mounted() {
-    if(window.location.pathname.startsWith("/vocabulary")){
+    if(window.location.pathname.startsWith("/vocabulary?")){
       this.selectFooter(true, false, false)
     } else if(window.location.pathname.startsWith("/my-page")) {
       this.selectFooter(false, false, true)

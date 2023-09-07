@@ -12,7 +12,7 @@ const router = createRouter({
         {
             path: '/vocabulary',
             name: 'Vocabulary',
-            component: () => import('../views/vocabulary/VocabularyView.vue.vue')
+            component: () => import('../views/vocabulary/VocabularyView.vue.vue'),
         },
         {
             path: '/vocabulary/words/new',
