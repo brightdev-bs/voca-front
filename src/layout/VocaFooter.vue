@@ -18,11 +18,12 @@ export default {
     }
   },
   mounted() {
-    if(window.location.pathname.startsWith("/vocabulary?")){
+    console.log(window.location.pathname);
+    if(window.location.pathname.startsWith("/vocabulary")){
       this.selectFooter(true, false, false)
     } else if(window.location.pathname.startsWith("/my-page")) {
       this.selectFooter(false, false, true)
-    } else {
+    } else if(window.location.pathname === '/'){
       this.selectFooter(false, true, false)
     }
   },
