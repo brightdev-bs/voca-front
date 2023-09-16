@@ -1,5 +1,19 @@
 <template>
   <h2>Verification</h2>
+  <div>
+    <v-alert
+        v-if="isSuccess"
+        type="success"
+        title="Verified"
+        text="Now you can login !"
+    ></v-alert>
+    <v-alert
+        v-else
+        type="error"
+        title="error"
+        :text="this.errorMessage"
+    ></v-alert>
+  </div>
 </template>
 
 <script>
@@ -10,19 +24,17 @@ export default {
     let token = this.$route.query.token;
     axios.get(this.server + "/v1/email?token=" + token)
         .then(() => {
-          alert('It is verified');
+          this.isSuccess = true;
         })
         .catch(err => {
-          let message = err.response.data.data;
-          this.alert.type = 'error';
-          alert(message);
+          this.isSuccess = false;
+          this.errorMessage = err.response.data.data;
         })
   },
   data() {
     return {
-      alert: {
-        type: ''
-      },
+      isSuccess: true,
+      errorMessage: '',
     }
   }
 }
