@@ -3,7 +3,7 @@
     <v-main>
       <v-container>
         <voca-header></voca-header>
-        <router-view></router-view>
+        <VocaView></VocaView>
         <voca-footer></voca-footer>
       </v-container>
     </v-main>
@@ -13,11 +13,14 @@
 <script>
 import VocaHeader from "@/layout/VocaHeader.vue";
 import VocaFooter from "@/layout/VocaFooter.vue";
+import VocaView from "@/layout/VocaView.vue";
 export default {
   name: 'App',
   components: {
     VocaHeader,
+    VocaView,
     VocaFooter,
   },
 }
 </script>
+

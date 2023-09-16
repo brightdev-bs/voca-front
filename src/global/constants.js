@@ -10,4 +10,10 @@ export const Response = {
         FAIL: 'Something happened. Try again'
 }
 
+export const Constants = {
+        'FACEBOOK': 'facebook',
+        'GOOGLE': 'google',
+};
+
+
 export * from "@/global/constants.js";

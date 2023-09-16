@@ -4,7 +4,6 @@
     <template v-slot:append>
       <v-btn-group v-if="isActive()">
         <v-btn href="/login">LOGIN</v-btn>
-        <v-btn href="/sign-up">SIGN-UP</v-btn>
       </v-btn-group>
       <v-btn-group v-else>
         <v-btn href="/my-page">{{ username }}</v-btn>
