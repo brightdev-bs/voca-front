@@ -86,6 +86,8 @@ export default {
         params.date = date.format("YYYY-MM-DD");
       }
 
+      console.log(params);
+
       return params;
     },
     checkDate() {

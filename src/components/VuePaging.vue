@@ -1,5 +1,5 @@
 <template>
-  <div class="pagination mt-3">
+  <div class="pagination mt-3" v-if="totalPage !== 0">
     <v-btn @click="prevPage" :disabled="currentPage === String(1)" class="pagination-button" size="small">&lt;</v-btn>
     <span class="page-count">{{ currentPage }} / {{ totalPage }}</span>
     <v-btn @click="nextPage" :disabled="currentPage === String(totalPage)" class="pagination-button" size="small">&gt;</v-btn>
