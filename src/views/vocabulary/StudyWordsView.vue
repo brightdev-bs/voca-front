@@ -1,14 +1,31 @@
 <template>
-  <v-textarea
-      v-model="text"
-      bg-color="amber-lighten-4"
-      color="orange orange-darken-4"
-      label="Study Vocabulary"
-      variant="solo"
-      readonly
-  ></v-textarea>
-  <v-row justify="end">
-    <v-btn size="small" class="float-right me-4" @click="next">Next</v-btn>
+  <v-row justify="center">
+    <v-col cols="12" sm="6">
+      <div v-if="!isDefinition">
+        <v-card class="d-flex text-center align-center" style="height: 300px;" @click="isDefinition = !isDefinition">
+          <v-card-text>
+            <div>
+              <h2>{{ current.word }}</h2>
+              <p class="mt-2">{{ current.definition }}</p>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
+      <div v-else>
+        <v-card class="d-flex text-center align-center" style="height: 300px;" @click="isDefinition = !isDefinition">
+          <v-card-text>
+            <div>
+              <h2>{{ current.definition }}</h2>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
+    </v-col>
+  </v-row>
+  <v-row>
+    <v-col cols="12" class="text-center">
+      <v-btn size="small" @click="next">Next</v-btn>
+    </v-col>
   </v-row>
 
 </template>
@@ -22,7 +39,12 @@ export default {
   data() {
     return {
       words: [],
-      text: '',
+      current: {
+        word: '',
+        definition: '',
+        note: '',
+      },
+      isDefinition: false,
     }
   },
   mounted() {
@@ -39,12 +61,9 @@ export default {
       }
 
       const word = this.words[index++];
-      const wordText = word.word;
-      const definition = word.definition;
-      const note = word.note;
-
-      this.text = wordText + '\t\t\t\t\t\t\t' + definition + '\n'
-        + '\t\t' + note
+      this.current.word = word.word;
+      this.current.definition = word.definition;
+      this.current.note = word.note;
     }
   }
 }

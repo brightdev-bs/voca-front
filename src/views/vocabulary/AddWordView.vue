@@ -146,7 +146,7 @@ export default {
             immediate: false,
             onSuccess: () => {
               this.loading = false;
-              location.href = "/vocabulary"
+              location.href = "/vocabulary?page=1"
             },
             onError: err => {
               this.loading = false;
