@@ -38,7 +38,7 @@
 </template>
 <script>
 import {Constants} from "@/global/constants";
-import SocialLoginButton from "@/components/SocialLoginButton.vue";
+import SocialLoginButton from "@/components/account/SocialLoginButton.vue";
 import {useAxios} from "@/composables/useAxios";
 import {reactive, toRefs} from "vue";
 import {email, minLength, required} from "@vuelidate/validators";

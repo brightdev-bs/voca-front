@@ -29,7 +29,7 @@ import {reactive, ref, toRefs} from "vue";
 import {email, required} from "@vuelidate/validators";
 import {useVuelidate} from "@vuelidate/core";
 import {useAxios} from "@/composables/useAxios";
-import LoadingAlert from "@/components/LoadingAlert.vue";
+import LoadingAlert from "@/components/common/LoadingAlert.vue";
 
 export default {
   components: {LoadingAlert},

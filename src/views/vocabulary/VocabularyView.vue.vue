@@ -27,13 +27,13 @@
 </template>
 
 <script>
-import VocaTable from "@/components/VocaTable.vue";
+import VocaTable from "@/components/voca/VocaTable.vue";
 import moment from "moment";
 import VocaFooter from "@/layout/VocaFooter.vue";
 import {useWordStore} from "@/stores/useWordStore";
 import router from "@/router/router";
 import {useAxios} from "@/composables/useAxios";
-import VuePaging from "@/components/VuePaging.vue";
+import VuePaging from "@/components/common/VuePaging.vue";
 
 
 export default {

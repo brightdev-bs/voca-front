@@ -36,7 +36,7 @@ import {useVuelidate} from "@vuelidate/core";
 import {minLength, required, sameAs} from "@vuelidate/validators";
 import {useAxios} from "@/composables/useAxios";
 import {reactive} from "vue";
-import LoadingAlert from "@/components/LoadingAlert.vue";
+import LoadingAlert from "@/components/common/LoadingAlert.vue";
 
 export default {
   components: {LoadingAlert},

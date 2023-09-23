@@ -58,18 +58,6 @@ const router = createRouter({
             component: () => import('../views/vocabulary/StudyWordsView.vue'),
             props: true,
         },
-        {
-            path: '/community/:communityId/posts',
-            name: 'PostForm',
-            component: () => import('../views/post/PostFormView.vue'),
-            props: true,
-        },
-        {
-            path: '/community/:communityId/posts/:postId',
-            name: 'PostDetail',
-            component: () => import('../views/post/PostDetailView.vue'),
-            props: true,
-        },
     ]
 });
 

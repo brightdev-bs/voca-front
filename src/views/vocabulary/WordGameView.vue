@@ -47,7 +47,7 @@
 <script>
 
 import {useWordStore} from "@/stores/useWordStore";
-import VocaInfoDialog from "@/components/VocaInfoDialog.vue";
+import VocaInfoDialog from "@/components/voca/VocaInfoDialog.vue";
 import router from "@/router/router";
 
 export default {

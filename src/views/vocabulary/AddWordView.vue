@@ -99,7 +99,7 @@
 
 import {useAxios} from "@/composables/useAxios";
 import moment from "moment/moment";
-import LoadingAlert from "@/components/LoadingAlert.vue";
+import LoadingAlert from "@/components/common/LoadingAlert.vue";
 
 
 export default {
