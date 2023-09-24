@@ -1,27 +1,5 @@
 <template>
-  <v-row justify="center">
-    <v-col cols="12" sm="6">
-      <div v-if="!isDefinition">
-        <v-card class="d-flex text-center align-center" style="height: 300px;" @click="isDefinition = !isDefinition">
-          <v-card-text>
-            <div>
-              <h2>{{ current.word }}</h2>
-              <p class="mt-2">{{ current.definition }}</p>
-            </div>
-          </v-card-text>
-        </v-card>
-      </div>
-      <div v-else>
-        <v-card class="d-flex text-center align-center" style="height: 300px;" @click="isDefinition = !isDefinition">
-          <v-card-text>
-            <div>
-              <h2>{{ current.definition }}</h2>
-            </div>
-          </v-card-text>
-        </v-card>
-      </div>
-    </v-col>
-  </v-row>
+  <VocaCard :current="current"/>
   <v-row>
     <v-col cols="12" class="text-center">
       <v-btn size="small" @click="next">Next</v-btn>
@@ -33,9 +11,11 @@
 <script>
 
 import {useWordStore} from "@/stores/useWordStore";
+import VocaCard from "@/components/voca/VocaCard.vue";
 
 let index = 0;
 export default {
+  components: { VocaCard },
   data() {
     return {
       words: [],
@@ -44,7 +24,6 @@ export default {
         definition: '',
         note: '',
       },
-      isDefinition: false,
     }
   },
   mounted() {

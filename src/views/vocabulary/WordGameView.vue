@@ -1,141 +1,136 @@
 <template>
-  <div class="ma-5">
-    <v-row
-        v-for="word in words"
-        :key="word.key"
-    >
-      <v-col>
-        <v-card
-            :text="word.word"
-            variant="outlined"
-            :style="word.isWrong ? 'border: 1px solid red;' : 'border: 1px solid black;'"
-        >
-        </v-card>
-      </v-col>
-      <v-col>
-          <v-text-field v-model="word.text">
+  <v-row justify="center">
+    <v-col cols="12" sm="6">
+      <VueAlert
+          :show-alert="showAlert"
+          :is-correct="isCorrect"
+      />
+    </v-col>
+  </v-row>
 
-          </v-text-field>
-      </v-col>
-    </v-row>
+  <VocaCard :current="current"/>
 
-    <v-row class="me-1" justify="end">
-      <v-btn @click="submit">
-        submit
-      </v-btn>
-    </v-row>
-  </div>
+  <v-row justify="center">
+    <v-col cols="12" sm="6">
+      <v-text-field
+          v-model="current.text"
+          class="mt-3"
+          label="Definition"
+          variant="solo"/>
+    </v-col>
+  </v-row>
+  <v-row justify="center">
+    <v-btn @click="submit">submit</v-btn>
+  </v-row>
 
   <template v-if="dialog">
     <VocaInfoDialog
-        :score="result.score"
         :wrongWords="result.wrongWords"
-        :title="title"
         @close="closeDialog()"
-        @main="moveToMain()"
     >
     </VocaInfoDialog>
   </template>
 
-<!--  <v-alert-->
-<!--      color="info"-->
-<!--      title="Word-Game result"-->
-<!--      text="{{ result.score }}"-->
-<!--  ></v-alert>-->
 </template>
 
 <script>
 
 import {useWordStore} from "@/stores/useWordStore";
 import VocaInfoDialog from "@/components/voca/VocaInfoDialog.vue";
+import VocaCard from "@/components/voca/VocaCard.vue";
+import VueAlert from "@/components/common/VueAlert.vue";
 import router from "@/router/router";
 
+let index = 0;
+
 export default {
-  components: {VocaInfoDialog},
+  components: {VueAlert, VocaInfoDialog, VocaCard },
   mounted() {
-    this.init();
+    const store = useWordStore();
+    this.words = store.getWords;
+    this.next();
   },
   data() {
     return {
       words: [],
+      current: {
+        word: '',
+        definition: '',
+        note: '',
+        text: '',
+      },
+      isDefinition: false,
+      isCorrect: false,
+      showAlert: false,
       result: {
-        score: '',
         wrongWords: [],
-        incorrect: [],
       },
       title: 'Result',
       dialog: false,
     }
   },
   methods: {
-    init() {
-      const store = useWordStore();
-      const words = store.getWords;
-      this.words = words;
+    next() {
+      if(this.words.length <= 0) return;
+      if(this.words.length <= index) {
+        alert("The word-game is finished !");
+        this.calculateResult();
+        return;
+      }
+
+      const word = this.words[index++];
+      this.current.word = word.word;
+      this.current.definition = word.definition;
+      this.current.note = word.note;
+      this.current.text = '';
     },
     submit() {
-      let count = 0;
-      let wrongWords = new Array();
-      let incorrect = [];
-      for(let i = 0; i < this.words.length; i++) {
-        const word = this.words[i];
+      const word = this.current;
+      const def = word.definition.replace(/\s|^\[.*\]|\(.*\)/g, '');
+      const txt = word.text.replace(/\s|^\[.*\]|\(.*\)/g, '');
 
-        let correctFlag = false;
+      let correctFlag = false;
+      if (def === txt) correctFlag = true;
 
-        // 정규식을 이용해 () [], 띄어쓰기 무시한다.
-        // https://regexr.com/
-        if(word.definition && word.text) {
-          const def = word.definition.replace(/\s|^\[.*\]|\(.*\)/g, '');
-          const txt = word.text.replace(/\s|^\[.*\]|\(.*\)/g, '');
 
-          if (def === txt) {
-            correctFlag = true;
-            this.words[i].isWrong = false;
-            count++;
-            continue;
-          }
+      const defArr = new Set(def.split(","));
+      const txtArr = txt.split(",");
 
-          const defArr = new Set(def.split(","));
-          const txtArr = txt.split(",");
-
-          for (const text of txtArr) {
-            if (defArr.has(text)) {
-              correctFlag = true;
-              this.words[i].isWrong = false;
-              count++;
-            }
-          }
-        }
-
-        if(correctFlag === false) {
-          wrongWords.push(word.word);
-          incorrect.push(i);
-        }
+      for (const text of txtArr) {
+        if (defArr.has(text)) correctFlag = true;
       }
 
-      for(const id of incorrect) {
-        this.words[id].isWrong = true;
+      this.checkAnswer(correctFlag, word);
+
+      this.next();
+    },
+    checkAnswer(isCorrect, word) {
+      if(isCorrect === true) {
+        this.isCorrect = true;
+      } else {
+        this.result.wrongWords.push(Object.assign({}, word));
+        this.isCorrect = false;
       }
 
-      this.result.score = count + " / " + this.words.length;
-      this.result.wrongWords = wrongWords;
-      this.result.incorrect = incorrect;
+      this.showAlert = true;
+      this.hideAlert();
+    },
+    hideAlert() {
+      setTimeout(() => {
+        this.showAlert = false;
+      }, 500);
+    },
+    calculateResult() {
+
       this.showResult();
-
     },
     showResult() {
-      this.score = this.result.score;
-      for(const wrongWord of this.result.wrongWords) {
-        this.score += wrongWord.word + '<br>';
-      }
       this.dialog = true;
     },
     closeDialog() {
       this.dialog = false;
+      router.push('/vocabulary?page=1')
     },
-    moveToMain() {
-      router.push('/');
-    }
   }
 }
 </script>
