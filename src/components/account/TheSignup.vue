@@ -32,8 +32,7 @@
       </div>
     </div>
     <div class="line"></div>
-    <SocialLoginButton :social-type='"facebook"' @click="loginWithSocialMedia(Constants.FACEBOOK)"/>
-    <SocialLoginButton :social-type='"google"' @click="loginWithSocialMedia(Constants.GOOGLE)"/>
+    <SocialLoginButton :social-type='"google"' @click="signupWithSocialMedia(Constants.GOOGLE)"/>
   </div>
 </template>
 <script>
@@ -109,22 +108,8 @@ export default {
       }
 
     },
-    async loginWithSocialMedia(platform) {
-      console.log(platform);
-      // console.log(platform);
-      // if (platform === 'facebook') {
-      //   console.log("Login with facebook");
-      // }
-      //
-      // if (platform === 'google') {
-      //   googleTokenLogin().then(() => {
-      //     // const accessToken = response.access_token;
-      //     // axios call
-      //
-      //   }).catch((e) => {
-      //     console.log(e);
-      //   })
-      // }
+    async signupWithSocialMedia(platform) {
+      this.$emit('signupWithSocialMedia', platform);
     },
     toLoginForm() {
       console.log("toLoginForm")

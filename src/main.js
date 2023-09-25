@@ -13,19 +13,22 @@ import { loadFonts } from './plugins/webfontloader'
 import VCalendar from 'v-calendar'
 import VueBasicAlert from 'vue-basic-alert'
 
-import CKEditor from '@ckeditor/ckeditor5-vue'
+import vue3GoogleLogin from 'vue3-google-login'
+
 
 const pinia = createPinia();
 
 loadFonts()
 
 let app = createApp(App)
-    .use(CKEditor)
     .use(router)
     .use(vuetify)
     .use(aliases, mdi)
     .use(VCalendar, {})
     .use(pinia)
+    .use(vue3GoogleLogin, {
+        clientId: '178996359638-7l7a0t9l4slvtdvao0amrtf7tg47mphh.apps.googleusercontent.com',
+    })
     .use(VueBasicAlert)
 
 app.component("v-select", vSelect)

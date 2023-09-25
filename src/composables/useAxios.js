@@ -38,6 +38,7 @@ export const useAxios = (url, config = {}, options = {}) => {
             if(onSuccess) onSuccess(res);
         }).catch(err => {
             if(!err.response) {
+                console.log(err.response);
                 return;
             }
             if(!err.response.data.data) {

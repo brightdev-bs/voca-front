@@ -15,5 +15,13 @@ export const Constants = {
         'GOOGLE': 'google',
 };
 
+export const Url = {
+    'FACEBOOK_URL': 'https://accounts.google.com/o/oauth2/v2/auth?client_id='
+        + process.env.VUE_APP_GOOGLE_CLIENT_ID + '&redirect_url='
+        + process.env.VUE_APP_GOOGLE_REDIRECT_URL
+        + '&response_type=code'
+        + '&scope=email profile',
+}
+
 
 export * from "@/global/constants.js";

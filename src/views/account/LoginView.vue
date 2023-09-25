@@ -4,20 +4,23 @@
       :login-form="this.loginForm"
       @changeForm="changeForm"
       @update:submitLogin="submitLoginForm"
+      @loginWithSocialMedia="loginWithSocialMedia"
     />
 
     <!-- Signup Form -->
     <TheSignup
         @changeForm="changeForm"
+        @signupWithSocialMedia="signupWithSocialMedia"
     />
 
   </section>
 </template>
 <script>
-import { Constants } from "@/global/constants";
+import {Constants } from "@/global/constants";
 import TheLogin from "@/components/account/TheLogin.vue";
 import {useAxios} from "@/composables/useAxios";
 import TheSignup from "@/components/account/TheSignup.vue";
+import {googleTokenLogin} from "vue3-google-login";
 export default {
   computed: {
     Constants() {
@@ -81,10 +84,7 @@ export default {
           {
             immediate: false,
             onSuccess: res => {
-              localStorage.setItem('token', res.data.data.token)
-              localStorage.setItem('name', res.data.data.username)
-              localStorage.setItem('id', res.data.data.id)
-              location.href = process.env.VUE_APP_ADDRESS;
+              this.saveUserInfo(res);
             },
           },
       );
@@ -92,10 +92,90 @@ export default {
 
     },
     changeForm(isSignup) {
-      console.log('isSignup = {}', isSignup);
       this.signup = isSignup;
-    }
+    },
+    async loginWithSocialMedia(platform) {
+      console.log(platform);
+      if(platform === 'facebook') {
+        console.log("facebook");
+      }
 
+      if(platform === 'google') {
+        googleTokenLogin().then((response) => {
+          const token = response.access_token;
+          console.log(token);
+
+          const params = {
+            'token': token
+          }
+
+          // ajax call to backend
+          const { submitExecute } = useAxios(
+              'v1/login/google',
+              {
+                method: 'get',
+                params,
+              },
+              {
+                immediate: false,
+                onSuccess: res => {
+                  this.saveUserInfo(res);
+                },
+              },
+          );
+
+          submitExecute(token);
+
+
+        }).catch((e) => {
+          console.log(e);
+        })
+      }
+    },
+    saveUserInfo: function (res) {
+      console.log('token = {}', res);
+      localStorage.setItem('token', res.data.data.token)
+      localStorage.setItem('name', res.data.data.username)
+      localStorage.setItem('id', res.data.data.id)
+      location.href = process.env.VUE_APP_ADDRESS;
+    },
+    async signupWithSocialMedia(platform) {
+      if(platform === 'facebook') {
+        console.log("facebook");
+      }
+
+      if(platform === 'google') {
+        googleTokenLogin().then((response) => {
+          const token = response.access_token;
+          console.log(token);
+
+          const params = {
+            'token': token
+          }
+
+          // ajax call to backend
+          const {submitExecute} = useAxios(
+              'v1/signup/google',
+              {
+                method: 'get',
+                params,
+              },
+              {
+                immediate: false,
+                onSuccess: res => {
+                  this.saveUserInfo(res);
+                },
+              },
+          );
+
+          submitExecute(token);
+
+
+        }).catch((e) => {
+          console.log(e);
+        })
+      }
+    }
   }
 }
 </script>

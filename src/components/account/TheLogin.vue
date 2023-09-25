@@ -30,7 +30,6 @@
 
     <div class="line"></div>
 
-    <SocialLoginButton :social-type='"facebook"' @click="loginWithSocialMedia(Constants.FACEBOOK)"/>
     <SocialLoginButton :social-type="'google'" @click="loginWithSocialMedia(Constants.GOOGLE)"/>
   </div>
 </template>
@@ -84,7 +83,7 @@ export default {
         this.$emit('update:submitLogin', this.state.loginForm)
     },
     async loginWithSocialMedia(platform) {
-      console.log(platform);
+      this.$emit('loginWithSocialMedia', platform);
     },
   }
 }
