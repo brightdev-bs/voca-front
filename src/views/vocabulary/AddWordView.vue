@@ -163,7 +163,6 @@ export default {
       dateExecute(form);
     },
     change(event) {
-      console.log(event);
       if(event == 'add') {
        this.vocaView = true;
        this.select = '';

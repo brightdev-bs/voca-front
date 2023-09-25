@@ -95,15 +95,10 @@ export default {
       this.signup = isSignup;
     },
     async loginWithSocialMedia(platform) {
-      console.log(platform);
-      if(platform === 'facebook') {
-        console.log("facebook");
-      }
 
       if(platform === 'google') {
         googleTokenLogin().then((response) => {
           const token = response.access_token;
-          console.log(token);
 
           const params = {
             'token': token
@@ -127,27 +122,22 @@ export default {
           submitExecute(token);
 
 
-        }).catch((e) => {
-          console.log(e);
+        }).catch(() => {
+
         })
       }
     },
     saveUserInfo: function (res) {
-      console.log('token = {}', res);
       localStorage.setItem('token', res.data.data.token)
       localStorage.setItem('name', res.data.data.username)
       localStorage.setItem('id', res.data.data.id)
       location.href = process.env.VUE_APP_ADDRESS;
     },
     async signupWithSocialMedia(platform) {
-      if(platform === 'facebook') {
-        console.log("facebook");
-      }
 
       if(platform === 'google') {
         googleTokenLogin().then((response) => {
           const token = response.access_token;
-          console.log(token);
 
           const params = {
             'token': token
@@ -171,8 +161,8 @@ export default {
           submitExecute(token);
 
 
-        }).catch((e) => {
-          console.log(e);
+        }).catch(() => {
+
         })
       }
     }

@@ -97,7 +97,6 @@ export default {
   methods: {
     async submitSignupForm() {
       const isFormCorrect = await this.v$.$validate();
-      console.log(isFormCorrect);
       if(isFormCorrect) {
         const requestBody = {
           username: this.state.username,
@@ -112,7 +111,6 @@ export default {
       this.$emit('signupWithSocialMedia', platform);
     },
     toLoginForm() {
-      console.log("toLoginForm")
       this.$emit('changeForm', false);
     }
   }

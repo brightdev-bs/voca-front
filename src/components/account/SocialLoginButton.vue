@@ -14,7 +14,6 @@ export default {
   },
   computed: {
     isFacebook() {
-      console.log(this.socialType)
       return this.socialType === 'facebook';
     },
     isGoogle() {

@@ -86,8 +86,6 @@ export default {
         params.date = date.format("YYYY-MM-DD");
       }
 
-      console.log(params);
-
       return params;
     },
     checkDate() {
@@ -160,7 +158,6 @@ export default {
           {
             immediate: false,
             onSuccess: res => {
-              console.log(res);
               res.data.data.words.forEach(w => {
                 w.isHidden = false
                 w.isWrong= false
