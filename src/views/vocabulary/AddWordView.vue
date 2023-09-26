@@ -38,7 +38,7 @@
     >
       <v-card>
         <v-card-title>
-          <span class="text-h5">Add new vocabulary</span>
+          <h3 class="ma-3">Add new word</h3>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -46,40 +46,40 @@
               <v-text-field
                 v-model="this.voca.name"
                 label="Name of vocabulary"
-                required>
-              </v-text-field>
+                variant="solo"
+                required
+              />
             </v-row>
             <v-row>
               <v-text-field
                   v-model="this.voca.description"
                   label="Description"
-                  required>
-              </v-text-field>
+                  variant="solo"
+                  required
+              />
             </v-row>
             <v-row>
-              <!--  Todo : 추후에 공개  -->
               <v-checkbox
                   v-model="this.voca.isPublic"
-                  class="d-none"
-                  :label=" '공개' ">
-              </v-checkbox>
+                  label="public"></v-checkbox>
             </v-row>
+            If you check, other users can study with your vocabulary
           </v-container>
         </v-card-text>
 
         <!--  단어장 추가  -->
-        <v-card-actions>
+        <v-card-actions class="mb-3 mr-3">
           <v-spacer></v-spacer>
           <v-btn
-              color="blue-darken-1"
               variant="text"
+              elevation="4"
               @click="this.vocaView = false"
           >
             cancel
           </v-btn>
           <v-btn
-              color="blue-darken-1"
               variant="text"
+              elevation="4"
               @click="addVocabulary"
           >
             save
@@ -205,8 +205,10 @@ export default {
       const form = {
         "name": name,
         "description": desc,
-        "isPublic": isPublic,
+        "publicFlag": isPublic,
       }
+
+      console.log(form);
 
       dateExecute(form);
     },
