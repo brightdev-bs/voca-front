@@ -7,7 +7,7 @@
       <v-btn size="small" class="float-right me-1 mt-1" @click="hideDefinition">{{ hideButton }}</v-btn>
       <v-btn size="small" @click="setWordGame" class="float-right me-1 mt-1">Word Game</v-btn>
       <v-btn size="small" @click="studyWords" class="float-right me-1 mt-1">Study</v-btn>
-      <v-btn size="small" href="/vocabulary/words/new" class="float-right me-1 mt-1" v-if="isToday">Add</v-btn>
+      <v-btn size="small" to="/vocabulary/words/new" class="float-right me-1 mt-1" v-if="isToday">Add</v-btn>
     </v-row>
   </div>
   <voca-table

@@ -15,9 +15,11 @@ const router = createRouter({
             component: () => import('../views/vocabulary/VocabularyView.vue.vue'),
         },
         {
-            path: '/vocabulary/words/new',
-            name: 'WriteWord',
-            component: () => import('../views/vocabulary/AddWordView.vue')
+            path: '/vocabulary/words/new/:word',
+            alias: ['/vocabulary/words/new'],
+            name: 'AddWord',
+            component: () => import('../views/vocabulary/AddWordView.vue'),
+            props: route => ({ word: route.params.word || {word: '', definition: '', note: ''} }),
         },
         {
             path: '/login',

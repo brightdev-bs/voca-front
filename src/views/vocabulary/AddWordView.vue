@@ -2,18 +2,24 @@
 
   <section class="ma-5">
     <WordForm
-        :category="this.category"
+        :category="category"
         :updateValue="this.select"
-        @open-category="openVocaFormPopup"
-        @update-category="updateVocabulary"
-        @add-word="addWord"
+        :is-open="this.vocaView"
+        :voca-form="this.voca"
+        :word-form="this.wordForm"
+        :button-action="this.buttonAction"
+        @updateWord="updateWord"
+        @updateDefinition="updateDefinition"
+        @updateNote="updateNote"
+        @openCategory="openVocaFormPopup"
+        @updateCategory="updateVocabulary"
+        @addVocabulary="addVocabulary"
+        @addWord="addWord"
+        @cancel="closePopup"
+        @updateVocaName="updateVocaName"
+        @updateVocaDescription="updateVocaDescription"
     />
 
-    <VocaFormPopup
-        v-if="this.vocaView"
-        @add-vocabulary="addVocabulary"
-        @close-popup="closePopup"
-    />
     <LoadingAlert :loading="loading"/>
   </section>
 
@@ -25,17 +31,21 @@ import {useAxios} from "@/composables/useAxios";
 import moment from "moment/moment";
 import LoadingAlert from "@/components/common/LoadingAlert.vue";
 import WordForm from "@/components/voca/WordForm.vue";
-import VocaFormPopup from "@/components/voca/VocaFormPopup.vue";
 
 
 export default {
   components: {
-    VocaFormPopup,
     WordForm,
     LoadingAlert
   },
   mounted() {
     this.initVocaList();
+    const word = this.$route.params.word;
+    if(word) {
+      this.wordForm = JSON.parse(word);
+      this.select = this.wordForm.vocabularyId
+      this.buttonAction = 'edit'
+    }
   },
   data() {
     return {
@@ -45,38 +55,78 @@ export default {
           { name: 'create new vocabulary', key: "add"}
       ],
       loading: false,
+      voca: {
+        name: '',
+        description: '',
+        isPublic : true,
+      },
+      wordForm: {
+        word: '',
+        definition: '',
+        note: '',
+      },
+      buttonAction: 'add',
     }
   },
   methods: {
-    addWord(form) {
-
-      const { dateExecute } = useAxios(
-          'v1/words',
-          {
-            method: 'post',
-            headers: {
-              "Content-Type": 'application/json',
-              Authorization: localStorage.getItem("token"),
+    addWord(word, action) {
+      if(action === 'add') {
+        const { dateExecute } = useAxios(
+            'v1/words',
+            {
+              method: 'post',
+              headers: {
+                "Content-Type": 'application/json',
+                Authorization: localStorage.getItem("token"),
+              },
             },
-          },
-          {
-            immediate: false,
-            onSuccess: () => {
-              this.loading = false;
-              location.href = "/vocabulary?page=1"
+            {
+              immediate: false,
+              onSuccess: () => {
+                this.loading = false;
+                location.href = "/vocabulary?page=1"
+              },
+              onError: err => {
+                this.loading = false;
+                alert(err);
+              }
             },
-            onError: err => {
-              this.loading = false;
-              alert(err);
-            }
-          },
-      );
+        );
 
-      form.vocaId = this.select;
-      form.date = moment().format("yyyy-MM-DD");
+        word.vocaId = this.select;
+        word.date = moment().format("yyyy-MM-DD");
 
-      this.loading = true;
-      dateExecute(form);
+        this.loading = true;
+        dateExecute(word);
+      } else {
+          const {dateExecute} = useAxios(
+              'v1/words/' + word.id,
+              {
+                method: 'put',
+                headers: {
+                  "Content-Type": 'application/json',
+                  Authorization: localStorage.getItem("token"),
+                },
+              },
+              {
+                immediate: false,
+                onSuccess: () => {
+                  this.loading = false;
+                  location.href = "/vocabulary?page=1"
+                },
+                onError: err => {
+                  this.loading = false;
+                  alert(err);
+                }
+              },
+          );
+
+          word.vocaId = this.select;
+          word.date = moment().format("yyyy-MM-DD");
+
+          this.loading = true;
+          dateExecute(word);
+        }
     },
     openVocaFormPopup() {
        this.vocaView = true;
@@ -90,11 +140,10 @@ export default {
       this.select = value;
     },
     addVocabulary(voca) {
-      console.log(voca);
       const name = voca.name.trim();
       const desc = voca.description.trim();
       const isPublic = voca.isPublic;
-      for(const value of this.form.category) {
+      for(const value of this.category) {
         if(value.name == name) {
           alert("There is already same name of vocabulary");
           return;
@@ -113,7 +162,7 @@ export default {
           {
             immediate: false,
             onSuccess: res => {
-              this.form.category.unshift({name: name, key: res.data.data.id});
+              this.category.unshift({name: name, key: res.data.data.id});
               this.voca.name = '';
               this.voca.description = '';
               this.vocaView = false;
@@ -157,7 +206,23 @@ export default {
       );
 
       submitExecute();
-    }
+    },
+    updateVocaName(name) {
+      this.voca.name = name;
+    },
+    updateVocaDescription(desc) {
+      this.voca.description = desc;
+    },
+    updateWord(word) {
+      this.wordForm.word = word;
+    },
+    updateDefinition(def) {
+      this.wordForm.definition = def;
+    },
+    updateNote(note) {
+      this.wordForm.note = note;
+    },
+
   }
 
 }

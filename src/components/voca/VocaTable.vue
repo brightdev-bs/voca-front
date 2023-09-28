@@ -25,7 +25,7 @@
           <v-btn
               density="compact"
               icon="mdi-file-edit-outline"
-              @click="editWord(word.id)"
+              @click="editWord(index)"
           />
         </v-col>
       </td>
@@ -49,8 +49,6 @@ export default {
   },
   methods: {
     check(id) {
-
-      console.log(id);
       axios
           .patch(this.server + '/v1/words/' + id, {
             headers: {
@@ -68,8 +66,8 @@ export default {
     changeHideStatus(id) {
       this.$emit('changeHideStatus', id);
     },
-    editWord(id) {
-      console.log(id);
+    editWord(index) {
+      this.$router.push({name:'AddWord', params: { word: JSON.stringify(this.words[index])}});
     }
   }
 }
