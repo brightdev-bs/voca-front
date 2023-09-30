@@ -3,7 +3,7 @@
     <v-row>
       <h3> Study Vocabulary </h3>
       <v-spacer></v-spacer>
-      <v-btn class="me-1" size="small" color="primary" prepend-icon="mdi-heart">Bookmark</v-btn>
+      <v-btn class="me-1" size="small" color="primary" prepend-icon="mdi-heart" @click="addLike">Like</v-btn>
     </v-row>
     <v-row justify="end">
       <v-btn size="small" class="float-right me-1 mt-1" @click="hideDefinition">{{ hideButton }}</v-btn>
@@ -24,14 +24,11 @@
       @prev-page="prevPage"
   />
 
-  <!--      v-bind:프롭스 속성 이름="상위 컴포넌트 데이터 이름"-->
-  <voca-footer @update="update"/>
 </template>
 
 <script>
 import VocaTable from "@/components/voca/VocaTable.vue";
 import moment from "moment";
-import VocaFooter from "@/layout/VocaFooter.vue";
 import {useWordStore} from "@/stores/useWordStore";
 import router from "@/router/router";
 import {useAxios} from "@/composables/useAxios";
@@ -45,7 +42,6 @@ export default {
   components: {
     VuePaging,
     VocaTable,
-    VocaFooter,
   },
   data() {
     return {
@@ -181,6 +177,32 @@ export default {
             onError: err => {
               alert(err.data.data);
             }
+          },
+      );
+
+      dateExecute();
+    },
+    addLike() {
+      const vocaId = this.$route.query.voca;
+      const token = localStorage.getItem("token")
+      if(!token) {
+        alert('Please Login First');
+        return;
+      }
+      const {dateExecute} = useAxios(
+          'v1/voca/' + vocaId + '/liked',
+          {
+            method: 'post',
+            headers: {
+              "Content-Type": 'application/json',
+              Authorization: token,
+            },
+          },
+          {
+            immediate: false,
+            onSuccess: (res) => {
+              alert(res.data);
+            },
           },
       );
 

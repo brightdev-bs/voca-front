@@ -2,44 +2,30 @@
   <v-table>
     <thead>
     <tr>
-      <th class="text-left words" width="52%">
+      <th class="text-left words" width="45%">
         Word
       </th>
       <th class="text-left" width="55%">
         Definition
       </th>
-      <td class="text-center pa-1" width="3%">
-        edit
-      </td>
     </tr>
     </thead>
     <tbody>
     <tr
-        @contextmenu.prevent="showContextMenu(word.id, $event)"
         v-for="(word, index) in words"
         :key="word.id"
     >
-      <td>{{ word.word }}</td>
+      <td @touchstart.prevent="handleLongPress(index, $event)">{{ word.word }}</td>
       <td :class="{ hide: word.isHidden }" @click="changeHideStatus(index)">{{ word.definition }}</td>
-      <td class="pa-1">
-        <v-col cols="auto pa-0">
-          <v-btn
-              density="compact"
-              icon="mdi-file-edit-outline"
-              @click="editWord(index)"
-          />
-        </v-col>
-      </td>
     </tr>
     </tbody>
+    <div v-if="contextMenu.show" class="context-menu" :style="{ top: contextMenu.y + 'px', left: contextMenu.x + 'px' }">
+      <ul>
+        <li @click="editWord(contextMenu.index)">Edit</li>
+        <li @click="deleteWord(contextMenu.index)">Delete</li>
+      </ul>
+    </div>
   </v-table>
-
-  <div v-if="contextMenu.show" class="context-menu" :style="{ top: contextMenu.y + 'px', left: contextMenu.x + 'px' }">
-    <ul>
-      <li @click="editWord(contextMenu.index)">Edit</li>
-      <li @click="deleteWord(contextMenu.index)">Delete</li>
-    </ul>
-  </div>
 
 </template>
 
@@ -85,6 +71,7 @@ export default {
       this.$router.push({name:'AddWord', params: { word: JSON.stringify(this.words[index])}});
     },
     deleteWord(index) {
+      console.log(index);
       const { dateExecute } = useAxios(
             '/v1/words/' + index,
           {
@@ -119,6 +106,17 @@ export default {
       this.contextMenu.show = false;
       document.removeEventListener('click', this.closeContextMenu);
     },
+    handleLongPress(index, event) {
+      event.preventDefault();
+
+      const x = event.touches[0].clientX;
+      const y = event.touches[0].clientY;
+
+      event.clientX = x;
+      event.clientY = y;
+
+      this.showContextMenu(index, event);
+    }
   }
 }
 </script>
