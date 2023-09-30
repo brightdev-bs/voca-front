@@ -15,6 +15,7 @@
   <voca-table
       :words="this.words"
       @changeHideStatus="changeHideStatus"
+      @removeElement="removeElement"
   ></voca-table>
 
   <VuePaging
@@ -33,7 +34,6 @@ import {useWordStore} from "@/stores/useWordStore";
 import router from "@/router/router";
 import {useAxios} from "@/composables/useAxios";
 import VuePaging from "@/components/common/VuePaging.vue";
-
 
 export default {
   mounted() {
@@ -207,6 +207,9 @@ export default {
       );
 
       dateExecute();
+    },
+    removeElement(index) {
+      this.words.splice(index, 1);
     }
   }
 }

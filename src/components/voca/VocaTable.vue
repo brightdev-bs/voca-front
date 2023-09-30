@@ -15,14 +15,14 @@
         v-for="(word, index) in words"
         :key="word.id"
     >
-      <td @touchstart.prevent="handleLongPress(index, $event)">{{ word.word }}</td>
+      <td @touchstart.prevent="handleLongPress(word.id, index, $event)">{{ word.word }}</td>
       <td :class="{ hide: word.isHidden }" @click="changeHideStatus(index)">{{ word.definition }}</td>
     </tr>
     </tbody>
     <div v-if="contextMenu.show" class="context-menu" :style="{ top: contextMenu.y + 'px', left: contextMenu.x + 'px' }">
       <ul>
-        <li @click="editWord(contextMenu.index)">Edit</li>
-        <li @click="deleteWord(contextMenu.index)">Delete</li>
+        <li @click="editWord(contextMenu.id, contextMenu.index)">Edit</li>
+        <li @click="deleteWord(contextMenu.id, contextMenu.index)">Delete</li>
       </ul>
     </div>
   </v-table>
@@ -42,6 +42,7 @@ export default {
     return {
       contextMenu: {
         show: false,
+        id: 0,
         index: null,
         x: 0,
         y: 0,
@@ -67,13 +68,12 @@ export default {
     changeHideStatus(id) {
       this.$emit('changeHideStatus', id);
     },
-    editWord(index) {
+    editWord(id, index) {
       this.$router.push({name:'AddWord', params: { word: JSON.stringify(this.words[index])}});
     },
-    deleteWord(index) {
-      console.log(index);
+    deleteWord(id, index) {
       const { dateExecute } = useAxios(
-            '/v1/words/' + index,
+            '/v1/words/' + id,
           {
             method: 'delete',
             headers: {
@@ -83,8 +83,8 @@ export default {
           },
           {
             immediate: false,
-            onSuccess: res => {
-              console.log(res);
+            onSuccess: () => {
+              this.$emit('removeElement', index);
             },
             onError: err => {
               alert(err.data.data);
@@ -93,10 +93,11 @@ export default {
       );
       dateExecute();
     },
-    showContextMenu(index, event) {
+    showContextMenu(id, index, event) {
       event.preventDefault();
       this.contextMenu.show = true;
       this.contextMenu.index = index;
+      this.contextMenu.id = id;
       this.contextMenu.x = event.clientX;
       this.contextMenu.y = event.clientY;
 
@@ -106,7 +107,7 @@ export default {
       this.contextMenu.show = false;
       document.removeEventListener('click', this.closeContextMenu);
     },
-    handleLongPress(index, event) {
+    handleLongPress(id, index, event) {
       event.preventDefault();
 
       const x = event.touches[0].clientX;
@@ -115,7 +116,7 @@ export default {
       event.clientX = x;
       event.clientY = y;
 
-      this.showContextMenu(index, event);
+      this.showContextMenu(id, index, event);
     }
   }
 }
