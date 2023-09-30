@@ -1,5 +1,9 @@
 <template>
-  <VocaCard :current="current"/>
+  <VocaCard
+      :current="current"
+      :is-definition="this.isDefinition"
+      @toggleDefinition="toggleDefinition"
+  />
   <v-row>
     <v-col cols="12" class="text-center">
       <v-btn size="small" @click="next">Next</v-btn>
@@ -24,6 +28,7 @@ export default {
         definition: '',
         note: '',
       },
+      isDefinition: false,
     }
   },
   mounted() {
@@ -43,7 +48,10 @@ export default {
       this.current.word = word.word;
       this.current.definition = word.definition;
       this.current.note = word.note;
-    }
+    },
+    toggleDefinition() {
+      this.isDefinition = !this.isDefinition;
+    },
   }
 }
 </script>

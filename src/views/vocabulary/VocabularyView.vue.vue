@@ -1,7 +1,9 @@
 <template>
   <div class="ma-5">
     <v-row>
-      {{ this.title }}
+      <h3> Study Vocabulary </h3>
+      <v-spacer></v-spacer>
+      <v-btn class="me-1" size="small" color="primary" prepend-icon="mdi-heart">Bookmark</v-btn>
     </v-row>
     <v-row justify="end">
       <v-btn size="small" class="float-right me-1 mt-1" @click="hideDefinition">{{ hideButton }}</v-btn>

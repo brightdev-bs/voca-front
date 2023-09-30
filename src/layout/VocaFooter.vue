@@ -18,7 +18,6 @@ export default {
     }
   },
   mounted() {
-    console.log(window.location.pathname);
     if(window.location.pathname.startsWith("/vocabulary")){
       this.selectFooter(true, false, false)
     } else if(window.location.pathname.startsWith("/my-page")) {

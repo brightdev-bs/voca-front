@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-col cols="12" sm="6">
-      <div v-if="!isDefinition">
+      <div v-if="!isDefinition" @click="toggleDefinition">
         <v-card class="d-flex text-center align-center" style="height: 300px;">
           <v-card-text>
             <div>
@@ -11,7 +11,17 @@
           </v-card-text>
         </v-card>
       </div>
+      <div v-else>
+        <v-card class="d-flex text-center align-center" style="height: 300px;" @click="toggleDefinition">
+          <v-card-text>
+            <div>
+              <h2>{{ current.definition }}</h2>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
     </v-col>
+
   </v-row>
 </template>
 <script>
@@ -22,10 +32,11 @@ export default {
       definition: '',
       note: '',
     },
+    isDefinition: Boolean,
   },
-  data() {
-    return {
-      isDefinition: false,
+  methods: {
+    toggleDefinition() {
+      this.$emit('toggleDefinition');
     }
   }
 
