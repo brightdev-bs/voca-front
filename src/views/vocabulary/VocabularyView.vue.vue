@@ -3,7 +3,9 @@
     <v-row>
       <h3> Study Vocabulary </h3>
       <v-spacer></v-spacer>
-      <v-btn class="me-1" size="small" color="primary" prepend-icon="mdi-heart" @click="addLike">Like</v-btn>
+      <v-btn
+          v-if="isVocaPage"
+          class="me-1" size="small" color="primary" prepend-icon="mdi-heart" @click="addLike">Like</v-btn>
     </v-row>
     <v-row justify="end">
       <v-btn size="small" class="float-right me-1 mt-1" @click="hideDefinition">{{ hideButton }}</v-btn>
@@ -51,6 +53,7 @@ export default {
       words: [],
       currentPage: 1,
       totalPage: 1,
+      isVocaPage: false,
     }
   },
   methods: {
@@ -77,9 +80,11 @@ export default {
       if(voca) {
         this.date = '';
         params.voca = voca;
+        this.isVocaPage = true;
       } else if(date) {
         params.date = date;
         params.offset = this.$route.query.offset;
+        this.isVocaPage = false;
       } else {
         let date = moment();
         params.date = date.format("YYYY-MM-DD");
