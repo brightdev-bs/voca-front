@@ -59,11 +59,12 @@ export default {
     update() {
       const url = this.getUrl();
       const params = this.buildParams();
+      console.log(params);
       this.requestWords(url, params);
     },
     getUrl() {
       let voca = this.$route.query.voca;
-      if(voca) return 'v1/voca/words';
+      if(voca) return 'v1/voca/' + voca;
       else return "v1/words";
     },
     buildParams() {
@@ -139,10 +140,19 @@ export default {
       return false;
     },
     nextPage(page) {
-      window.location.href = '/vocabulary?page=' + page;
+      const params = this.getParams(page);
+      window.location.href = '/vocabulary?' + params;
     },
     prevPage(page) {
-      window.location.href = '/vocabulary?page=' + page;
+      const params = this.getParams(page);
+      window.location.href = '/vocabulary?' + params;
+    },
+    getParams(page) {
+      let params = '';
+      const vocaId = this.$route.query.voca;
+      if(vocaId) params += 'voca=' + vocaId;
+      params += '&page=' + page;
+      return params;
     },
     requestWords(url, params) {
       const { dateExecute } = useAxios(
@@ -158,6 +168,7 @@ export default {
           {
             immediate: false,
             onSuccess: res => {
+              console.log(res);
               res.data.data.words.forEach(w => {
                 w.isHidden = false
                 w.isWrong= false

@@ -1,12 +1,40 @@
 <template>
   <section>
-
+    <PublicVocaList
+        :vocabularies="this.vocabularies"
+    />
   </section>
 </template>
 
 <script>
 
+import PublicVocaList from "@/components/home/PublicVocaList.vue";
+import {useAxios} from "@/composables/useAxios";
+
 export default {
+  components: {PublicVocaList},
+  data() {
+    return {
+      vocabularies: [],
+    }
+  },
+  mounted() {
+    useAxios(
+        'v1/home',
+        {
+          method: 'get',
+        },
+        {
+          immediate: true,
+          onSuccess: (res) => {
+            this.vocabularies = res.data.data;
+          },
+          onError: err => {
+            alert(err);
+          }
+        },
+    );
+  }
 
 }
 </script>
