@@ -216,6 +216,15 @@ export default {
     removeElement(index) {
       this.words.splice(index, 1);
     }
+  },
+  head() {
+    return {
+      title: "Today's Vocabulary",
+      meta: [
+        { name: 'description', content: 'Vocabulary Today I Studied, Make Your Own Vocabulary' },
+        { name: 'keywords', content: 'Vocabulary' },
+      ],
+    }
   }
 }
 </script>

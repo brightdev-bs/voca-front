@@ -34,6 +34,15 @@ export default {
           }
         },
     );
+  },
+  head() {
+    return {
+      title: "Voca-World",
+      meta: [
+        { name: 'description', content: 'Voca-World Is A Best Language Partner. It Helps You To Easily memorize Vocabulary. We Also Provide Essential TOPIK Vocabulary.' },
+        { name: 'keywords', content: 'vocabulary, language partner' },
+      ],
+    }
   }
 
 }

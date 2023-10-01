@@ -132,6 +132,15 @@ export default {
       this.dialog = false;
       router.push('/vocabulary?page=1')
     },
+  },
+  head() {
+    return {
+      title: "Word Game",
+      meta: [
+        { name: 'description', content: 'Check Your Study Status By Word Game. The Fun Way To Study Vocabulary' },
+        { name: 'keywords', content: 'Word game, Study' },
+      ],
+    }
   }
 }
 </script>

@@ -102,6 +102,15 @@ export default {
         this.showAlert = false;
       }, 700);
     },
+  },
+  head() {
+    return {
+      title: "Study Vocabulary",
+      meta: [
+        { name: 'description', content: 'Study Vocabulary And Add Famous Words For Your Test' },
+        { name: 'keywords', content: 'Vocabulary, Study' },
+      ],
+    }
   }
 }
 </script>
