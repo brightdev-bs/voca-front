@@ -1,7 +1,7 @@
 <template>
   <div class="ma-5">
     <v-row>
-      <h3> Study Vocabulary </h3>
+      <h3> Today's Vocabulary </h3>
       <v-spacer></v-spacer>
       <v-btn
           v-if="isVocaPage"

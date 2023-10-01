@@ -3,12 +3,12 @@
     <v-alert
         v-if="!isCorrect"
         type="error"
-        title="Wrong"
+        :title=errorTitle
     />
     <v-alert
         v-else
         type="success"
-        title="Correct"
+        :title=successTitle
     />
   </div>
 </template>
@@ -17,6 +17,8 @@ export default {
   props: {
     showAlert: Boolean,
     isCorrect: Boolean,
+    errorTitle: String,
+    successTitle: String,
   },
 }
 </script>

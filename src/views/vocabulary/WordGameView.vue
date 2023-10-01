@@ -9,6 +9,8 @@
       <VueAlert
           :show-alert="showAlert"
           :is-correct="isCorrect"
+          :error-title="'Wrong'"
+          :success-title="'Correct'"
       />
     </v-col>
   </v-row>
