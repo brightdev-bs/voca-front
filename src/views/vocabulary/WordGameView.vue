@@ -1,4 +1,9 @@
 <template>
+  <v-btn @click="rulePopup = true">Rule</v-btn>
+  <WordGameRuleDialog
+      v-if="rulePopup"
+    @closeRulePopup="rulePopup = false"
+  />
   <v-row justify="center">
     <v-col cols="12" sm="6">
       <VueAlert
@@ -13,6 +18,8 @@
   <v-row justify="center">
     <v-col cols="12" sm="6">
       <v-text-field
+          @keyup.enter="submit()"
+          ref="answerField"
           v-model="current.text"
           class="mt-3"
           label="Definition"
@@ -40,11 +47,10 @@ import VocaInfoDialog from "@/components/voca/VocaInfoDialog.vue";
 import VocaCard from "@/components/voca/VocaCard.vue";
 import VueAlert from "@/components/common/VueAlert.vue";
 import router from "@/router/router";
-
-let index = 0;
+import WordGameRuleDialog from "@/components/voca/WordGameRuleDialog.vue";
 
 export default {
-  components: {VueAlert, VocaInfoDialog, VocaCard },
+  components: {WordGameRuleDialog, VueAlert, VocaInfoDialog, VocaCard },
   mounted() {
     const store = useWordStore();
     this.words = store.getWords;
@@ -52,6 +58,7 @@ export default {
   },
   data() {
     return {
+      index: 0,
       words: [],
       current: {
         word: '',
@@ -67,18 +74,19 @@ export default {
       },
       title: 'Result',
       dialog: false,
+      rulePopup: false,
     }
   },
   methods: {
     next() {
       if(this.words.length <= 0) return;
-      if(this.words.length <= index) {
-        alert("The word-game is finished !");
-        this.calculateResult();
+      if(this.words.length <= this.index) {
+        this.$refs.answerField.blur();
+        this.dialog = true;
         return;
       }
 
-      const word = this.words[index++];
+      const word = this.words[this.index++];
       this.current.word = word.word;
       this.current.definition = word.definition;
       this.current.note = word.note;
@@ -86,12 +94,11 @@ export default {
     },
     submit() {
       const word = this.current;
-      const def = word.definition.replace(/\s|^\[.*\]|\(.*\)/g, '');
-      const txt = word.text.replace(/\s|^\[.*\]|\(.*\)/g, '');
+      const def = word.definition.replace(/[\s[\]()...~-]/g, '').toLowerCase();
+      const txt = word.text.replace(/[\s[\]()...~-]/g, '').toLowerCase();
 
       let correctFlag = false;
       if (def === txt) correctFlag = true;
-
 
       const defArr = new Set(def.split(","));
       const txtArr = txt.split(",");
@@ -101,7 +108,6 @@ export default {
       }
 
       this.checkAnswer(correctFlag, word);
-
       this.next();
     },
     checkAnswer(isCorrect, word) {
@@ -119,13 +125,6 @@ export default {
       setTimeout(() => {
         this.showAlert = false;
       }, 500);
-    },
-    calculateResult() {
-
-      this.showResult();
-    },
-    showResult() {
-      this.dialog = true;
     },
     closeDialog() {
       this.dialog = false;

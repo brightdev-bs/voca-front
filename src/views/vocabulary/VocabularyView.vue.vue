@@ -206,7 +206,7 @@ export default {
           {
             immediate: false,
             onSuccess: (res) => {
-              alert(res.data);
+              alert(res.data.data);
             },
           },
       );
