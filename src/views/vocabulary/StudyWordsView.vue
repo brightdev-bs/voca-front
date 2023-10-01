@@ -1,4 +1,5 @@
 <template>
+  <p class="text-center mb-1 font-weight-bold" >Flip the card by clicking on it</p>
   <VocaCard
       :current="current"
       :is-definition="this.isDefinition"
