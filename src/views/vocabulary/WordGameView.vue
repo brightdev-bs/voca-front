@@ -50,9 +50,22 @@ import VocaCard from "@/components/voca/VocaCard.vue";
 import VueAlert from "@/components/common/VueAlert.vue";
 import router from "@/router/router";
 import WordGameRuleDialog from "@/components/voca/WordGameRuleDialog.vue";
+import {useHead} from "@vueuse/head";
 
 export default {
+
+
   components: {WordGameRuleDialog, VueAlert, VocaInfoDialog, VocaCard },
+  setup() {
+    useHead({
+      meta: [
+        {
+          name: `description`,
+          content: 'The best way to check if you study a word is doing word game in voca-world. Come and check your vocabulary'
+        }
+      ]
+    })
+  },
   mounted() {
     const store = useWordStore();
     this.words = store.getWords;
@@ -133,15 +146,6 @@ export default {
       router.push('/vocabulary?page=1')
     },
   },
-  head() {
-    return {
-      title: "Word Game",
-      meta: [
-        { name: 'description', content: 'Check Your Study Status By Word Game. The Fun Way To Study Vocabulary' },
-        { name: 'keywords', content: 'Word game, Study' },
-      ],
-    }
-  }
 }
 </script>
 

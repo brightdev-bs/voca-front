@@ -14,9 +14,11 @@ import VCalendar from 'v-calendar'
 import VueBasicAlert from 'vue-basic-alert'
 
 import vue3GoogleLogin from 'vue3-google-login'
+import { createHead } from '@vueuse/head'
 
 
 const pinia = createPinia();
+const head = createHead();
 
 loadFonts()
 
@@ -30,6 +32,7 @@ let app = createApp(App)
         clientId: '178996359638-7l7a0t9l4slvtdvao0amrtf7tg47mphh.apps.googleusercontent.com',
     })
     .use(VueBasicAlert)
+    .use(head)
 
 app.component("v-select", vSelect)
 

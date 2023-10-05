@@ -36,8 +36,19 @@ import {useWordStore} from "@/stores/useWordStore";
 import router from "@/router/router";
 import {useAxios} from "@/composables/useAxios";
 import VuePaging from "@/components/common/VuePaging.vue";
+import {useHead} from "@vueuse/head";
 
 export default {
+  setup() {
+    useHead({
+      meta: [
+        {
+          name: `description`,
+          content: 'The Fastest way to memorize vocabulary with voca-world. You can hide definition just by clicking and check if you know the word.'
+        }
+      ]
+    })
+  },
   mounted() {
     this.update();
   },
