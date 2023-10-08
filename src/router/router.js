@@ -8,31 +8,6 @@ const router = createRouter({
             path: '/',
             name: 'Main',
             component: () => import('../views/HomeView.vue'),
-            meta: {
-                title: 'Voca-World',
-                metaTags: [
-                    {
-                        name: 'description',
-                        content: 'Voca-World is a web service for learning words in various languages. It offers a variety of features to enhance language learning effectively.',
-                    },
-                    {
-                        property: 'og:title',
-                        content: 'Voca-World - Vocabulary Learning Service',
-                    },
-                    {
-                        property: 'og:description',
-                        content: 'Voca-World is a web service for learning words in various languages. It offers a variety of features to enhance language learning effectively.',
-                    },
-                    {
-                        name: 'twitter:title',
-                        content: 'Voca-World - Vocabulary Learning Service',
-                    },
-                    {
-                        name: 'twitter:description',
-                        content: 'Voca-World is a web service for learning words in various languages. It offers a variety of features to enhance language learning effectively.',
-                    },
-                ]
-            }
         },
         {
             path: '/vocabulary',
