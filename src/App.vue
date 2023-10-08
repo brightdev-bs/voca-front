@@ -14,7 +14,6 @@
 import VocaHeader from "@/layout/VocaHeader.vue";
 import VocaFooter from "@/layout/VocaFooter.vue";
 import VocaView from "@/layout/VocaView.vue";
-import {computed, reactive} from "vue";
 import {useHead} from "@vueuse/head";
 useHead({
   title: `Voca-World`,
