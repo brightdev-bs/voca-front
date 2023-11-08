@@ -2,6 +2,7 @@
   <v-table>
     <thead>
     <tr>
+      <th class="text-left" width="5%"/>
       <th class="text-left words" width="45%">
         Word
       </th>
@@ -15,6 +16,7 @@
         v-for="(word, index) in words"
         :key="word.id"
     >
+      <td class="pa-0 ma-0"><v-icon icon="mdi-volume-high" @click="speakText(word)"/></td>
       <td @touchstart.prevent="handleLongPress(word.id, index, $event)">{{ word.word }}</td>
       <td :class="{ hide: word.isHidden }" @click="changeHideStatus(index)">{{ word.definition }}</td>
     </tr>
@@ -73,7 +75,7 @@ export default {
     },
     deleteWord(id, index) {
       const { dateExecute } = useAxios(
-            '/v1/words/' + id,
+          '/v1/words/' + id,
           {
             method: 'delete',
             headers: {
@@ -117,6 +119,12 @@ export default {
       event.clientY = y;
 
       this.showContextMenu(id, index, event);
+    },
+    speakText(text) {
+      const speechSynthesis = window.speechSynthesis;
+      const wordSpeech = new SpeechSynthesisUtterance(text.word);
+      wordSpeech.rate = 0.8;
+      speechSynthesis.speak(wordSpeech);
     }
   }
 }
@@ -151,5 +159,10 @@ export default {
 
 .context-menu ul li:hover {
   background-color: #f0f0f0;
+}
+
+.v-icon {
+  width: 24px;
+  height: 24px;
 }
 </style>

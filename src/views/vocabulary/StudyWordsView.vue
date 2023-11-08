@@ -1,5 +1,10 @@
 <template>
   <p class="text-center mb-1 font-weight-bold" >Flip the card by clicking on it</p>
+  <v-row>
+    <v-col cols="12" class="text-center">
+      <v-icon icon="mdi-volume-high" class="ml-2 mb-1" @click="speakText"/>
+    </v-col>
+  </v-row>
   <VocaCard
       :current="current"
       :is-definition="this.isDefinition"
@@ -109,6 +114,19 @@ export default {
         this.showAlert = false;
       }, 700);
     },
+    speakText() {
+      const speechSynthesis = window.speechSynthesis;
+      const wordSpeech = new SpeechSynthesisUtterance(this.current.word);
+      wordSpeech.rate = 0.8;
+      speechSynthesis.speak(wordSpeech);
+
+      setTimeout(() => {
+        const noteSpeech = new SpeechSynthesisUtterance(this.current.note);
+        noteSpeech.rate = 0.8;
+        speechSynthesis.speak(noteSpeech)
+      }, 1000);
+
+    }
   },
 }
 </script>
