@@ -32,13 +32,7 @@ import VocaCard from "@/components/voca/VocaCard.vue";
 import {useAxios} from "@/composables/useAxios";
 import moment from "moment";
 import VueAlert from "@/components/common/VueAlert.vue";
-import {useHead} from "@vueuse/head";
-useHead({
-  meta: [
-    { name: 'description', content: 'Study Vocabulary And Add Famous Words For Your Test' },
-    { name: 'keywords', content: 'Vocabulary, Study' },
-  ],
-})
+
 export default {
   components: {VueAlert, VocaCard },
   data() {

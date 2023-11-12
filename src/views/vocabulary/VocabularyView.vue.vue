@@ -1,7 +1,7 @@
 <template>
   <div class="ma-5">
     <v-row>
-      <h3> Today's Vocabulary </h3>
+      <h3> {{ this.title }} </h3>
       <v-spacer></v-spacer>
       <v-btn
           v-if="isVocaPage"
@@ -36,16 +36,15 @@ import {useWordStore} from "@/stores/useWordStore";
 import router from "@/router/router";
 import {useAxios} from "@/composables/useAxios";
 import VuePaging from "@/components/common/VuePaging.vue";
-import {useHead} from "@vueuse/head";
-useHead({
-  meta: [
-    {
-      name: `description`,
-      content: 'The Fastest way to memorize vocabulary with voca-world. You can hide definition just by clicking and check if you know the word.'
-    }
-  ]
-})
+import {useMeta} from "vue-meta";
+
 export default {
+  setup() {
+    useMeta({
+      title: '영어 단어장 모음',
+      htmlAttrs: { lang: 'ko-KR', amp: true }
+    })
+  },
   mounted() {
     this.update();
   },
@@ -69,6 +68,9 @@ export default {
       const url = this.getUrl();
       const params = this.buildParams();
       console.log(params);
+      if(params.voca) {
+        this.title = params.voca;
+      }
       this.requestWords(url, params);
     },
     getUrl() {
@@ -225,15 +227,6 @@ export default {
       this.words.splice(index, 1);
     }
   },
-  head() {
-    return {
-      title: "Today's Vocabulary",
-      meta: [
-        { name: 'description', content: 'Vocabulary Today I Studied, Make Your Own Vocabulary' },
-        { name: 'keywords', content: 'Vocabulary' },
-      ],
-    }
-  }
 }
 </script>
 

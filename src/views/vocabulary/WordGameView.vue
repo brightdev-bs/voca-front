@@ -50,15 +50,7 @@ import VocaCard from "@/components/voca/VocaCard.vue";
 import VueAlert from "@/components/common/VueAlert.vue";
 import router from "@/router/router";
 import WordGameRuleDialog from "@/components/voca/WordGameRuleDialog.vue";
-import {useHead} from "@vueuse/head";
-useHead({
-  meta: [
-    {
-      name: `description`,
-      content: 'The best way to check if you study a word is doing word game in voca-world. Come and check your vocabulary'
-    }
-  ]
-})
+
 
 export default {
 

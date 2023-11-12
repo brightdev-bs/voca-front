@@ -10,16 +10,6 @@
 
 import PublicVocaList from "@/components/home/PublicVocaList.vue";
 import {useAxios} from "@/composables/useAxios";
-import {useHead} from "@vueuse/head";
-
-useHead({
-  meta: [
-    {
-      name: `description`,
-      content: 'The best frequent vocabulary for TOPIK Test and Essential English Vocabulary for Korean SAT'
-    }
-  ]
-})
 export default {
   components: {PublicVocaList},
   data() {
