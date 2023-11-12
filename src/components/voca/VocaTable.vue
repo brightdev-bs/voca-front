@@ -123,8 +123,13 @@ export default {
     speakText(text) {
       const speechSynthesis = window.speechSynthesis;
       const wordSpeech = new SpeechSynthesisUtterance(text.word);
+      if(this.isKorean(text.word)) wordSpeech.lang = "ko-KR";
       wordSpeech.rate = 0.8;
       speechSynthesis.speak(wordSpeech);
+    },
+    isKorean(text) {
+      const koreanRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+      return koreanRegex.test(text);
     }
   }
 }
