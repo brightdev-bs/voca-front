@@ -25,6 +25,7 @@
       :current-page="this.currentPage"
       @next-page="nextPage"
       @prev-page="prevPage"
+      @update:handle-page-change="handlePageChange"
   />
 
 </template>
@@ -58,8 +59,8 @@ export default {
       isToday: this.checkDate(),
       title: 'Today I Learned',
       words: [],
-      currentPage: 1,
       totalPage: 1,
+      currentPage: 1,
       isVocaPage: false,
       liked: false,
     }
@@ -68,7 +69,6 @@ export default {
     update() {
       const url = this.getUrl();
       const params = this.buildParams();
-      console.log(params);
       if(params.voca) {
         this.title = params.voca;
       }
@@ -81,13 +81,9 @@ export default {
     },
     buildParams() {
       let params = {};
+      params.page = this.currentPage
       let voca = this.$route.query.voca;
       const date = this.$route.query.date;
-      let page = this.$route.query.page;
-      if(!page) page = 1;
-      this.currentPage = page;
-      params.page = page - 1;
-
       if(voca) {
         this.date = '';
         params.voca = voca;
@@ -100,6 +96,8 @@ export default {
         let date = moment();
         params.date = date.format("YYYY-MM-DD");
       }
+
+      console.log("params = " + params.page)
 
       return params;
     },
@@ -154,19 +152,12 @@ export default {
       return false;
     },
     nextPage(page) {
-      const params = this.getParams(page);
-      window.location.href = '/vocabulary?' + params;
+      this.currentPage = page.value + 1;
+      this.update()
     },
     prevPage(page) {
-      const params = this.getParams(page);
-      window.location.href = '/vocabulary?' + params;
-    },
-    getParams(page) {
-      let params = '';
-      const vocaId = this.$route.query.voca;
-      if(vocaId) params += 'voca=' + vocaId;
-      params += '&page=' + page;
-      return params;
+      this.currentPage = page.value - 1;
+      this.update()
     },
     requestWords(url, params) {
       const { dateExecute } = useAxios(
@@ -182,7 +173,6 @@ export default {
           {
             immediate: false,
             onSuccess: res => {
-              console.log(res);
               res.data.data.words.forEach(w => {
                 w.isHidden = false
                 w.isWrong= false
@@ -228,6 +218,11 @@ export default {
     },
     removeElement(index) {
       this.words.splice(index, 1);
+    },
+    handlePageChange(currentPage) {
+      console.log(currentPage)
+      this.currentPage = currentPage;
+      this.update();
     }
   },
 }

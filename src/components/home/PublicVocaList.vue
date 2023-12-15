@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     moveToVoca(id) {
-      this.$router.push('/vocabulary?voca=' + id + '&page=1');
+      this.$router.push('/vocabulary?voca=' + id);
     }
   }
 }

@@ -128,6 +128,7 @@ export default {
       }
     },
     saveUserInfo: function (res) {
+      console.info("saveUserInfo = {}", res);
       localStorage.setItem('token', res.data.data.token)
       localStorage.setItem('name', res.data.data.username)
       localStorage.setItem('id', res.data.data.id)
