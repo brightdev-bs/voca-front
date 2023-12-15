@@ -4,7 +4,7 @@
       <h3> {{ this.title }} </h3>
       <v-spacer></v-spacer>
       <v-btn
-          v-if="isVocaPage"
+          v-if="isVocaPage && !liked"
           class="me-1" size="small" color="primary" prepend-icon="mdi-heart" @click="addLike">Like</v-btn>
     </v-row>
     <v-row justify="end">
@@ -61,6 +61,7 @@ export default {
       currentPage: 1,
       totalPage: 1,
       isVocaPage: false,
+      liked: false,
     }
   },
   methods: {
@@ -188,6 +189,8 @@ export default {
               });
               this.words = res.data.data.words;
               this.totalPage = res.data.data.totalPage;
+              this.title = res.data.data.title
+              this.liked = res.data.data.liked;
             },
             onError: err => {
               alert(err.data.data);

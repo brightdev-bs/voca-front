@@ -1,6 +1,6 @@
 <template>
   <v-card
-      @click="moveToVoca(vocabulary.name)"
+      @click="moveToVoca(vocabulary.id)"
       class="mb-3 d-flex flex-column align-center card-small"
       elevation="5"
       v-for="vocabulary in vocabularies"
@@ -28,8 +28,8 @@ export default {
     vocabularies: Array,
   },
   methods: {
-    moveToVoca(name) {
-      window.location.href = '/vocabulary?voca=' + name + '&page=1'
+    moveToVoca(id) {
+      this.$router.push('/vocabulary?voca=' + id + '&page=1');
     }
   }
 }
