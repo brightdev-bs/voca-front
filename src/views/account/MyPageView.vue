@@ -25,20 +25,19 @@
       />
     </div>
 
-    <div>
-      <h3 class="ma-3">Vocabularies</h3>
-      <v-card
-          class="mx-auto"
-      >
-        <v-list
-            v-model="selectedVoca"
-            :items="this.vocabulary"
-            item-title="name"
-            item-value="id"
-            @click:select="openVocabulary"
-        ></v-list>
-      </v-card>
-    </div>
+    <VocabularyList
+        :title="'My Vocabularies'"
+        :vocabulary="vocabulary"
+        @openVocabulary="openVocabulary"
+        class="mt-5"
+    />
+
+    <VocabularyList
+        :title="'Liked Vocabularies'"
+        :vocabulary="vocabulary"
+        @openVocabulary="openVocabulary"
+        class="mt-5"
+    />
 
     <v-dialog
         v-model="vocaClicked"
@@ -101,8 +100,10 @@ import moment from "moment";
 import {Error} from "@/global/constants";
 import {useAxios} from "@/composables/useAxios";
 import {reactive, toRefs} from "vue";
+import VocabularyList from "@/components/voca/VocabularyList.vue";
 
 export default {
+  components: {VocabularyList},
 
   setup () {
     const { loading, dateExecute } = useAxios(
