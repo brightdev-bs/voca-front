@@ -59,7 +59,7 @@ export default {
       isToday: this.checkDate(),
       title: 'Today I Learned',
       words: [],
-      totalPage: 1,
+      totalPage: 0,
       currentPage: 1,
       isVocaPage: false,
       liked: false,
@@ -67,6 +67,7 @@ export default {
   },
   methods: {
     update() {
+      console.log("update")
       const url = this.getUrl();
       const params = this.buildParams();
       if(params.voca) {
@@ -81,7 +82,7 @@ export default {
     },
     buildParams() {
       let params = {};
-      params.page = this.currentPage
+      params.page = this.currentPage - 1
       let voca = this.$route.query.voca;
       const date = this.$route.query.date;
       if(voca) {
@@ -90,14 +91,11 @@ export default {
         this.isVocaPage = true;
       } else if(date) {
         params.date = date;
-        params.offset = this.$route.query.offset;
         this.isVocaPage = false;
       } else {
         let date = moment();
         params.date = date.format("YYYY-MM-DD");
       }
-
-      console.log("params = " + params.page)
 
       return params;
     },
@@ -210,6 +208,7 @@ export default {
             immediate: false,
             onSuccess: (res) => {
               alert(res.data.data);
+              this.liked = true;
             },
           },
       );
@@ -220,7 +219,6 @@ export default {
       this.words.splice(index, 1);
     },
     handlePageChange(currentPage) {
-      console.log(currentPage)
       this.currentPage = currentPage;
       this.update();
     }

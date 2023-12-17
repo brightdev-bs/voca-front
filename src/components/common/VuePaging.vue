@@ -10,7 +10,7 @@
         :max="totalPage"
     />
       / {{ totalPage }}
-    <v-btn @click="nextPage" :disabled="currentPage === totalPage - 1" class="pagination-button" size="small">&gt;</v-btn>
+    <v-btn @click="nextPage" :disabled="currentPage === totalPage" class="pagination-button ml-2" size="small">&gt;</v-btn>
   </div>
 </template>
 <script setup>
@@ -53,6 +53,11 @@ const handlePageChange = _debounce(function () {
 }, 500)
 
 const changePage = () => {
+  console.log(props.totalPage)
+  if (inputModel.value < 1 || inputModel.value > props.totalPage) {
+    alert("1 ~ " + props.totalPage + " page is available")
+    return;
+  }
   emit('update:handle-page-change', inputModel)
 }
 </script>
