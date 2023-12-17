@@ -186,7 +186,7 @@ export default {
     },
     choose(flag) {
       if(flag) {
-        location.href = this.domain + '/vocabulary?date=' + this.selectedDate + '&page=1';
+        location.href = this.domain + '/vocabulary?date=' + this.selectedDate;
       } else {
         this.dateClicked = false;
       }
@@ -205,7 +205,7 @@ export default {
     },
     vocaPopupClikced(flag) {
       if(flag) {
-        location.href = this.domain + '/vocabulary?voca=' + this.selectedVoca.key + '&page=1';
+        location.href = this.domain + '/vocabulary?voca=' + this.selectedVoca.key;
       } else {
         this.vocaClicked = false;
       }
