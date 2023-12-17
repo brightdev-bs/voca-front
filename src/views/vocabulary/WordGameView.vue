@@ -4,23 +4,13 @@
       v-if="rulePopup"
     @closeRulePopup="rulePopup = false"
   />
-  <v-row justify="center">
-    <v-col cols="12" sm="6">
-      <VueAlert
-          :show-alert="showAlert"
-          :is-correct="isCorrect"
-          :error-title="'Wrong'"
-          :success-title="'Correct'"
-      />
-    </v-col>
-  </v-row>
 
   <VocaCard :current="current"/>
 
   <v-row justify="center">
     <v-col cols="12" sm="6">
       <v-text-field
-          @keyup.enter="submit()"
+          @keypress.enter="submit()"
           ref="answerField"
           v-model="current.text"
           class="mt-3"
@@ -47,7 +37,6 @@
 import {useWordStore} from "@/stores/useWordStore";
 import VocaInfoDialog from "@/components/voca/VocaInfoDialog.vue";
 import VocaCard from "@/components/voca/VocaCard.vue";
-import VueAlert from "@/components/common/VueAlert.vue";
 import router from "@/router/router";
 import WordGameRuleDialog from "@/components/voca/WordGameRuleDialog.vue";
 
@@ -55,7 +44,7 @@ import WordGameRuleDialog from "@/components/voca/WordGameRuleDialog.vue";
 export default {
 
 
-  components: {WordGameRuleDialog, VueAlert, VocaInfoDialog, VocaCard },
+  components: {WordGameRuleDialog, VocaInfoDialog, VocaCard },
 
   mounted() {
     const store = useWordStore();
@@ -74,7 +63,6 @@ export default {
       },
       isDefinition: false,
       isCorrect: false,
-      showAlert: false,
       result: {
         wrongWords: [],
       },
@@ -103,7 +91,7 @@ export default {
       const def = word.definition.replace(/[\s[\]()...~-]/g, '').toLowerCase();
       const txt = word.text.replace(/[\s[\]()...~-]/g, '').toLowerCase();
 
-      let correctFlag = false;
+      let correctFlag;
       if (def === txt) correctFlag = true;
 
       const defArr = new Set(def.split(","));
@@ -119,18 +107,13 @@ export default {
     checkAnswer(isCorrect, word) {
       if(isCorrect === true) {
         this.isCorrect = true;
+        this.$notify({ type: 'success', text: "Correct" } );
       } else {
         this.result.wrongWords.push(Object.assign({}, word));
         this.isCorrect = false;
+        this.$notify({ type: 'error', text: 'Wrong'} );
       }
 
-      this.showAlert = true;
-      this.hideAlert();
-    },
-    hideAlert() {
-      setTimeout(() => {
-        this.showAlert = false;
-      }, 500);
     },
     closeDialog() {
       this.dialog = false;

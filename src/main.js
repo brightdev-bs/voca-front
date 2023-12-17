@@ -15,6 +15,8 @@ import VueBasicAlert from 'vue-basic-alert'
 
 import vue3GoogleLogin from 'vue3-google-login'
 
+import Notifications from '@kyvg/vue3-notification'
+
 import { createMetaManager } from "vue-meta";
 
 const pinia = createPinia();
@@ -30,6 +32,7 @@ let app = createApp(App)
     .use(vue3GoogleLogin, {
         clientId: '178996359638-7l7a0t9l4slvtdvao0amrtf7tg47mphh.apps.googleusercontent.com',
     })
+    .use(Notifications)
     .use(VueBasicAlert)
     .use(createMetaManager())
 
