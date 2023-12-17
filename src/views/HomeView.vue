@@ -8,6 +8,7 @@
         :vocabularies="this.vocabularies"
     />
   </section>
+  <v-btn block @click="more" v-if="isMore">More</v-btn>
 </template>
 
 <script>
@@ -20,6 +21,8 @@ export default {
   data() {
     return {
       vocabularies: [],
+      page: 0,
+      isMore: true,
     }
   },
   mounted() {
@@ -57,6 +60,28 @@ export default {
           },
       )
     },
+    more() {
+      this.page++;
+      useAxios(
+          'v1/home?page=' + this.page,
+          {
+            method: 'get',
+          },
+          {
+            immediate: true,
+            onSuccess: (res) => {
+              const words = res.data.data;
+              this.vocabularies = this.vocabularies.concat(words);
+              if (words.length < 5) {
+                this.isMore = false;
+              }
+            },
+            onError: err => {
+              alert(err);
+            }
+          },
+      )
+    }
   }
 }
 </script>
