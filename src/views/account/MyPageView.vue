@@ -34,8 +34,8 @@
 
     <VocabularyList
         :title="'Liked Vocabularies'"
-        :vocabulary="vocabulary"
-        @openVocabulary="openVocabulary"
+        :vocabulary="likedVocabulary"
+        @openVocabulary="openLikedVocabulary"
         class="mt-5"
     />
 
@@ -126,7 +126,11 @@ export default {
 
             const vocabularies = res.data.data.vocabularyList;
             for (let voca of vocabularies) {
-              state.vocabulary.push(voca);
+              console.log(voca);
+              if (voca.type === 'CREATED')
+                state.myVocabulary.push(voca);
+              else
+                state.likedVocabulary.push(voca);
             }
           },
           onError: err => {
@@ -153,7 +157,8 @@ export default {
       ],
       selectedDate: null,
       dateClicked: false,
-      vocabulary: [],
+      myVocabulary: [],
+      likedVocabulary: [],
       selectedVoca: null,
       vocaClicked: false,
       loading: loading,
@@ -193,8 +198,19 @@ export default {
       }
       this.selectedDate = null;
     },
-    openVocabulary(selected) {
-      for(const voca of this.vocabulary) {
+    openMyVocabulary(selected) {
+      for(const voca of this.myVocabulary) {
+        if(voca.id == selected.id) {
+          this.selectedVoca = {
+            key: voca.id,
+            value: voca.name
+          }
+        }
+      }
+      this.vocaClicked = true;
+    },
+    openLikedVocabulary(selected) {
+      for(const voca of this.likedVocabulary) {
         if(voca.id == selected.id) {
           this.selectedVoca = {
             key: voca.id,
