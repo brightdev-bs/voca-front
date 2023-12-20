@@ -136,8 +136,6 @@ export default {
     },
     async signupWithSocialMedia(platform) {
 
-      const originalUserAgent = navigator.userAgent;
-      navigator.userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36';
 
       if(platform === 'google') {
         googleTokenLogin().then((response) => {
@@ -157,7 +155,6 @@ export default {
               {
                 immediate: false,
                 onSuccess: res => {
-                  navigator.userAgent = originalUserAgent;
                   this.saveUserInfo(res);
                 },
               },
