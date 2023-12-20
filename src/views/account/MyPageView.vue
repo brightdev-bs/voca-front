@@ -27,15 +27,15 @@
 
     <VocabularyList
         :title="'My Vocabularies'"
-        :vocabulary="myVocabulary"
-        @openVocabulary="openMyVocabulary"
+        :vocabulary="vocabulary"
+        @openVocabulary="openVocabulary"
         class="mt-5"
     />
 
     <VocabularyList
         :title="'Liked Vocabularies'"
-        :vocabulary="likedVocabulary"
-        @openVocabulary="openLikedVocabulary"
+        :vocabulary="vocabulary"
+        @openVocabulary="openVocabulary"
         class="mt-5"
     />
 
@@ -117,7 +117,6 @@ export default {
         {
           immediate: false,
           onSuccess: res => {
-            console.log(res);
             state.profile.username = res.data.data.user.username;
             state.profile.email = res.data.data.user.email;
             const records = res.data.data.dates;
@@ -127,11 +126,7 @@ export default {
 
             const vocabularies = res.data.data.vocabularyList;
             for (let voca of vocabularies) {
-              console.log(voca);
-              if (voca.type === 'CREATED')
-                state.myVocabulary.push(voca);
-              else
-                state.likedVocabulary.push(voca);
+              state.vocabulary.push(voca);
             }
           },
           onError: err => {
@@ -158,8 +153,7 @@ export default {
       ],
       selectedDate: null,
       dateClicked: false,
-      myVocabulary: [],
-      likedVocabulary: [],
+      vocabulary: [],
       selectedVoca: null,
       vocaClicked: false,
       loading: loading,
@@ -199,19 +193,8 @@ export default {
       }
       this.selectedDate = null;
     },
-    openMyVocabulary(selected) {
-      for(const voca of this.myVocabulary) {
-        if(voca.id == selected.id) {
-          this.selectedVoca = {
-            key: voca.id,
-            value: voca.name
-          }
-        }
-      }
-      this.vocaClicked = true;
-    },
-    openLikedVocabulary(selected) {
-      for(const voca of this.likedVocabulary) {
+    openVocabulary(selected) {
+      for(const voca of this.vocabulary) {
         if(voca.id == selected.id) {
           this.selectedVoca = {
             key: voca.id,
