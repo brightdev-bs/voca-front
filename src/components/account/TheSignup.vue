@@ -32,7 +32,9 @@
       </div>
     </div>
     <div class="line"></div>
-    <SocialLoginButton :social-type='"google"' @click="signupWithSocialMedia(Constants.GOOGLE)"/>
+    <SocialLoginButton
+        :social-type='"google"'
+        @click="signupWithSocialMedia(Constants.GOOGLE)"/>
   </div>
 </template>
 <script>
